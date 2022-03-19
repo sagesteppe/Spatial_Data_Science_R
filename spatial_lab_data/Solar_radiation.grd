@@ -1,0 +1,26 @@
+[general]
+creator=R package 'raster'
+created=2022-02-06 19:23:09
+[georeference]
+nrows=1002
+ncols=605
+xmin=325365
+ymin=4315392
+xmax=327180
+ymax=4318398
+projection=+proj=utm +zone=13 +datum=WGS84 +units=m +no_defs
+[data]
+datatype=FLT4S
+byteorder=little
+nbands=1
+bandorder=BIL
+categorical=FALSE
+minvalue=969.513000488281
+maxvalue=9716.818359375
+nodatavalue=-3.4e+38
+[legend]
+legendtype=
+values=
+color=
+[description]
+layername=UER_srad_bareearth_day172_3m_v1

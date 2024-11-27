@@ -1,0 +1,189 @@
+---
+title: "Spatial_case_study"
+author: "steppe"
+date: "2/21/2022"
+output: html_document
+---
+```{r}
+library(sf)
+library(tidyverse)
+```
+
+```{r}
+directories <- list.dirs()
+directories <- directories[which(stringr::str_detect(directories, "study"))]
+
+files <- list.files(directories,  pattern = '.shp$')
+str(files)
+
+```
+
+```{r}
+CensusTracts <- read_sf(paste0(directories, "/", files[1]), quiet = T)
+LandUse <- read_sf(paste0(directories, "/", files[2]), quiet = T)
+MajorRoads <- read_sf(paste0(directories, "/", files[3]), quiet = T)
+
+CensusTracts
+
+rm(directories, files)
+```
+
+
+```{r Filter Census Tracts}
+CensusTracts <- CensusTracts %>% 
+  filter(Med_Income >= 25000 & Med_Income <= 80000 & Med_HouseV >= 200000 & Med_HouseV <= 500000) #%>% 
+  #filter(Med_Income %in% (25000:80000) & Med_HouseV %in% (200000:500000)) #%>%  
+  #filter(between(Med_Income, 25000, 80000) & between(Med_HouseV, 200000, 500000))
+
+```
+
+```{r Filter for Land Use}
+LandUse <- LandUse %>% 
+  filter(LU05_DESC == 'Open Land')
+```
+
+```{r Buffer Major Roads}
+MajorRoads <- st_buffer(MajorRoads, dist = 2000)
+```
+
+```{r Check Polygons}
+vt_CT <- st_is_valid(CensusTracts)
+which(vt_CT %in% F)
+
+vt_MR <- st_is_valid(MajorRoads)
+which(vt_MR %in% F)
+
+vt_LU <- st_is_valid(LandUse)
+which(vt_LU %in% F) # Uh oh we have a problem!, position 193
+
+which(st_is_valid(LandUse) == F)
+
+LandUse[193,] <- st_make_valid(LandUse[193,])
+st_is_valid(LandUse)
+
+# alternate way
+invalid <- as.numeric(which(vt_LU %in% F))
+LandUse[invalid,] <- st_make_valid(LandUse[invalid,])
+
+rm(vt_CT, vt_LU, vt_MR, invalid)
+```
+
+```{r Intersect}
+candidates <- st_intersection(CensusTracts, LandUse, MajorRoads) 
+
+ggplot(candidates) + 
+  geom_sf()
+```
+
+```{r Re polygons}
+candidates <- candidates %>% 
+  st_union() %>% 
+  st_cast(to = 'POLYGON') %>% 
+  st_as_sf()
+```
+ 
+
+```{r Calculate area of Unioned Polygons and Select}
+ar <- st_area(candidates)
+ar <- as.numeric(ar)
+a <- which(ar>200000)
+candidates <- candidates[a,]
+
+candidates %>% 
+  mutate(Area = st_area(.))
+
+# or 
+candidates <- candidates %>% 
+  mutate(Area = as.numeric(st_area(.))) %>% 
+  filter(Area > 200000)
+
+#candidates1 <- candidates %>% 
+#  mutate(Area = st_area()) %>% 
+#  filter(Area > 200000)
+
+rm(ar, a)
+```
+
+
+```{r}
+png(file="CS05_map.png", height= 800, width= 600) # yy gets 17
+ggplot(CensusTracts) +
+  geom_sf(aes(fill=Med_Income,geometry=geometry))+
+  scale_fill_gradient(low="white",high="light blue", name = "Median Income") +
+  geom_sf(data=candidates, fill="red", aes(color="red"), show.legend =  "polygon")+
+  scale_color_manual(values=c("red"), labels = c("Candidate locations"),
+                     name = "IKEA new store") +
+  coord_sf( xlim=c(761525.5,796537.2), ylim=c(2924038,2984915)) +
+  labs(title="IKEA new store candidates map", caption ='information')
+dev.off()
+```
+
+
+```{r}
+data(us_states) 
+bound <- st_bbox(candidates)
+
+CensusTracts <- CensusTracts %>% # we are removing polygons that are only made up of water. 
+  filter(Med_Income > 1)
+
+ggplot() +
+  
+  # Add data
+  
+  geom_sf(data = CensusTracts,
+          aes(fill = Med_Income)) + # put down the census tracts (polygons with associated median household income) first
+  #rcartocolor::scale_fill_carto_c(palette = "Burg")+
+  geom_sf(data = candidates, aes(colour = 'yellow'), fill = 'yellow', 
+          show.legend =  "polygon", lwd = 1
+          ) + # now add the candidate Sites
+  
+  #  Style
+  
+  coord_sf(xlim = c(760000, 800000), 
+           ylim = c(2920000, 2990000)) + # zoom in on our area of interest
+  theme_bw() + # remove the background
+  scale_color_manual(values=c("yellow"), labels = c("Candidate locations"),
+                     name = "IKEA new store") +
+  labs(title="Prospective sites for an Ikea in Boston, MA. ", 
+       y="Latitude",
+       x="Longitude",
+       caption="Sources: United States Census Bureau, MassGIS",
+       fill = "Household Median Income",
+       color = "Prospective parcels") +
+  theme(plot.title = element_text(hjust = 0.5),
+        panel.background = element_rect(fill = "grey90"))
+```
+
+
+```{r}
+ggplot() +
+  
+  # Add data
+  geom_sf(data = CensusTracts,
+          aes(fill = Med_Income)) + # put down the census tracts (polygons with associated median household income) first
+  rcartocolor::scale_fill_carto_c(palette = "Burg")+
+  geom_sf(data = candidates, aes(colour = 'yellow'), fill = 'yellow', 
+          show.legend =  "polygon", lwd = 1
+          ) + # now add the candidate Sites
+  
+  #  Style
+  
+  coord_sf( # use the bbox to 'crop' the extent of the map
+           xlim = c(bound[1], bound[3]), 
+           ylim = c(bound[2], bound[4]),
+           )+ # zoom in on our area of interest
+  theme_bw() + # remove the background
+  scale_color_manual(values=c("yellow"), labels = c("Candidate locations"),
+                     name = "IKEA new store") +
+  labs(title="Prospective sites for an Ikea in Boston, MA. ", 
+       y="Latitude",
+       x="Longitude",
+       caption="Sources: United States Census Bureau, MassGIS",
+       fill = "Household Median Income",
+       color = "Prospective parcels") +
+  theme(plot.title = element_text(hjust = 0.5),
+        axis.text.x = element_text(angle = 45, vjust = 0.5, hjust=0.5),
+        panel.background = element_rect(fill = "royalblue1"))
+
+```
+

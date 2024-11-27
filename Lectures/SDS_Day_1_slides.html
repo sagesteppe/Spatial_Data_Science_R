@@ -11,7 +11,7 @@
 
   <meta name="author" content="Reed Benkendorf">
   <meta name="dcterms.date" content="2024-11-21">
-  <title>R Data Science: Spatial Data Science 1</title>
+  <title>R Data Science: Spatial Data Science I</title>
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
@@ -206,8 +206,8 @@
     <div class="slides">
 
 <section id="title-slide" class="quarto-title-block center">
-  <h1 class="title">R Data Science: Spatial Data Science 1</h1>
-  <p class="subtitle">Northwestern University</p>
+  <h1 class="title">R Data Science: Spatial Data Science I</h1>
+  <p class="subtitle">R for Data Science</p>
 
 <div class="quarto-title-authors">
 <div class="quarto-title-author">
@@ -232,7 +232,8 @@ Reed Benkendorf
 <h2>What is a GIS</h2>
 <div style="float: left; width: 70%;">
 <ul>
-<li><strong>G</strong>eographic <strong>I</strong>nformation <strong>S</strong>ystem is a system for producing, managing, displaying, and analyzing geographic information.</li>
+<li>a <strong>G</strong>eographic <strong>I</strong>nformation <strong>S</strong>ystem is a system for producing, managing, displaying, and analyzing geographic information.</li>
+<li>GIS do not require computers, but are often synonymous with software</li>
 <li><em>Spatial Data Science</em> is an emergent field which utilizes data science approaches in a <strong>GIS</strong>, and is a natural extension of a <strong>GIS</strong></li>
 </ul>
 </div>
@@ -260,7 +261,7 @@ Reed Benkendorf
 <div class="quarto-figure quarto-figure-right">
 <figure>
 <p><img data-src="../pictures/John_Snow_Cholera_by_National_Geographic.jpg" width="500"></p>
-<figcaption>The Broad Street Pump, A Cholera Outbreak in London. (John Snow)</figcaption>
+<figcaption>The Broad Street Pump (John Snow/ National Geographic)</figcaption>
 </figure>
 </div>
 </div>
@@ -275,27 +276,37 @@ Reed Benkendorf
 <section id="what-is-spatial-data-science" class="slide level2">
 <h2>What is Spatial Data Science?</h2>
 <div class="fragment">
-<p>GIS has always had big data…</p>
+<p>GIS has always had big data, and distinct statistics…</p>
 </div>
 <p><br></p>
 <div class="fragment">
-<p>geographic insights, and geospatial analyses <em>to</em> big tabular data sets<br>
-Including spatial terms in statistical models</p>
+<ul>
+<li>Geographic insights, and geospatial analyses <em>to</em> big tabular data sets<br>
+</li>
+<li>Including spatial terms in statistical models<br>
+</li>
+</ul>
+</div>
 <p><br></p>
-<p>Advanced statistics ML, and exploratory processes to develop hypotheses<br>
-Feature engineering of spatial products</p>
+<div class="fragment">
+<ul>
+<li>Advanced statistics ML, and exploratory processes to develop hypotheses<br>
+</li>
+<li>Feature engineering of spatial products<br>
+</li>
+</ul>
 </div>
 </section>
 <section id="why-use-r-as-a-gis-and-for-spatial-data-science" class="slide level2">
 <h2>Why use R as a GIS and for Spatial Data Science ?</h2>
 <div>
 <ul>
-<li class="fragment">Work Flow Automation</li>
-<li class="fragment">Rich Ecosystem (packages, functions, code-sharing, etc.)</li>
+<li class="fragment">Work flow automation</li>
+<li class="fragment">Rich ecosystem (packages, functions, code-sharing, etc.)</li>
 <li class="fragment">Reproducible</li>
-<li class="fragment">Self Documenting</li>
-<li class="fragment">Computationally Efficient</li>
-<li class="fragment">Parallel Processing/HPC interfaces</li>
+<li class="fragment">Self documenting</li>
+<li class="fragment">Computationally efficient</li>
+<li class="fragment">Parallel processing/HPC interfaces</li>
 </ul>
 </div>
 </section>
@@ -381,14 +392,14 @@ Feature engineering of spatial products</p>
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure>
-<p><img data-src="../pictures/geoid_cross_section.png" class="quarto-figure quarto-figure-center" style="width:35.0%"></p>
+<p><img data-src="../pictures/geoid_cross_section.png" class="quarto-figure quarto-figure-center" style="width:40.0%"></p>
 </figure>
 </div>
 </div>
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure>
-<p><img data-src="../pictures/Geoid_undulation_10k_ICGEM.jpg" class="quarto-figure quarto-figure-center" style="width:35.0%"></p>
+<p><img data-src="../pictures/Geoid_undulation_10k_ICGEM.jpg" class="quarto-figure quarto-figure-center" style="width:40.0%"></p>
 </figure>
 </div>
 </div>
@@ -423,8 +434,8 @@ Feature engineering of spatial products</p>
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure>
-<p><img data-src="../pictures/Number_One_City_Datum_Cosmo1976.jpg" style="width:50.0%"></p>
-<figcaption>Number one City Datum (Cosmo1976)</figcaption>
+<p><img data-src="../pictures/Number_One_City_Datum_Cosmo1976.jpg" style="width:85.0%"></p>
+<figcaption>Number One City Datum (Cosmo1976)</figcaption>
 </figure>
 </div>
 </div>
@@ -433,8 +444,8 @@ Feature engineering of spatial products</p>
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure>
-<p><img data-src="SDS_Day_1_slides_files/figure-revealjs/Map%20of%20Chicago%20Datum-1.png" style="width:75.0%"></p>
-<figcaption>Control Points Number one City Datum</figcaption>
+<p><img data-src="SDS_Day_1_slides_files/figure-revealjs/Map%20of%20Chicago%20Datum-1.png" style="width:85.0%"></p>
+<figcaption>Control Points Number One City Datum</figcaption>
 </figure>
 </div>
 </div>
@@ -444,13 +455,18 @@ Feature engineering of spatial products</p>
 </section>
 <section id="geodetic-coordinates" class="slide level2">
 <h2>Geodetic Coordinates</h2>
-<p><font size="5"> &gt; “The geodetic (or geographic) latitude is the angle between the equatorial plane and the normal (vertical) to the ellipsoid surface at the considered point.” - Proj </font></p>
+<p><font size="5"></font></p><font size="5">
+<blockquote>
+<p>“The geodetic (or geographic) latitude is the angle between the equatorial plane and the normal (vertical) to the ellipsoid surface at the considered point.” - Proj</p>
+</blockquote>
+</font><p><font size="5"></font></p>
 <div class="columns">
 <div class="column" style="width:60%;">
 <ul>
-<li>phi = geodetic latitude (north/south)</li>
-<li>lambda =longitude (east/west)</li>
-<li><em>h</em> = ellipsoidal height</li>
+<li><span class="math inline">\(\phi\)</span> = geodetic latitude (north/south)</li>
+<li><span class="math inline">\(\lambda\)</span> =longitude (east/west)</li>
+<li><em>h</em> = ellipsoidal height<br>
+</li>
 <li>N = Normal (plane at right angle to the ellipsoid surface)</li>
 </ul>
 </div><div style="float: right; width: 40%; font-size: 0.8em; color: #cbc4c3; text-align: center;">
@@ -666,11 +682,11 @@ Workflow
 <section id="geodesy-takeaways" class="slide level2">
 <h2>Geodesy Takeaways</h2>
 <div>
-<p><font size="5"> - There are various models (geoids &amp; ellipsoids) to represent the shape of the earth<br>
-- Different datums are used to represent different parts of the earth. This is in part due to legacy effects.<br>
+<p><font size="6"> - There are various models (geoids &amp; ellipsoids) to represent the earths shape<br>
+- Different datums are used to represent different parts of the earth.<br>
 - You will almost always use WGS 84 (based on a ellipsoid – which is fit through a special model of earths gravitational fields a geoid) NAD83 (based on a ellipsoid) for a geographic coordinate system. These +/-1 m from each other across much of North America. More useful than a geoid.<br>
-- You will usually want to use a UTM grid based on WGS for or State Planes based on NAD83 for projections.<br>
-- Different coordinates notation systems are used, focus on Decimal degrees.<br>
+- You will usually want to use a UTM grid based on WGS or State Planes based on NAD83 for projections.<br>
+- Different coordinates notation systems are used, focus on decimal degrees.<br>
 </font></p>
 </div>
 </section></section>
@@ -705,7 +721,7 @@ Workflow
 </ul>
 </section>
 <section id="simple-features---standards" class="slide level2">
-<h2>Simple Features - Standards</h2>
+<h2>simple features - standards</h2>
 <ul>
 <li>Open Geospatial Consortium ISO 19125-1:2004: adhered to in ESRI, and GDAL.</li>
 <li>Features have <em>geometries</em> describing their location, and properties described by <em>attributes.</em></li>
@@ -714,7 +730,7 @@ Workflow
 </ul>
 </section>
 <section id="simple-features-sf-1---attributes" class="slide level2">
-<h2>Simple Features (sf) 1 - Attributes</h2>
+<h2>simple features (sf) 1 - attributes</h2>
 <ul>
 <li>Attributes of the feature, theoretically devoid of spatial context.</li>
 <li>Described in text, numbers, stored in a data frame type object.</li>
@@ -747,51 +763,58 @@ Workflow
 </div>
 </section>
 <section id="sf-2---coordinates-form-a-point" class="slide level2">
-<h2>sf 2 - Coordinates form a Point</h2>
+<h2>sf 2 - coordinates form a point</h2>
 <ul>
-<li><p>all geometries are composed of points.</p></li>
-<li><p>points only require two coordinates, X &amp; Y.</p></li>
-<li><p>Y = Latitude (necessary), X = Longitude (necessary)<br>
-</p></li>
-<li><p>Z = Elevation/Depth (somewhat uncommon)<br>
-</p></li>
-<li><p>M = Time or Uncertainty of Measurement (rather uncommon)</p></li>
+<li>all geometries are composed of points.</li>
+<li>points only require two coordinates, X &amp; Y.
+<ul>
+<li>Y Latitude (necessary), X Longitude (necessary)<br>
+</li>
+<li>Z Elevation/Depth (uncommon)<br>
+</li>
+<li>M Time or uncertainty of measurement (uncommon)</li>
+</ul></li>
 </ul>
 
 <img data-src="SDS_Day_1_slides_files/figure-revealjs/sf%202%20-%20Coordinates%20form%20a%20Point-1.png" class="quarto-figure quarto-figure-center r-stretch" style="width:75.0%"></section>
-<section id="sf-3---points-areform-a-sf-geometry-sfgs" class="slide level2">
-<h2>sf 3 - Points are/form a SF Geometry (sfg’s)</h2>
+<section id="sf-3---points-form-a-sf-geometry-sfgs" class="slide level2">
+<h2>sf 3 - Points form a sf geometry (sfg’s)</h2>
 <ul>
 <li><p>SFG is the spatial topology associated with a feature</p></li>
-<li><p>POINT - A true dimensionless 1 dimensional point</p></li>
-<li><p>LINESTRING - Sequence of points connected by strings.</p></li>
-<li><p>POLYGON - Sequence of points connected by strings, which close upon themselves.</p></li>
-<li><p>i.e.&nbsp;the first and last point of the polygon are the same.</p></li>
+<li><p><em>POINT</em> - one-dimensional location<br>
+</p></li>
+<li><p><em>LINESTRING</em> - two points connected by a string<br>
+</p></li>
+<li><p><em>POLYGON</em> - Sequence of points connected by strings</p></li>
 </ul>
 
-<img data-src="SDS_Day_1_slides_files/figure-revealjs/sf%203%20-%20Points%20are/form%20a%20SF%20Geometry%20(sfg)-1.png" width="960" class="r-stretch"></section>
+<img data-src="SDS_Day_1_slides_files/figure-revealjs/sf%203%20-%20Points%20are/form%20a%20SF%20Geometry%20(sfg)-1.png" class="quarto-figure quarto-figure-center r-stretch" width="960"></section>
 <section id="sf-4---combining-geometries-sfgs" class="slide level2">
 <h2>sf 4 - combining geometries (sfg’s)</h2>
 <ul>
-<li>Two or more Points, and sets of Linestring, and polygons can be the geometries of a single feature</li>
-<li>Multi(POINT), multi(LINESTRING), multi(POLYGON) - Forming collections of geometries</li>
-<li>GEOMETRYCOLLECTION - A mixed set of these three or more geometries in the same geometry</li>
+<li>Two or more <em>points</em>, and sets of <em>linestrings</em>, and <em>polygons</em> can be the geometries of a single feature</li>
+<li>Multi(POINT), multi(LINESTRING), multi(POLYGON)<br>
+</li>
+<li><em>GEOMETRYCOLLECTION</em> - A mixed set of geometry types in the same geometry</li>
 </ul>
 
-<img data-src="SDS_Day_1_slides_files/figure-revealjs/sf%204%20-%20Geometries%20can%20form%20Geometries%20(sfg)-1.png" width="960" class="r-stretch"></section>
+<img data-src="SDS_Day_1_slides_files/figure-revealjs/sf%204%20-%20Geometries%20can%20form%20Geometries%20(sfg)-1.png" class="quarto-figure quarto-figure-center r-stretch" width="960"></section>
 <section id="sf-5---geometries-and-spatial-information-form-a-collection-sfc" class="slide level2">
-<h2>sf 5 - Geometries and Spatial Information form a Collection (sfc)</h2>
+<h2>sf 5 - geometries and spatial information form a collection (sfc)</h2>
 <ul>
-<li><p>A list column of S3 type containing certain parameters regarding the Geometry/Geometries</p></li>
-<li><p>Coordinate Reference System (‘crs’)</p></li>
-<li><p>Precision (‘precision’)</p></li>
-<li><p>Bounding box (‘bbox’)</p></li>
+<li><p>A list column of S3 type containing attributes of the Geometry/Geometries</p></li>
+<li><p>Coordinate Reference System (‘crs’)<br>
+</p></li>
+<li><p>Precision (‘precision’)<br>
+</p></li>
+<li><p>Bounding box (‘bbox’)<br>
+</p></li>
 <li><p>Number Empty (‘n_empty’)</p></li>
 </ul>
-<p>Wherein precision refers to the precision of the coordinates forming the geometries. the bbox is a rectangle which includes all pairs of coordinates in the geometry. N_empty, denotes whether the geometry is missing coordinates in a position.</p>
 </section>
 <section id="sf-6---recapped" class="slide level2">
-<h2>sf 6 - Recapped</h2>
+<h2>sf 6 - recapped</h2>
+<p><font size="5"></font></p><font size="5">
 <div class="cell">
 <div class="cell-output-display">
 <table class="caption-top">
@@ -833,6 +856,8 @@ Workflow
 </tbody>
 </table>
 </div>
+</div>
+<div class="cell">
 <div class="cell-output cell-output-stdout">
 <pre><code>Geometry set for 1 feature 
 Geometry type: POINT
@@ -845,11 +870,13 @@ Precision:     2 </code></pre>
 <pre><code>sfc_POINT of length 1; first list element:  'XY' num [1:2] -87.7 42.1</code></pre>
 </div>
 </div>
+</font><p><font size="5"></font></p>
 <ul>
 <li>We now finally have <em>both</em> attributes and coordinates which are forming a point geometry.</li>
 <li>This is a Simple Feature.</li>
 </ul>
 </section></section>
+<section>
 <section id="sp" class="title-slide slide level1 center">
 <h1>sp</h1>
 <ul>
@@ -860,10 +887,8 @@ Precision:     2 </code></pre>
 <li>A good introduction to S4 objects; popular in new spatial packages too!</li>
 </ul>
 </section>
-
-<section>
-<section id="sp---history" class="title-slide slide level1 center">
-<h1>sp - History</h1>
+<section id="sp---history" class="slide level2">
+<h2>sp - History</h2>
 <ul>
 <li><p>Released in 2005</p></li>
 <li><p>First package to hold all major vector types of geometries<br>
@@ -877,123 +902,82 @@ Precision:     2 </code></pre>
 <section id="sp---spatial-classes-for-topology" class="slide level2">
 <h2>sp - Spatial Classes for Topology</h2>
 <ul>
-<li><p>SF holds different geometries in list columns, SP has <em>many</em> different types of objects/classes for holding geometries.</p></li>
-<li><p>Spatial(Multi)Points<br>
+<li><p>SF holds different geometries in list columns, sp has <em>many</em> different types of objects/classes for holding geometries.</p></li>
+<li><p>Spatial<strong>Multi</strong>Points<br>
 </p></li>
-<li><p>Spatial(Multi)Lines<br>
+<li><p>Spatial<strong>Multi</strong>Lines<br>
 </p></li>
-<li><p>Spatial(Multi)Polygons<br>
+<li><p>Spatial<strong>Multi</strong>Polygons<br>
 </p></li>
-<li><p>Spatial(Multi)Grids</p></li>
+<li><p>Spatial<strong>Multi</strong>Grids</p></li>
 </ul>
 </section>
-<section id="sp---structures-of-the-spatial-class---topology-only" class="slide level2">
-<h2>sp - Structures of The Spatial* Class - Topology Only</h2>
+<section id="sp---structures-of-the-object" class="slide level2">
+<h2>sp - Structures of the object</h2>
 <ul>
-<li><p>Less information than SF (‘n_missing’ and ‘precision’ both lacking)</p></li>
-<li><p>Bounding box</p></li>
-<li><p>Coordinate Reference System</p></li>
-<li><p>…Coordinates!</p></li>
+<li>Less detailed than <code>sf</code> (‘n_missing’, ‘precision’ lacking)</li>
 </ul>
 <div class="cell">
 <div class="cell-output cell-output-stdout">
 <pre><code>Formal class 'SpatialPoints' [package "sp"] with 3 slots
-  ..@ coords     : num [1:15, 1:2] 0.95 0.77 0.48 0.22 0.32 0.03 0.13 0.31 0.03 0.42 ...
+  ..@ coords     : num [1:15, 1:2] -105.7 -97.4 -96.2 -94 -111.9 ...
   .. ..- attr(*, "dimnames")=List of 2
   .. .. ..$ : NULL
   .. .. ..$ : chr [1:2] "xc" "yc"
-  ..@ bbox       : num [1:2, 1:2] 0.03 0.35 0.95 1.82
+  ..@ bbox       : num [1:2, 1:2] -128.4 20.5 -80.6 94.2
   .. ..- attr(*, "dimnames")=List of 2
   .. .. ..$ : chr [1:2] "xc" "yc"
   .. .. ..$ : chr [1:2] "min" "max"
   ..@ proj4string:Formal class 'CRS' [package "sp"] with 1 slot
-  .. .. ..@ projargs: chr NA</code></pre>
+  .. .. ..@ projargs: chr "+proj=longlat +datum=WGS84 +no_defs"
+  .. .. ..$ comment: chr "GEOGCRS[\"WGS 84\",\n    ENSEMBLE[\"World Geodetic System 1984 ensemble\",\n        MEMBER[\"World Geodetic Sys"| __truncated__</code></pre>
 </div>
 </div>
 </section>
 <section id="sp---attributes---dataframe" class="slide level2">
 <h2>sp - Attributes - DataFrame</h2>
 <ul>
-<li><p>Attachment of attributes, in a data frame, to a Spatial topology can create:</p></li>
-<li><p>SpatialPointsDataFrame</p></li>
-<li><p>SpatialLinesDataFrame</p></li>
-<li><p>SpatialPolgonsDataFrame</p></li>
-<li><p>SpatialGridsDataFrame</p></li>
-<li><p>Each S*DF is accessed the same way:</p>
+<li>Attachment of attributes (e.g.&nbsp;data frame), to a Spatial topology</li>
+<li>Each S*DF is accessed the same way:
 <ul>
-<li>SPDF@data[[‘col_name’]]</li>
-<li>SPDF$‘col_name’</li>
+<li>SPDF@data[[‘col_name’]]<br>
+</li>
+<li>SPDF$col_name</li>
 </ul></li>
 </ul>
 <div class="cell">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href=""></a><span class="fu">str</span>(SPDF<span class="sc">@</span>data)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>Formal class 'SpatialPointsDataFrame' [package "sp"] with 5 slots
-  ..@ data       :'data.frame': 15 obs. of  2 variables:
-  .. ..$ temperature: num [1:15] 4.36 4.7 4.82 4.73 5 3.64 4.43 5.02 5.88 4.36 ...
-  .. ..$ aspect     : int [1:15] 15 2 3 34 45 37 9 35 33 39 ...
-  ..@ coords.nrs : num(0) 
-  ..@ coords     : num [1:15, 1:2] 0.95 0.77 0.48 0.22 0.32 0.03 0.13 0.31 0.03 0.42 ...
-  .. ..- attr(*, "dimnames")=List of 2
-  .. .. ..$ : NULL
-  .. .. ..$ : chr [1:2] "xc" "yc"
-  ..@ bbox       : num [1:2, 1:2] 0.03 0.35 0.95 1.82
-  .. ..- attr(*, "dimnames")=List of 2
-  .. .. ..$ : chr [1:2] "xc" "yc"
-  .. .. ..$ : chr [1:2] "min" "max"
-  ..@ proj4string:Formal class 'CRS' [package "sp"] with 1 slot
-  .. .. ..@ projargs: chr NA</code></pre>
-</div>
-<div class="cell-output-display">
-<table class="caption-top">
-<thead>
-<tr class="header">
-<th style="text-align: right;">temperature</th>
-<th style="text-align: right;">aspect</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td style="text-align: right;">4.36</td>
-<td style="text-align: right;">15</td>
-</tr>
-<tr class="even">
-<td style="text-align: right;">4.70</td>
-<td style="text-align: right;">2</td>
-</tr>
-<tr class="odd">
-<td style="text-align: right;">4.82</td>
-<td style="text-align: right;">3</td>
-</tr>
-<tr class="even">
-<td style="text-align: right;">4.73</td>
-<td style="text-align: right;">34</td>
-</tr>
-<tr class="odd">
-<td style="text-align: right;">5.00</td>
-<td style="text-align: right;">45</td>
-</tr>
-<tr class="even">
-<td style="text-align: right;">3.64</td>
-<td style="text-align: right;">37</td>
-</tr>
-</tbody>
-</table>
+<pre><code>'data.frame':   15 obs. of  2 variables:
+ $ temperature: num  5.15 5.02 4.77 4.01 5.91 7.38 4.17 4.4 4.7 4.17 ...
+ $ aspect     : int  4 44 9 37 10 14 18 22 11 8 ...</code></pre>
 </div>
 </div>
+<aside class="notes">
 <p>We see here that SF contains all of the spatial information in a Simple Feature Collection which can be tidily tucked away in the geometry list column, in SP the analogue to the SFC is the object itself.</p>
 <p>SP is mostly geometry with a data slot, SF is mostly data frame with a geometry column.</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
 </section>
 <section id="sp-overview-of-a-spatialdataframe" class="slide level2">
-<h2>sp Overview of a Spatial*DataFrame</h2>
+<h2>sp overview of a Spatial*DataFrame</h2>
 
-<img data-src="SDS_Day_1_slides_files/figure-revealjs/Creat%20some%20Spatial%20Classes-1.png" width="960" class="r-stretch"><ul>
+<img data-src="SDS_Day_1_slides_files/figure-revealjs/Creat%20some%20Spatial%20Classes-1.png" class="quarto-figure quarto-figure-center r-stretch" width="960"><ul>
 <li>Data frame is held in a different slot from the geometry and topology</li>
-<li>Data frame columns may be subset</li>
 <li>Data frame columns accessed via object@data[[‘colname’]] indexing</li>
 </ul>
 </section>
-<section id="sp---recapped." class="slide level2">
-<h2>sp - Recapped.</h2>
+<section id="sp---recapped" class="slide level2">
+<h2>sp - Recapped</h2>
 <ul>
 <li>If you need to use spatial statistics, you will come across these objects.</li>
 <li>Don’t sweat them <strong>too</strong> much; you can always convert from and to sf to run certain analyses</li>
@@ -1002,17 +986,29 @@ Precision:     2 </code></pre>
 <section>
 <section id="raster-data-in-r" class="title-slide slide level1 center">
 <h1>Raster data in R</h1>
+<div style="float: left; width: 60%;">
 <ul>
 <li>Rasters are used to represent (continuous) features on the planet using grids<br>
 </li>
-<li>Excellent format for storing and sharing data<br>
+<li>Each raster is composed of grids<br>
 </li>
-<li>Divides space into continuous grids<br>
+<li>Raster data sets are often distributed in adjoining <em>tiles</em><br>
 </li>
-<li>Raster data sets are often distributed in adjoining <em>tiles</em></li>
 </ul>
-
-<img data-src="../pictures/Western_Plant_Predictors.png" style="width:75.0%" class="r-stretch quarto-figure-center"><p class="caption">Western Plant Predictors. Note each cell is the extent of a single raster tile, each tile contains cells.</p></section>
+</div>
+<div style="float: right; width: 40%; font-size: 0.8em; color: #cbc4c3; text-align: center;">
+<div class="cell" data-layout-align="center">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img data-src="../pictures/Western_Plant_Predictors.png" style="width:75.0%"></p>
+<figcaption>Each cell is a tile, one raster.</figcaption>
+</figure>
+</div>
+</div>
+</div>
+</div>
+</section>
 <section id="raster-components" class="slide level2">
 <h2>Raster Components</h2>
 <ul>
@@ -1025,25 +1021,61 @@ Precision:     2 </code></pre>
 </section>
 <section id="example-raster-1-create-frame" class="slide level2">
 <h2>Example Raster 1 Create Frame</h2>
-<p>Rasters tend to confuse people. We are going to create our own example here before we talk about them much more.</p>
+<p><vcenter> Rasters tend to confuse people. We are going to create our own example here before we talk about them much more. </vcenter></p>
 </section>
 <section id="example-raster-1-background" class="slide level2">
 <h2>Example Raster 1 Background</h2>
-<p>&lt; font size = ‘4’&gt; Fairy shrimp live in bodies of water which dry out in late Spring, and refill in early Fall. We seek to determine where suitable habitat for fairy shrimp are in the Great Basin. In order to do so, we will use satellite imagery to detect valleys which fill with water in Fall, and dry out in late Spring.</p>
-
-<img data-src="../pictures/SurpriseValley_JohnathonGlen_USGS.jpg" style="width:85.0%" class="r-stretch quarto-figure-center"><p class="caption">Suprise Valley by: John Glen</p><p></p>
+<ul>
+<li>Fairy shrimp (endangered) live in bodies of water which dry out in late Spring, and refill in early Fall (playas).<br>
+</li>
+<li>Determine suitable habitat for fairy shrimp<br>
+</li>
+<li>Satellite imagery at two time points</li>
+</ul>
+<center>
+<div style="font-size: 0.8em; color: #cbc4c3; text-align: center;">
+<div class="cell" data-layout-align="center">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img data-src="../pictures/SurpriseValley_JohnathonGlen_USGS.jpg" style="width:40.0%"></p>
+<figcaption>Suprise Valley by: John Glen</figcaption>
+</figure>
+</div>
+</div>
+</div>
+</div>
+</center>
 </section>
-<section id="example-raster-1-a" class="slide level2">
-<h2>Example Raster 1 A</h2>
-<p>In the code above, we are going to define all four of the essential components of a raster. Clearly, we are defining three explicitly (Bounding Coordinates, Dimensions, CRS), and the remaining one implicitly (Cell resolution).</p>
+<section id="example-raster-1" class="slide level2">
+<h2>Example Raster 1</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href=""></a>empty_raster <span class="ot">&lt;-</span> <span class="fu">raster</span>(</span>
+<span id="cb6-2"><a href=""></a>  <span class="co"># rasters have 4 bounding edges</span></span>
+<span id="cb6-3"><a href=""></a>  <span class="co"># Here we define each 'corner' of the raster'</span></span>
+<span id="cb6-4"><a href=""></a>    <span class="at">xmn =</span> <span class="fl">697129.7</span>, </span>
+<span id="cb6-5"><a href=""></a>    <span class="at">xmx =</span> <span class="fl">811775.7</span>,</span>
+<span id="cb6-6"><a href=""></a>    <span class="at">ymn =</span> <span class="dv">4388466</span>,</span>
+<span id="cb6-7"><a href=""></a>    <span class="at">ymx =</span> <span class="dv">4502382</span>,</span>
+<span id="cb6-8"><a href=""></a>    </span>
+<span id="cb6-9"><a href=""></a>  <span class="co"># Here we set the number of cells 118*118</span></span>
+<span id="cb6-10"><a href=""></a>    <span class="at">nrows =</span> <span class="dv">118</span>, </span>
+<span id="cb6-11"><a href=""></a>    <span class="at">ncols =</span> <span class="dv">118</span>,</span>
+<span id="cb6-12"><a href=""></a></span>
+<span id="cb6-13"><a href=""></a>  <span class="co"># set the rasters Coordinate Reference System</span></span>
+<span id="cb6-14"><a href=""></a>    <span class="at">crs =</span> <span class="st">"+proj=utm +zone=10 +datum=WGS84"</span>, </span>
+<span id="cb6-15"><a href=""></a>  <span class="co"># we are using the WGS84 ellipsoid, with a UTM planar projection </span></span>
+<span id="cb6-16"><a href=""></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
 </section>
-<section id="example-raster-1-b" class="slide level2">
-<h2>Example Raster 1 B</h2>
+<section id="example-raster-1-1" class="slide level2">
+<h2>Example Raster 1</h2>
 
-<img data-src="SDS_Day_1_slides_files/figure-revealjs/Create%20Empty%20Raster%20and%20Populate%20-%203%20with%20output-1.png" class="quarto-figure quarto-figure-center r-stretch" width="960"><p>We can imagine that the raster we are currently creating looks like this. A frame without content. We can see where the bounding coordinates are,</p>
+<img data-src="SDS_Day_1_slides_files/figure-revealjs/Create%20Empty%20Raster%20and%20Populate%20-%203%20with%20output-1.png" class="quarto-figure quarto-figure-center r-stretch" width="960"><p>The raster currently looks like this, a frame in space with a specified origin, CRS, and cells, but lacking any content (values).</p>
 </section>
 <section id="example-raster-2-set-values" class="slide level2">
 <h2>Example Raster 2 Set Values</h2>
+<p><font size="5"></font></p><font size="5">
 <div class="cell">
 <div class="cell-output-display">
 <table class="caption-top">
@@ -1113,6 +1145,7 @@ Precision:     2 </code></pre>
 </table>
 </div>
 </div>
+</font><p><font size="5"></font></p>
 <p>I think it is easiest to imagine that the values within a raster are in the shape of a matrix. Hence, using the code above we could take a vector of values, and bend them, so that each position within the vector matches up with the beginning of a new row.</p>
 </section>
 <section id="example-raster-3" class="slide level2">
@@ -1132,40 +1165,36 @@ The height of each raster cell is: 965.38983 meters</code></pre>
 <section id="raster-package---in-r" class="title-slide slide level1 center">
 <h1>Raster Package - in R!</h1>
 <ul>
-<li>Does not need to load all files into active memory at once</li>
-<li>Many functions ‘based’ on functions in ‘base’ R.</li>
-</ul>
-</section>
-<section id="attributes" class="slide level2">
-<h2>Attributes</h2>
-<ul>
-<li>Cells</li>
-<li>Values</li>
+<li>Does not need to load all files into active memory at once, allows ambitious projects.<br>
+</li>
+<li>Many functions use generics from base R</li>
 </ul>
 </section>
 <section id="raster-layer" class="slide level2">
 <h2>Raster Layer</h2>
 <p>A single raster layer</p>
-<h3 id="raster-stack">Raster Stack</h3>
+</section>
+<section id="raster-stack" class="slide level2">
+<h2>Raster Stack</h2>
 
-<img data-src="SDS_Day_1_slides_files/figure-revealjs/Raster%20Stack-1.png" width="960" class="r-stretch"><p>The main use of Raster Stacks is to hold layers of similar themes.</p>
-<p>Two usage examples:</p>
+<img data-src="SDS_Day_1_slides_files/figure-revealjs/Raster%20Stack-1.png" style="width:75.0%" class="r-stretch"><p>The main use of Raster Stacks is to hold layers of similar themes.</p>
 <ol type="1">
-<li>Each layer is the same variable from a different time.<br>
-</li>
+<li>Each layer is the same variable from a different time. e.g.&nbsp;mean monthly temperature from January -&gt; December (12 layers per stack)</li>
+<li>Each layer is a different independent variable (theme) in an analysis. e.g.&nbsp;yearly mean temperature, mean precipitation, etc.</li>
 </ol>
-<ul>
-<li>e.g.&nbsp;mean monthly temperature from January -&gt; December (12 layers per stack)</li>
-</ul>
-<ol start="2" type="1">
-<li>Each layer is a different variable (theme) in an analysis.<br>
-</li>
-</ol>
-<ul>
-<li><p>e.g.&nbsp;yearly mean temperature, mean precipitation, etc.</p></li>
-<li><p>Do not need be held in memory</p></li>
-</ul>
-<p><notes> In general these are rasters which have been classified and we want to extract values from or run calculations with. Now what is great about layers, is that we can do one big thing bricks cannot do, we can load in many layers from many files and create a stack of attributes we are interested in studying on the fly. </notes></p>
+<aside class="notes">
+<p>In general these are rasters which have been classified and we want to extract values from or run calculations with. Now what is great about layers, is that we can do one big thing bricks cannot do, we can load in many layers from many files and create a stack of attributes we are interested in studying on the fly.</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
 </section>
 <section id="raster-brick" class="slide level2">
 <h2>Raster Brick</h2>
@@ -1174,15 +1203,23 @@ The height of each raster cell is: 965.38983 meters</code></pre>
 </li>
 <li>The sensors of a camera, e.g.&nbsp;Red, Green, and Blue<br>
 </li>
-<li>Used for performing image classification to produce data raster layers<br>
-</li>
-<li>do not need to be held in memory</li>
+<li>Used for performing image classification to produce data raster layers</li>
 </ul>
-<p><notes></notes></p>
+<aside class="notes">
 <p>As I have mentioned rasters are often generated from satellite imagery; we will discuss rasters which are not developed this way next lecture. Historically most pictures are imaged via the use of three bands. These having spectral values of Red, Green, and Blue (RGB) associated with them. For example our .tif file, is composed of three bands. Note that a Rasterbrick is most often used for loading in these types of imaging data, which can then be processed to form a more typical ‘raster’ data set.</p>
-<p></p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
 
-<img data-src="SDS_Day_1_slides_files/figure-revealjs/Raster%20Brick-1.png" width="960" class="r-stretch"></section></section>
+<img data-src="SDS_Day_1_slides_files/figure-revealjs/Raster%20Brick-1.png" class="quarto-figure quarto-figure-center r-stretch" width="960"></section></section>
 <section id="terra" class="title-slide slide level1 center">
 <h1>Terra</h1>
 <ul>
@@ -1200,155 +1237,271 @@ The height of each raster cell is: 965.38983 meters</code></pre>
 <section id="cartography" class="title-slide slide level1 center">
 <h1>Cartography</h1>
 <ul>
-<li><p>Focus on sf here<br>
-</p></li>
-<li><p>You have scripts to do many types of mapping in your course resources<br>
-</p></li>
-<li><p>sf objects are ggplot2 compliant<br>
-</p></li>
-<li><p>the order of mapping operations is more important than code</p></li>
-<li><p>Import example data sets which come with two packages</p></li>
+<li>use <code>sf</code>!<br>
+</li>
+<li>You have scripts to do many types of mapping in your course resources<br>
+</li>
+<li><code>sf</code> objects are <code>ggplot2</code> compatible<br>
+</li>
+<li>the order of mapping operations is more important than code</li>
 </ul>
 </section>
-<section id="read-in-sf-data" class="slide level2">
-<h2>Read in sf data</h2>
+<section id="read-in-spatial-data" class="slide level2">
+<h2>read in spatial data</h2>
+<ul>
+<li>considerably integration of <code>sf</code> and <code>tidvyerse</code></li>
+<li>allows for plotting of spatial data for maps<br>
+</li>
+<li>maps should provide context of studies where results vary/informed by space</li>
+</ul>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href=""></a><span class="fu">data</span>(<span class="st">"us_states"</span>, <span class="at">package =</span> <span class="st">"spData"</span>) <span class="co"># lazy load</span></span>
-<span id="cb7-2"><a href=""></a>us_states <span class="ot">&lt;-</span> <span class="fu">st_as_sf</span>(us_states) <span class="co"># convert from sp to sf </span></span>
-<span id="cb7-3"><a href=""></a></span>
-<span id="cb7-4"><a href=""></a>north_carolina <span class="ot">&lt;-</span> <span class="fu">read_sf</span>( <span class="co"># read in vector data from disk. </span></span>
-<span id="cb7-5"><a href=""></a>  <span class="fu">system.file</span>(<span class="st">"shape/nc.shp"</span>, <span class="at">package =</span> <span class="st">"sf"</span>)</span>
-<span id="cb7-6"><a href=""></a>  )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href=""></a><span class="fu">data</span>(<span class="st">"us_states"</span>, <span class="at">package =</span> <span class="st">"spData"</span>) <span class="co"># lazy load</span></span>
+<span id="cb9-2"><a href=""></a>us_states <span class="ot">&lt;-</span> <span class="fu">st_as_sf</span>(us_states) <span class="co"># convert from sp to sf </span></span>
+<span id="cb9-3"><a href=""></a></span>
+<span id="cb9-4"><a href=""></a>north_carolina <span class="ot">&lt;-</span> <span class="fu">read_sf</span>( <span class="co"># read in vector data from disk. </span></span>
+<span id="cb9-5"><a href=""></a>  <span class="fu">system.file</span>(<span class="st">"shape/nc.shp"</span>, <span class="at">package =</span> <span class="st">"sf"</span>)</span>
+<span id="cb9-6"><a href=""></a>  )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section id="plot-borders-of-sf" class="slide level2">
-<h2>Plot borders of sf</h2>
+<h2>plot borders of sf</h2>
 <ul>
-<li>Map an sf object using their own geom ‘geom_sf’</li>
+<li>Map an sf object using their own geom <code>geom_sf</code></li>
 </ul>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href=""></a><span class="fu">ggplot</span>(north_carolina) <span class="sc">+</span> </span>
-<span id="cb8-2"><a href=""></a>  <span class="fu">geom_sf</span>() <span class="sc">+</span> </span>
-<span id="cb8-3"><a href=""></a>  <span class="fu">theme_bw</span>() <span class="co"># we will use this theme for class, play around with others, but more</span></span>
-<span id="cb8-4"><a href=""></a>  <span class="co"># miniminal themes tend to be the best. It's very easy to clutter maps. </span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href=""></a><span class="fu">ggplot</span>(north_carolina) <span class="sc">+</span> </span>
+<span id="cb10-2"><a href=""></a>  <span class="fu">geom_sf</span>() <span class="sc">+</span> </span>
+<span id="cb10-3"><a href=""></a>  <span class="fu">theme_bw</span>() <span class="co"># we will use this theme for class, play around with others, but more</span></span>
+<span id="cb10-4"><a href=""></a>  <span class="co"># miniminal themes tend to be the best. It's very easy to clutter maps. </span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 
 </div>
 <img data-src="SDS_Day_1_slides_files/figure-revealjs/sf%20with%20ggplot2%20-%202-1.png" class="quarto-figure quarto-figure-center r-stretch" style="width:75.0%"></section>
 <section id="fill-sf-interiors" class="slide level2">
-<h2>Fill sf interiors</h2>
+<h2>fill sf interiors</h2>
 <ul>
 <li>Fill the interior of polygons by a variable</li>
 </ul>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb9" data-code-line-numbers="2"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href=""></a><span class="fu">ggplot</span>(north_carolina) <span class="sc">+</span></span>
-<span id="cb9-2"><a href=""></a>  <span class="fu">geom_sf</span>(<span class="fu">aes</span>(<span class="at">fill =</span> BIR79))  <span class="sc">+</span> <span class="co"># fill the interior of polygons by a variable</span></span>
-<span id="cb9-3"><a href=""></a>  <span class="fu">theme_bw</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb11" data-code-line-numbers="2"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href=""></a><span class="fu">ggplot</span>(north_carolina) <span class="sc">+</span> </span>
+<span id="cb11-2"><a href=""></a>  <span class="fu">geom_sf</span>(<span class="fu">aes</span>(<span class="at">fill =</span> BIR79)) <span class="sc">+</span> </span>
+<span id="cb11-3"><a href=""></a>  <span class="co"># fill the interior of polygons by a variable</span></span>
+<span id="cb11-4"><a href=""></a>  <span class="fu">theme_bw</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 
 </div>
 <img data-src="SDS_Day_1_slides_files/figure-revealjs/sf%20with%20ggplot2%20-%203-1.png" class="quarto-figure quarto-figure-center r-stretch" style="width:75.0%"></section>
 <section id="colour-sf-borders-i" class="slide level2">
-<h2>Colour sf borders I</h2>
+<h2>colour sf borders I</h2>
 <ul>
-<li>Color the borders of each polygon in an sf object</li>
+<li>Colour the borders of each polygon in an sf object</li>
+<li>But <em>why</em> are you doing this?</li>
 </ul>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb12" data-code-line-numbers="2-5"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href=""></a><span class="fu">ggplot</span>(north_carolina) <span class="sc">+</span></span>
+<span id="cb12-2"><a href=""></a>  <span class="fu">geom_sf</span>(</span>
+<span id="cb12-3"><a href=""></a>    <span class="fu">aes</span>(<span class="at">color =</span> BIR79),  <span class="co"># color the borders of polygons by a variable</span></span>
+<span id="cb12-4"><a href=""></a>    <span class="at">lwd =</span> <span class="dv">1</span> <span class="co"># just making the borders thicker.</span></span>
+<span id="cb12-5"><a href=""></a>    )  <span class="sc">+</span></span>
+<span id="cb12-6"><a href=""></a>  <span class="fu">scale_color_viridis_c</span>(<span class="at">option =</span> <span class="st">"plasma"</span>, <span class="at">trans =</span> <span class="st">"sqrt"</span>) <span class="sc">+</span></span>
+<span id="cb12-7"><a href=""></a>  <span class="co"># just using a very colourful color scheme so you can see it. </span></span>
+<span id="cb12-8"><a href=""></a>  <span class="fu">theme_bw</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 
+</div>
 <img data-src="SDS_Day_1_slides_files/figure-revealjs/sf%20with%20ggplot2%20-%204-1.png" class="quarto-figure quarto-figure-center r-stretch" style="width:75.0%"></section>
 <section id="colour-sf-borders-ii" class="slide level2">
-<h2>Colour sf borders II</h2>
+<h2>colour sf borders II</h2>
 <ul>
 <li>Colour the border and remove any fill from the polygon interior</li>
 </ul>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb13" data-code-line-numbers="2-6"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href=""></a><span class="fu">ggplot</span>(north_carolina) <span class="sc">+</span></span>
+<span id="cb13-2"><a href=""></a>  <span class="fu">geom_sf</span>(</span>
+<span id="cb13-3"><a href=""></a>    <span class="fu">aes</span>(<span class="at">color =</span> BIR79),</span>
+<span id="cb13-4"><a href=""></a>    <span class="at">fill =</span> <span class="cn">NA</span>  </span>
+<span id="cb13-5"><a href=""></a>    <span class="co"># fill to 'NA' leaves only the borders of  polygons</span></span>
+<span id="cb13-6"><a href=""></a>    ) <span class="sc">+</span> </span>
+<span id="cb13-7"><a href=""></a>  <span class="fu">scale_color_viridis_c</span>(<span class="at">option =</span> <span class="st">"plasma"</span>, <span class="at">trans =</span> <span class="st">"sqrt"</span>) <span class="sc">+</span></span>
+<span id="cb13-8"><a href=""></a>  <span class="fu">theme_bw</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 
+</div>
 <img data-src="SDS_Day_1_slides_files/figure-revealjs/sf%20with%20ggplot2%20-%205a-1.png" class="quarto-figure quarto-figure-center r-stretch" style="width:75.0%"></section>
 <section id="fill-interior-remove-borders" class="slide level2">
-<h2>Fill interior remove borders</h2>
+<h2>fill interior &amp; remove borders</h2>
 <ul>
 <li>Colour the interior of polygons and remove the border</li>
 <li>Can be useful to de-clutter maps</li>
 </ul>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb14" data-code-line-numbers="2-5"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href=""></a><span class="fu">ggplot</span>(north_carolina) <span class="sc">+</span></span>
+<span id="cb14-2"><a href=""></a>  <span class="fu">geom_sf</span>(</span>
+<span id="cb14-3"><a href=""></a>    <span class="fu">aes</span>(<span class="at">fill =</span> BIR79),</span>
+<span id="cb14-4"><a href=""></a>    <span class="at">color =</span> <span class="cn">NA</span>  <span class="co"># set to 'NA' to 'remove' borders. </span></span>
+<span id="cb14-5"><a href=""></a>    ) <span class="sc">+</span></span>
+<span id="cb14-6"><a href=""></a>  <span class="fu">scale_color_viridis_c</span>(</span>
+<span id="cb14-7"><a href=""></a>    <span class="at">option =</span> <span class="st">"plasma"</span>, </span>
+<span id="cb14-8"><a href=""></a>    <span class="at">trans =</span> <span class="st">"sqrt"</span> <span class="co"># some data have a couple very large  values which can swamp the palettes</span></span>
+<span id="cb14-9"><a href=""></a>    ) <span class="sc">+</span></span>
+<span id="cb14-10"><a href=""></a>  <span class="fu">theme_bw</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 
+</div>
 <img data-src="SDS_Day_1_slides_files/figure-revealjs/sf%20with%20ggplot2%20-%205b-1.png" class="quarto-figure quarto-figure-center r-stretch" style="width:75.0%"></section>
 <section id="fill-interior-and-colour-borders" class="slide level2">
 <h2>fill interior and colour borders</h2>
 <ul>
-<li>fill the interior of polygons and color the borders</li>
+<li>fill the interior of polygons and colour the borders</li>
 </ul>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb15" data-code-line-numbers="2-5"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href=""></a><span class="fu">ggplot</span>(north_carolina) <span class="sc">+</span></span>
+<span id="cb15-2"><a href=""></a>  <span class="fu">geom_sf</span>(</span>
+<span id="cb15-3"><a href=""></a>    <span class="fu">aes</span>(<span class="at">fill =</span> BIR79, </span>
+<span id="cb15-4"><a href=""></a>        <span class="at">color =</span> FIPS)</span>
+<span id="cb15-5"><a href=""></a>    ) <span class="sc">+</span> <span class="co"># both fill and color</span></span>
+<span id="cb15-6"><a href=""></a>  <span class="fu">guides</span>(<span class="at">color =</span> <span class="st">'none'</span>) <span class="sc">+</span> <span class="co"># removed the categorical legend (is too big!)</span></span>
+<span id="cb15-7"><a href=""></a>  <span class="fu">theme_bw</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 
-<img data-src="SDS_Day_1_slides_files/figure-revealjs/sf%20with%20ggplot2%20-%206-1.png" class="quarto-figure quarto-figure-center r-stretch" style="width:75.0%"></section></section>
-<section>
-<section id="do-it-all-at-once" class="title-slide slide level1 center">
-<h1>Do it all at once</h1>
+</div>
+<img data-src="SDS_Day_1_slides_files/figure-revealjs/sf%20with%20ggplot2%20-%206-1.png" class="quarto-figure quarto-figure-center r-stretch" style="width:75.0%"></section>
+<section id="do-it-all-at-once" class="slide level2">
+<h2>do it all at once</h2>
 <ul>
 <li>all of this could also have been done as:</li>
 </ul>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href=""></a><span class="fu">ggplot</span>() <span class="sc">+</span> <span class="co"># leave empty</span></span>
+<span id="cb16-2"><a href=""></a>  <span class="fu">geom_sf</span>(<span class="at">data =</span> north_carolina, <span class="co">#  need to specify `data = object`. </span></span>
+<span id="cb16-3"><a href=""></a>          <span class="fu">aes</span>(<span class="at">fill =</span> BIR79, </span>
+<span id="cb16-4"><a href=""></a>              <span class="at">color =</span> FIPS)</span>
+<span id="cb16-5"><a href=""></a>          ) <span class="sc">+</span> <span class="co"># both fill and color</span></span>
+<span id="cb16-6"><a href=""></a>  <span class="fu">guides</span>(<span class="at">color =</span> <span class="st">'none'</span>) <span class="sc">+</span> <span class="co"># removed the categorical legend (is too big!)</span></span>
+<span id="cb16-7"><a href=""></a>  <span class="fu">theme_bw</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 
+</div>
 <img data-src="SDS_Day_1_slides_files/figure-revealjs/sf%20with%20ggplot2%20-%207-1.png" class="quarto-figure quarto-figure-center r-stretch" style="width:75.0%"></section>
 <section id="multiple-sf-data-sets-on-one-map" class="slide level2">
-<h2>Multiple sf data sets on one map</h2>
+<h2>multiple sf data sets on one map</h2>
 <ul>
 <li>Use two data sets to create one map</li>
 </ul>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb17" data-code-line-numbers="2-5"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href=""></a><span class="fu">ggplot</span>(us_states) <span class="sc">+</span> <span class="co"># two data sets.</span></span>
+<span id="cb17-2"><a href=""></a>  <span class="fu">geom_sf</span>() <span class="sc">+</span> <span class="co"># will inherit 'us_states' from plot call </span></span>
+<span id="cb17-3"><a href=""></a>  <span class="fu">geom_sf</span>( <span class="co"># now specify the second data set</span></span>
+<span id="cb17-4"><a href=""></a>    <span class="at">data =</span> north_carolina, </span>
+<span id="cb17-5"><a href=""></a>    <span class="at">fill =</span> <span class="st">'purple'</span>, </span>
+<span id="cb17-6"><a href=""></a>    <span class="co"># set as constant color - don't map using aes()</span></span>
+<span id="cb17-7"><a href=""></a>    <span class="at">color =</span> <span class="cn">NA</span> </span>
+<span id="cb17-8"><a href=""></a>    <span class="co"># this removes borders for a cleaner map. </span></span>
+<span id="cb17-9"><a href=""></a>    ) <span class="sc">+</span></span>
+<span id="cb17-10"><a href=""></a>  <span class="fu">theme_bw</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 
+</div>
 <img data-src="SDS_Day_1_slides_files/figure-revealjs/sf%20with%20ggplot2%20-%208-1.png" class="quarto-figure quarto-figure-center r-stretch" style="width:75.0%"></section>
 <section id="order-of-data-matters" class="slide level2">
 <h2>order of data matters</h2>
 <ul>
 <li>Be diligent about the order of data sets</li>
 </ul>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb18" data-code-line-numbers="1,3"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href=""></a><span class="fu">ggplot</span>(north_carolina) <span class="sc">+</span> <span class="co"># oh no! we drew over North Carolina!</span></span>
+<span id="cb18-2"><a href=""></a>  <span class="fu">geom_sf</span>(<span class="at">fill =</span> <span class="st">'purple'</span>) <span class="sc">+</span></span>
+<span id="cb18-3"><a href=""></a>  <span class="fu">geom_sf</span>(<span class="at">data =</span> us_states) <span class="sc">+</span></span>
+<span id="cb18-4"><a href=""></a>  <span class="fu">theme_bw</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 
+</div>
 <img data-src="SDS_Day_1_slides_files/figure-revealjs/sf%20with%20ggplot2%20-%209-1.png" class="quarto-figure quarto-figure-center r-stretch" style="width:75.0%"></section>
 <section id="build-plots-from-the-bottom-up" class="slide level2">
 <h2>build plots from the bottom up</h2>
 <ul>
-<li>remember to build plots from the ‘bottom’ up</li>
+<li>build plots and maps from the ‘bottom’ up</li>
 </ul>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb19" data-code-line-numbers="2-3"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href=""></a><span class="fu">ggplot</span>() <span class="sc">+</span> <span class="co"># two data sets.</span></span>
+<span id="cb19-2"><a href=""></a>  <span class="fu">geom_sf</span>(<span class="at">data =</span> us_states, <span class="at">fill =</span> <span class="cn">NA</span>) <span class="sc">+</span></span>
+<span id="cb19-3"><a href=""></a>  <span class="fu">geom_sf</span>(<span class="at">data =</span> north_carolina, <span class="at">fill =</span> <span class="st">'purple'</span>) <span class="sc">+</span></span>
+<span id="cb19-4"><a href=""></a>  <span class="fu">theme_bw</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 
+</div>
 <img data-src="SDS_Day_1_slides_files/figure-revealjs/sf%20with%20ggplot2%20-%2010-1.png" class="quarto-figure quarto-figure-center r-stretch" style="width:75.0%"></section>
 <section id="coord_sf" class="slide level2">
 <h2>coord_sf</h2>
 <ul>
-<li>coord_sf is a helpful modifier to geom_sf</li>
+<li><code>coord_sf</code> is a helpful modifier to geom_sf</li>
 <li>Can set a CRS for the map, modify extent, and change some rendering styles</li>
-<li>remember: ‘?coord_sf’ for arguments!</li>
 </ul>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb20" data-code-line-numbers="4-7"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href=""></a><span class="fu">ggplot</span>() <span class="sc">+</span></span>
+<span id="cb20-2"><a href=""></a>  <span class="fu">geom_sf</span>(<span class="at">data =</span> us_states) <span class="sc">+</span></span>
+<span id="cb20-3"><a href=""></a>  <span class="fu">geom_sf</span>(<span class="at">data =</span> north_carolina) <span class="sc">+</span></span>
+<span id="cb20-4"><a href=""></a>  <span class="fu">coord_sf</span>(</span>
+<span id="cb20-5"><a href=""></a>    <span class="at">crs =</span> <span class="dv">4267</span>, <span class="co"># we can convert each data set to the same CRS </span></span>
+<span id="cb20-6"><a href=""></a>    <span class="at">datum =</span> <span class="cn">NA</span> <span class="co"># we can remove the grid lines/graticules from plot</span></span>
+<span id="cb20-7"><a href=""></a>    )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 
+</div>
 <img data-src="SDS_Day_1_slides_files/figure-revealjs/sf%20with%20ggplot2%20-%2011-1.png" class="quarto-figure quarto-figure-center r-stretch" style="width:75.0%"></section>
 <section id="crop-map-extent" class="slide level2">
 <h2>crop map extent</h2>
 <ul>
-<li>clip the extent of a map using the bbox of the data set of interest</li>
+<li>clip the extent of a map using the bounding box of the data set of interest</li>
 </ul>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb21" data-code-line-numbers="7-11"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href=""></a>bound <span class="ot">&lt;-</span> <span class="fu">st_bbox</span>(north_carolina) </span>
+<span id="cb21-2"><a href=""></a><span class="co"># retrieve the bounding box from the sfc list column</span></span>
+<span id="cb21-3"><a href=""></a></span>
+<span id="cb21-4"><a href=""></a><span class="fu">ggplot</span>() <span class="sc">+</span></span>
+<span id="cb21-5"><a href=""></a>  <span class="fu">geom_sf</span>(<span class="at">data =</span> us_states) <span class="sc">+</span></span>
+<span id="cb21-6"><a href=""></a>  <span class="fu">geom_sf</span>(<span class="at">data =</span> north_carolina, <span class="fu">aes</span>(<span class="at">fill =</span> BIR79)) <span class="sc">+</span></span>
+<span id="cb21-7"><a href=""></a>  <span class="fu">coord_sf</span>( <span class="co"># use the bbox to 'crop' the extent of the map</span></span>
+<span id="cb21-8"><a href=""></a>           <span class="at">xlim =</span> <span class="fu">c</span>(bound[<span class="dv">1</span>], bound[<span class="dv">3</span>]), </span>
+<span id="cb21-9"><a href=""></a>           <span class="at">ylim =</span> <span class="fu">c</span>(bound[<span class="dv">2</span>], bound[<span class="dv">4</span>])</span>
+<span id="cb21-10"><a href=""></a>           ) <span class="sc">+</span></span>
+<span id="cb21-11"><a href=""></a>  <span class="fu">theme_bw</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 
+</div>
 <img data-src="SDS_Day_1_slides_files/figure-revealjs/sf%20with%20ggplot2%20-%2012-1.png" class="quarto-figure quarto-figure-center r-stretch" style="width:75.0%"></section></section>
-<section id="assignments-for-the-duration-of-the-spatial-data-science-module" class="title-slide slide level1 center">
-<h1>Assignments for the Duration of the Spatial Data Science Module:</h1>
-<p><strong>For next Lab: </strong></p>
-<p><em>Please</em> install these packages (if you have not done so already):</p>
+<section>
+<section id="assignments" class="title-slide slide level1 center">
+<h1>Assignments</h1>
+<p><strong>For next Lab: </strong> Install these packages (if you have not done so already):</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href=""></a><span class="fu">install.packages</span>(<span class="st">"sf"</span>, <span class="st">"raster"</span>, <span class="st">"terra"</span>, <span class="st">"sp"</span>, <span class="st">"tmap"</span>, <span class="st">"leaflet"</span>, <span class="st">"ggmap"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>optionally install these:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href=""></a><span class="fu">install.packages</span>(<span class="st">'snow'</span>,<span class="st">'parallel'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
 <p>Download the labs .R script from the course website.</p>
-<p>If you are interested in how Drone/Lidar data are collected please check out the ‘RMBL Spatial Data Science Webinar Series’:</p>
+</section>
+<section id="optional-assignments" class="slide level2">
+<h2>Optional Assignments</h2>
+<p>If you are interested in how Drone/LiDAR data are collected please check out the ‘RMBL Spatial Data Science Webinar Series’:</p>
 <ul>
 <li>https://github.com/ikb-rmbl/SpatialDataScienceWebinars2020</li>
 <li>Collecting UAS Data (Video): https://youtu.be/Pq8btEZRCvM (1.25 hours)</li>
 </ul>
-<p><strong>For next Lecture:</strong> Assigned Reading: Chapter 3 of Spatial Data Science</p>
-<p><strong>Future Bonus SDS Office Hours</strong> Wednesday Night at 5:00 - 6:00.</p>
-<p><strong>Notes on this Lab</strong> My lecture notes are in the R script I used to generate all of the novel figures for this presentation. Likewise this presentation is an .HTML file and can be launched from your computer (it was rendered directly from R using the script).</p>
 </section>
-
+<section id="assignments-1" class="slide level2">
+<h2>Assignments</h2>
+<p><strong>For next Lecture:</strong><br>
+Assigned Reading: Chapter 3 of Spatial Data Science</p>
+<p><strong>Future Bonus SDS Office Hours</strong><br>
+Wednesday Night at 5:00 - 6:00.</p>
+<p><strong>Notes on this Lab</strong><br>
+My lecture notes are in the R script I used to generate all of the novel figures for this presentation. Likewise this presentation is an .HTML file and can be launched from your computer (it was rendered directly from R using the script).</p>
+</section></section>
 <section>
 <section id="works-cited" class="title-slide slide level1 center">
 <h1>Works Cited</h1>
-<p>Krystalli, A. https://annakrystalli.me/intro-r-gis/gis.html Accessed 01.20.2022</p>
-<p>https://geocompr.robinlovelace.net/spatial-class.html Accessed 01.09.2022</p>
-<p>Hijman, R. 05.12.2019 ‘The raster Package’</p>
-<p>https://rspatial.org/raster/RasterPackage.pdf Accessed 01.09.2022</p>
-<p>https://www.neonscience.org/resources/learning-hub/tutorials/dc-multiband-rasters-r Accessed 01.19.2022</p>
-<p>Pebesma, E. https://r-spatial.github.io/sf/articles/sf1.html Accessed 01.10.2022</p>
-<p>https://proj.org/operations/conversions/geoc.html Accessed 01.20.2022.</p>
-<p>https://rspatial.org/raster/spatial/8-rastermanip.html Accessed 01.11.2022</p>
-<p>https://en.wikipedia.org/wiki/Open_Source_Geospatial_Foundation Accessed 01.09.2022</p>
-<p>NOAA. What is geodesy? National Ocean Service website, https://oceanservice.noaa.gov/facts/geodesy.html, 1/25/17.</p>
-<p>Geocomputation with R. Lovelace, R., Nowosad, J., Muenchow, J. 2022-01-25.</p>
+<p><font size="5"></font></p><font size="5">
+<p><a href="https://annakrystalli.me/intro-r-gis/gis.html">Anna Krystalli</a> Accessed 01.20.2022</p>
+<p><a href="https://geocompr.robinlovelace.net/spatial-class.html">Geocomputation with R</a> Accessed 01.09.2022</p>
+<p><a href="https://rspatial.org/raster/RasterPackage.pdf">raster</a> Accessed 01.09.2022</p>
+<p><a href="https://www.neonscience.org/resources/learning-hub/tutorials/dc-multiband-rasters-r">NEON</a> Accessed 01.19.2022</p>
+<p><a href="https://r-spatial.github.io/sf/articles/sf1.html">sf</a> Accessed 01.10.2022</p>
+<p><a href="https://proj.org/operations/conversions/geoc.html">proj</a> Accessed 01.20.2022.</p>
+<p><a href="https://rspatial.org/raster/spatial/8-rastermanip.html">R spatial</a> Accessed 01.11.2022</p>
+<p><a href="https://en.wikipedia.org/wiki/Open_Source_Geospatial_Foundation">Wikipedia</a> Accessed 01.09.2022</p>
+<p><a href="https://oceanservice.noaa.gov/facts/geodesy.html">NOAA</a> Accessed 01.25.2022</p>
+</font><p><font size="5"></font></p>
 </section>
 <section id="packages-cited" class="slide level2">
 <h2>Packages Cited:</h2>

@@ -412,24 +412,27 @@ Reed Benkendorf
 <h2>Geodetic Datums</h2>
 <div class="columns">
 <div class="column" style="width:70%;">
-<div>
+<div class="fragment">
 <p><font size="5"> - Reference frame established to represent locations within the frame.<br>
 - Historically these were locally focused and based on Geoids.<br>
-- either horizontal (X &amp; Y) or vertical (Z) features.</font></p><font size="5">
+- either horizontal (X &amp; Y) or vertical (Z) features.<br>
+- locations are then measured in relation to the control points.</font></p><font size="5">
+</font></div><font size="5">
+<div class="fragment">
 <ul>
-<li class="fragment">Components:
+<li>Components:
 <ul>
-<li class="fragment">reference ellipsoid or geoid<br>
+<li>reference ellipsoid or geoid<br>
 </li>
-<li class="fragment">origin point (from which measurements run)<br>
+<li>origin point (from which measurements run)<br>
 </li>
-<li class="fragment">control points very strictly measured from the origin,</li>
+<li>control points very strictly measured from the origin</li>
 </ul></li>
 </ul>
-</font><p><font size="5">Other locations are then measured in relation to the control points.<br>
-</font></p>
 </div>
-</div><div style="float: right; width: 30%; font-size: 0.8em; color: #cbc4c3; text-align: center;">
+</font><p><font size="5"></font></p>
+</div></div>
+<div style="float: right; width: 30%; font-size: 0.8em; color: #cbc4c3; text-align: center;">
 <div class="cell" data-layout-align="center">
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
@@ -451,7 +454,7 @@ Reed Benkendorf
 </div>
 </div>
 </div>
-</div>
+<p>::::</p>
 </section>
 <section id="geodetic-coordinates" class="slide level2">
 <h2>Geodetic Coordinates</h2>
@@ -920,11 +923,11 @@ Precision:     2 </code></pre>
 <div class="cell">
 <div class="cell-output cell-output-stdout">
 <pre><code>Formal class 'SpatialPoints' [package "sp"] with 3 slots
-  ..@ coords     : num [1:15, 1:2] -105.7 -97.4 -96.2 -94 -111.9 ...
+  ..@ coords     : num [1:15, 1:2] -113.6 -124.9 -122.9 -87.2 -80.9 ...
   .. ..- attr(*, "dimnames")=List of 2
   .. .. ..$ : NULL
   .. .. ..$ : chr [1:2] "xc" "yc"
-  ..@ bbox       : num [1:2, 1:2] -128.4 20.5 -80.6 94.2
+  ..@ bbox       : num [1:2, 1:2] -128.08 6.45 -80.92 84.56
   .. ..- attr(*, "dimnames")=List of 2
   .. .. ..$ : chr [1:2] "xc" "yc"
   .. .. ..$ : chr [1:2] "min" "max"
@@ -949,8 +952,8 @@ Precision:     2 </code></pre>
 <div class="sourceCode cell-code" id="cb4"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href=""></a><span class="fu">str</span>(SPDF<span class="sc">@</span>data)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>'data.frame':   15 obs. of  2 variables:
- $ temperature: num  5.15 5.02 4.77 4.01 5.91 7.38 4.17 4.4 4.7 4.17 ...
- $ aspect     : int  4 44 9 37 10 14 18 22 11 8 ...</code></pre>
+ $ temperature: num  4.68 5.79 4.01 3.95 4.09 6.01 5.95 4.06 5.57 5.45 ...
+ $ aspect     : int  3 41 21 15 5 26 35 40 8 10 ...</code></pre>
 </div>
 </div>
 <aside class="notes">
@@ -1488,7 +1491,6 @@ Wednesday Night at 5:00 - 6:00.</p>
 <p><strong>Notes on this Lab</strong><br>
 My lecture notes are in the R script I used to generate all of the novel figures for this presentation. Likewise this presentation is an .HTML file and can be launched from your computer (it was rendered directly from R using the script).</p>
 </section></section>
-<section>
 <section id="works-cited" class="title-slide slide level1 center">
 <h1>Works Cited</h1>
 <p><font size="5"></font></p><font size="5">
@@ -1503,8 +1505,9 @@ My lecture notes are in the R script I used to generate all of the novel figures
 <p><a href="https://oceanservice.noaa.gov/facts/geodesy.html">NOAA</a> Accessed 01.25.2022</p>
 </font><p><font size="5"></font></p>
 </section>
-<section id="packages-cited" class="slide level2">
-<h2>Packages Cited:</h2>
+
+<section id="packages" class="title-slide slide level1 center">
+<h1>Packages</h1>
 <div class="cell">
 <div class="cell-output cell-output-stdout">
 <pre><code>[[1]]
@@ -1543,7 +1546,7 @@ Hijmans R (2024). _terra: Spatial Data Analysis_. R package version
 </div>
 </div>
 
-</section></section>
+</section>
     </div>
   <div class="quarto-auto-generated-content" style="display: none;">
 <p><img src="../pictures/CBG_Logos/NegauneeInstitute_CBG-Logo-FlowerMark.png" class="slide-logo"></p>

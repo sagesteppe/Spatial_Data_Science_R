@@ -323,18 +323,22 @@ Geoid Cross Section & IGCM Geoid
 ::::{.columns}
 
 ::: {.column width = '70%'}
-::: {.incremental}
+::: {.fragment}
 <font size = '5'> 
 - Reference frame established to represent locations within the frame.  
 - Historically these were locally focused and based on Geoids.  
 - either horizontal (X & Y) or vertical (Z) features.  
+- locations are then measured in relation to the control points.  
+:::
 
+::: {.fragment}
 - Components: 
     - reference ellipsoid or geoid  
     - origin point (from which measurements run)  
-    - control points very strictly measured from the origin, 
-  
-Other locations are then measured in relation to the control points.  
+    - control points very strictly measured from the origin
+    
+:::
+
 </font> 
 ::: 
 ::: 
@@ -984,7 +988,7 @@ knitr::kable(fake_data, caption = "Example Matrix showing values underlaying a r
 
 </font> 
 
-I think it is easiest to imagine that the values within a raster are in the shape of a matrix. Hence, using the code above we could take a vector of values, and bend them, so that each position within the vector matches up with the beginning of a new  row. 
+- The values of a raster are essentially a matrix. 
 
 ```{r Create Empty Raster and Populate - 7 with output, comment = "", warning = F}
 example_raster_dec <- setValues(empty_raster, raster_matrix)
@@ -1037,7 +1041,7 @@ terra::plotRGB(dec_lakes_img)
 
 The main use of Raster Stacks is to hold layers of similar themes.
 
-1) Each layer is the same variable from a different time. e.g. mean monthly temperature from January -> December (12 layers per stack) 
+1) Each layer is the same variable from a different time. e.g. mean temerpature by month (12 layers per stack) 
 2) Each layer is a different independent variable (theme) in an analysis. e.g. yearly mean temperature, mean precipitation, etc. 
 
 ::: notes

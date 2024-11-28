@@ -228,12 +228,10 @@ Reed Benkendorf
 <section>
 <section id="topology" class="title-slide slide level1 center">
 <h1>Topology</h1>
-<ul>
-<li>Many/Most geographic operations are geometric in nature</li>
-</ul>
+<p>Many/Most geographic operations are geometric in nature</p>
 </section>
-<section id="theoretical-relations" class="slide level2">
-<h2>Theoretical Relations</h2>
+<section id="theoretical-relations-i" class="slide level2">
+<h2>Theoretical Relations I</h2>
 <div style="float: left; width: 50%;">
 <ul>
 <li>Dimensionally Extended 9-Intersection Model (DE-9IM)</li>
@@ -253,38 +251,63 @@ Reed Benkendorf
 </div>
 </div>
 </div>
-<p>In the example in the Upper Middle panel</p>
-<p>The dimensions which contain the intersection of the ‘Interior’ of ‘A’ to the ‘Boundary’ of ‘B’ is equal to a line.</p>
+</section>
+<section id="theoretical-relations-ii" class="slide level2">
+<h2>Theoretical Relations II</h2>
+<div style="float: left; width: 50%;">
+<p><font size="5"></font></p><font size="5">
+<p>Upper Middle Panel, dimensions containing the intersection of the <strong>Interior</strong> of ‘A’ to the <strong>Boundary</strong> of ‘B’ is equal to a line.</p>
 <p><span class="math display">\[
 dim[I(a)∩B(b)] = 1
 \]</span></p>
-<p><br></p>
-<ul>
-<li>where ‘I’ is the ‘Interior’ (of ‘a’) &amp; ‘B’ is the ‘Boundary’ (of ‘b’)</li>
-</ul>
+<p>where ‘I’ is the ‘Interior’ (of ‘A’) &amp; ‘B’ is the ‘Boundary’ (of ‘B’)</p>
 <p><span class="math display">\[
 \text{∩ is the 'Intersection'}
 \]</span></p>
-<p><br></p>
-<ul>
-<li>‘1’ denotes that the product of the intersection is a line</li>
-</ul>
-<p>In the example in the Upper Middle panel</p>
-<p>The dimensions which contain the intersection of the ‘Interior’ of ‘A’ to the ‘Boundary’ of ‘B’ is equal to a line.</p>
+</font><p><font size="5">‘1’ denotes that the product of the intersection is a line - it’s the maximal dimension when intersecting to a boundary! </font></p>
+</div>
+<div style="float: right; width: 50%; font-size: 0.8em; color: #cbc4c3; text-align: center;">
+<div class="cell" data-layout-align="center">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img data-src="../pictures/DE-9IM_By_Krauss.png" style="width:85.0%;height:50.0%"></p>
+<figcaption>DE-9IM (Krauss)</figcaption>
+</figure>
+</div>
+</div>
+</div>
+</div>
 </section>
 <section id="applications" class="slide level2">
 <h2>Applications</h2>
-<p>Schema for describing spatial relationships</p>
-<p><font size="4"> <br> - <em>dim[I(a)∩I(b)] = 2</em> Which values are in both polygons<br>
-- <em>dim[I(a)∩B(b)] = 1</em> Which values are in ‘a’, and at the boundary of ‘b’<br>
-- <em>dim[I(a)∩E(b)] = 2</em> Which values are in ‘a’, but not in ‘b’<br>
-<br> - <em>dim[B(a)∩I(b)] = 1</em> Which values are at the boundary of ‘a’, and in ‘b’<br>
-- <em>dim[B(a)∩B(b)] = 0</em> Which values are at the shared boundaries of ‘a’ and ‘b’<br>
-- <em>dim[B(a)∩E(b)] = 1</em> Which values are at the boundary of ‘a’, and outside ‘b’<br>
-<br> - <em>dim[E(a)∩I(b)] = 2</em> Which values are in ‘b’ but not in ‘a’<br>
-- <em>dim[E(a)∩B(b)] = 1</em> Which values are at the boundary of ‘b’ and outside ‘a’<br>
-- <em>dim[E(a)∩E(b)] = 2</em> Which values are outside both ‘a’ and ‘b’<br>
+<div style="float: left; width: 60%;">
+<p><font size="5"> A schema for describing spatial relationships<br>
 </font></p>
+<p><font size="4"></font></p><font size="4">
+<p><span class="math inline">\(dim[I(a)∩I(b)] = 2\)</span> Which areas are in both polygons<br>
+<span class="math inline">\(dim[I(a)∩B(b)] = 1\)</span> Which areas are in ‘a’, and the boundary of ‘b’<br>
+<span class="math inline">\(dim[I(a)∩E(b)] = 2\)</span> Which areas are in ‘a’, but not in ‘b’</p>
+<p><span class="math inline">\(dim[B(a)∩I(b)] = 1\)</span> Which areas are at the boundary of ‘a’, and in ‘b’<br>
+<span class="math inline">\(dim[B(a)∩B(b)] = 0\)</span> Which areas are at the boundaries of ‘a’ and ‘b’<br>
+<span class="math inline">\(dim[B(a)∩E(b)] = 1\)</span> Which areas are at the boundary of ‘a’, and outside ‘b’</p>
+<p><span class="math inline">\(dim[E(a)∩I(b)] = 2\)</span> Which areas are in ‘b’ but not in ‘a’<br>
+<span class="math inline">\(dim[E(a)∩B(b)] = 1\)</span> Which areas are at the boundary of ‘b’ and outside ‘a’<br>
+<span class="math inline">\(dim[E(a)∩E(b)] = 2\)</span> Which areas are outside both ‘a’ and ‘b’</p>
+</font><p><font size="4"></font></p>
+</div>
+<div style="float: right; width: 40%; font-size: 0.8em; color: #cbc4c3; text-align: center;">
+<div class="cell" data-layout-align="center">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img data-src="../pictures/DE-9IM_By_Krauss.png" style="width:85.0%;height:50.0%"></p>
+<figcaption>DE-9IM (Krauss)</figcaption>
+</figure>
+</div>
+</div>
+</div>
+</div>
 </section></section>
 <section>
 <section id="geometric-operations-on-spatial-predicates" class="title-slide slide level1 center">
@@ -293,34 +316,40 @@ dim[I(a)∩B(b)] = 1
 </section>
 <section id="theoretical-properties" class="slide level2">
 <h2>Theoretical Properties</h2>
-<div class="cell" data-layout-align="center">
+<div style="float: center; width: 100%; font-size: 0.6em; color: #cbc4c3; text-align: center;">
+<div class="cell">
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure>
-<p><img data-src="SDS_Day_2_slides_files/figure-revealjs/Plot%20Topology-1.png" style="height:25.0%" width="960"></p>
+<p><img data-src="SDS_Day_2_slides_files/figure-revealjs/Plot%20Topology-1.png" style="width:50.0%"></p>
 <figcaption>Spatial Predicates after Egenhofer and Herring (1990)</figcaption>
 </figure>
 </div>
 </div>
 </div>
+</div>
+<div class="columns">
+<div class="column" style="width:55%;">
+<p><font size="5"> <strong>Disjoint</strong> Neither ‘A’ nor ‘B’ touch at any position<br>
+<strong>Touches</strong> The boundaries of ‘A’ and ‘B’ touch<br>
+<strong>Overlaps</strong> Portions of the interior of feature ‘A’ overlap the interior of ‘B’<br>
+</font></p>
+</div><div class="column" style="width:45%;">
+<p><font size="5"> <strong>Covers</strong> ‘A’ is encapsulated by ‘B’ several sides, but a boundary of ‘A’ shares a border with ‘B’<br>
+<strong>Contains</strong> All borders of one feature are contained by another<br>
+<strong>Equals</strong> ‘A’ and ‘B’ have identical extents.<br>
+</font></p>
+</div></div>
+</section>
+<section id="implementations" class="slide level2">
+<h2>Implementations</h2>
+<p>postGIS implements the following three tests in addition to those on the previous slide:</p>
 <ul>
-<li><p><strong>Disjoint</strong> Neither ‘A’ nor ‘B’ touch at any position<br>
-</p></li>
-<li><p><strong>Touches</strong> The boundaries of ‘A’ and ‘B’ touch<br>
-</p></li>
-<li><p><strong>Covers</strong> Feature ‘A’ is encapsulated by ‘B’ on many sides, at least a boundary of ‘A’ shares at least a partial border with a border of ‘B’<br>
-</p></li>
-<li><p><strong>Contains</strong> All borders of one feature are contained by another<br>
-</p></li>
-<li><p><strong>Overlap</strong> Portions of the interior of feature ‘A’ overlap the interior of ‘B’<br>
-</p></li>
-<li><p><strong>Equals</strong> ‘A’ and ‘B’ have identical extents.</p></li>
-<li><p>postGIS implements the following three (additional) tests:</p></li>
-<li><p><strong>Intersects</strong> (includes: ‘st_touches’, ‘st_overlaps’, ‘st_covers’, ‘st_contain’, ‘st_equals’)<br>
-</p></li>
-<li><p><strong>Within</strong> (includes: ‘st_contains’)<br>
-</p></li>
-<li><p><strong>CoveredBy</strong> (includes: ‘st_equals’)</p></li>
+<li><strong>Intersects</strong> (includes: ‘st_touches’, ‘st_overlaps’, ‘st_covers’, ‘st_contain’, ‘st_equals’)<br>
+</li>
+<li><strong>Within</strong> (includes: ‘st_contains’)<br>
+</li>
+<li><strong>CoveredBy</strong> (includes: ‘st_equals’)</li>
 </ul>
 </section>
 <section id="applications-1" class="slide level2">
@@ -390,10 +419,7 @@ postGIS implementation
 </section>
 <section id="spatial-join" class="slide level2">
 <h2>Spatial Join</h2>
-<ul>
-<li>Combine objects based on their spatial relations.</li>
-<li>May use nearly all of the predicates above, and more!</li>
-</ul>
+<p>Combine objects based on their spatial relations.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb16"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href=""></a>nghbrhd_parks <span class="ot">&lt;-</span> <span class="fu">st_join</span>(</span>
 <span id="cb16-2"><a href=""></a>  chi_neighb, chi_parks, </span>
@@ -401,37 +427,37 @@ postGIS implementation
 <span id="cb16-4"><a href=""></a>  <span class="at">left =</span> <span class="cn">TRUE</span>) <span class="sc">%&gt;%</span> </span>
 <span id="cb16-5"><a href=""></a>  <span class="fu">count</span>(pri_neigh) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<center>
+<div style="float: center; width: 75%; font-size: 0.6em; color: #cbc4c3; text-align: center;">
 <div class="cell">
 <div class="cell-output-display">
 <div>
 <figure>
-<p><img data-src="SDS_Day_2_slides_files/figure-revealjs/Spatial%20Joins%202-1.png" style="height:25.0%" width="960"></p>
+<p><img data-src="SDS_Day_2_slides_files/figure-revealjs/Spatial%20Joins%202-1.png" style="height:10.0%" width="960"></p>
 </figure>
 </div>
 </div>
 </div>
-</center>
+</div>
 </section></section>
+<section>
 <section id="assorted-spatial-vector-operations" class="title-slide slide level1 center">
 <h1>Assorted Spatial Vector Operations</h1>
 <p>This is really a grab bag of what I and others seem to use most the often. We are going to focus on vector data.</p>
 </section>
-
-<section>
-<section id="import-a-vector-file" class="title-slide slide level1 center">
-<h1>Import a Vector file</h1>
-<ul>
-<li>Many formats of vector files may be imported to R.</li>
-</ul>
+<section id="import-a-vector-file" class="slide level2">
+<h2>Import a Vector file</h2>
+<p>Many formats of vector files may be imported to R. Here we import a shapefile, but the process is the same for geopackages etc.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb17" data-code-line-numbers="4"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href=""></a>fp <span class="ot">&lt;-</span> <span class="fu">file.path</span>(<span class="st">'..'</span>, <span class="st">'spatial_lecture_data'</span>, <span class="st">'Chicago_Neighborhoods'</span>)</span>
+<span id="cb17-2"><a href=""></a>files <span class="ot">&lt;-</span> <span class="fu">file.path</span>(fp, <span class="fu">list.files</span>(fp, <span class="st">".shp"</span>))</span>
+<span id="cb17-3"><a href=""></a></span>
+<span id="cb17-4"><a href=""></a>chi_neighb <span class="ot">&lt;-</span> <span class="fu">read_sf</span>(files)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
 </section>
 <section id="convert-to-and-from-sp-objects" class="slide level2">
 <h2>Convert to and from sp objects</h2>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href=""></a><span class="fu">data</span>(<span class="st">"us_states"</span>, <span class="at">package =</span> <span class="st">"spData"</span>)</span>
-<span id="cb17-2"><a href=""></a>us_states.sp <span class="ot">&lt;-</span> <span class="fu">as</span>(us_states, <span class="st">'Spatial'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-<p>convert from an sp to an sf object:</p>
+<p>Often needed to be done on the fly</p>
+<p>convert <code>sp</code> -&gt; <code>sf</code></p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb18"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href=""></a>us_states.sf <span class="ot">&lt;-</span> <span class="fu">st_as_sf</span>(us_states.sp)</span>
 <span id="cb18-2"><a href=""></a><span class="fu">class</span>(us_states.sf)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -439,7 +465,7 @@ postGIS implementation
 <pre><code>[1] "sf"         "data.frame"</code></pre>
 </div>
 </div>
-<p>convert from an sf object to an sp object:</p>
+<p>convert <code>sf</code> -&gt; <code>sf</code></p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb20"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href=""></a>us_states.sp <span class="ot">&lt;-</span> <span class="fu">as</span>(us_states.sf, <span class="st">'Spatial'</span>)</span>
 <span id="cb20-2"><a href=""></a><span class="fu">class</span>(us_states.sp)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -452,13 +478,9 @@ attr(,"package")
 </section>
 <section id="make-tabular-point-data-spatial" class="slide level2">
 <h2>Make tabular point data spatial</h2>
-<ul>
-<li>Specify columns holding coordinates<br>
-</li>
-<li>Specify the original crs the data were collected in<br>
-</li>
-<li>Should the coordinate holding columns be removed?</li>
-</ul>
+<p><code>coords</code> columns holding coordinates<br>
+<code>crs</code> The CRS the data are currently<br>
+<code>remove = F</code> Should the original coordinate holding columns be removed?</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb22"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href=""></a>museums.sf <span class="ot">&lt;-</span> <span class="fu">st_as_sf</span>(</span>
 <span id="cb22-2"><a href=""></a>  museums, </span>
@@ -502,7 +524,7 @@ attr(,"package")
 <h2><code>st_transform</code></h2>
 <details>
 <summary>
-Transform
+Check CRS
 </summary>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb23"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href=""></a><span class="fu">st_crs</span>(museums.sf)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -543,7 +565,7 @@ GEOGCRS["WGS 84",
 <div class="cell">
 <div class="sourceCode cell-code" id="cb25"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href=""></a>museums.conus_albers <span class="ot">&lt;-</span> <span class="fu">st_transform</span>(museums.sf, <span class="at">crs =</span> <span class="dv">5070</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p>verify the projection worked.</p>
+<p>verify the projection worked with <code>st_crs</code></p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb26"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href=""></a><span class="fu">st_crs</span>(museums.conus_albers)[[<span class="st">'input'</span>]]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
@@ -553,20 +575,44 @@ GEOGCRS["WGS 84",
 </section>
 <section id="remove-simple-feature-list-column" class="slide level2">
 <h2>Remove simple feature list column</h2>
+<p>Oftentimes required to feed a data set into other packages, the list columns can confuse them.</p>
+<p><font size="5"></font></p><font size="5">
 <div class="cell">
-<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href=""></a>museums <span class="ot">&lt;-</span> <span class="fu">st_drop_geometry</span>(museums.sf)</span>
-<span id="cb28-2"><a href=""></a><span class="fu">st_geometry</span>(museums.sf) <span class="ot">&lt;-</span> <span class="cn">NULL</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href=""></a><span class="fu">head</span>(museums.sf)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Simple feature collection with 2 features and 3 fields
+Geometry type: POINT
+Dimension:     XY
+Bounding box:  xmin: -87.61643 ymin: 41.79006 xmax: -87.58227 ymax: 41.86666
+Geodetic CRS:  WGS 84
+# A tibble: 2 × 4
+  attribute            latitude longitude             geometry
+  &lt;chr&gt;                &lt;chr&gt;    &lt;chr&gt;              &lt;POINT [°]&gt;
+1 Field Museum         41.86666 -87.61643 (-87.61643 41.86666)
+2 Science and Industry 41.79006 -87.58227 (-87.58227 41.79006)</code></pre>
 </div>
-</section>
-<section id="make-a-geometry-valid-as-a-simple-feature-i" class="slide level2">
-<h2>Make a geometry valid as a Simple Feature I</h2>
-<ul>
-<li>Some data may not be in a simple format</li>
-<li>sf package can <em>generally</em> fix this</li>
-</ul>
+</div>
+<p><br></p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href=""></a><span class="fu">st_is_valid</span>(p1)</span>
-<span id="cb29-2"><a href=""></a><span class="fu">st_is_valid</span>(p1, <span class="at">reason =</span> <span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href=""></a>museums <span class="ot">&lt;-</span> <span class="fu">st_drop_geometry</span>(museums.sf) <span class="co"># method one, pipe-able </span></span>
+<span id="cb30-2"><a href=""></a><span class="fu">st_geometry</span>(museums.sf) <span class="ot">&lt;-</span> <span class="cn">NULL</span> <span class="co"># method two, drop in place. </span></span>
+<span id="cb30-3"><a href=""></a><span class="fu">head</span>(museums)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 2 × 3
+  attribute            latitude longitude
+  &lt;chr&gt;                &lt;chr&gt;    &lt;chr&gt;    
+1 Field Museum         41.86666 -87.61643
+2 Science and Industry 41.79006 -87.58227</code></pre>
+</div>
+</div>
+</font><p><font size="5"></font></p>
+</section>
+<section id="make-geometry-a-valid-simple-feature" class="slide level2">
+<h2>Make geometry a valid Simple Feature</h2>
+<p>Some spatial data may not be in a simple format sf package can <em>generally</em> fix this</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb32"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href=""></a><span class="fu">st_is_valid</span>(p1)</span>
+<span id="cb32-2"><a href=""></a><span class="fu">st_is_valid</span>(p1, <span class="at">reason =</span> <span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="cell">
 <div class="cell-output cell-output-stdout">
@@ -578,31 +624,51 @@ GEOGCRS["WGS 84",
 </div>
 <p>making the geometry simple with st_make_valid()</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb32"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href=""></a>p2 <span class="ot">&lt;-</span> <span class="fu">st_make_valid</span>(p1)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb35"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href=""></a>p2 <span class="ot">&lt;-</span> <span class="fu">st_make_valid</span>(p1)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
-<section id="make-a-geometry-valid-as-a-simple-feature-ii" class="slide level2">
-<h2>Make a geometry valid as a Simple Feature II</h2>
-<ul>
-<li>Polygon became a multipolygon with two polygons</li>
-<li>Removed the self-intersection at position X5, Y5.</li>
-</ul>
-<div class="cell" data-layout-align="center">
+<section id="make-geometry-a-valid-simple-feature-1" class="slide level2">
+<h2>Make geometry a valid Simple Feature</h2>
+<p>Polygon became a multipolygon with two polygons<br>
+Split by removal of self-intersection at position X5, Y5.</p>
+<div class="columns">
+<div class="column" style="width:50%;">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb36"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb36-1"><a href=""></a><span class="fu">class</span>(p1)[<span class="dv">1</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>If we call class(p1), we can see that our original simple feature collection (sfc) contained: sfc_POLYGON</code></pre>
+<pre><code>[1] "sfc_POLYGON"</code></pre>
 </div>
+</div>
+</div><div class="column" style="width:50%;">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb38"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb38-1"><a href=""></a><span class="fu">class</span>(p2)[<span class="dv">1</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>If we call class(p2), we can see that our valid simple feature collection (sfc) contains: sfc_MULTIPOLYGON</code></pre>
+<pre><code>[1] "sfc_MULTIPOLYGON"</code></pre>
 </div>
+</div>
+</div></div>
 
+<img data-src="SDS_Day_2_slides_files/figure-revealjs/unnamed-chunk-5-1.png" class="quarto-figure quarto-figure-center r-stretch" width="960"></section>
+<section id="summarize-geometries-with-group_by" class="slide level2">
+<h2><code>summarize</code> geometries with <code>group_by</code></h2>
+<p><code>dplyr</code> can be used to union geometries by group</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb40"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb40-1"><a href=""></a>regions <span class="ot">&lt;-</span> us_states <span class="sc">%&gt;%</span></span>
+<span id="cb40-2"><a href=""></a>  <span class="fu">group_by</span>(REGION) <span class="sc">%&gt;%</span> </span>
+<span id="cb40-3"><a href=""></a>  <span class="fu">summarize</span>(<span class="at">geometry =</span> <span class="fu">st_union</span>(geometry))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<img data-src="SDS_Day_2_slides_files/figure-revealjs/Make%20Geometry%20Valid%20as%20a%20Simple%20Feature%205-1.png" class="quarto-figure quarto-figure-center r-stretch" width="960"></section>
-<section id="aggregate-simple-features-via-group_by-summarize" class="slide level2">
-<h2>Aggregate Simple Features via <code>group_by</code> &amp; <code>summarize</code></h2>
-<ul>
-<li>Simple dplyr operations be used to combine the geometries of features</li>
-<li>Can be used to combine the geometries of features</li>
-</ul>
+<div class="columns">
+<div class="column" style="width:50%;">
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure>
+<p><img data-src="SDS_Day_2_slides_files/figure-revealjs/Summarize%203-1.png" width="960"></p>
+</figure>
+</div>
+</div>
+</div>
+</div><div class="column" style="width:50%;">
 <details>
 <summary>
 input data
@@ -655,13 +721,7 @@ input data
 </div>
 </font>
 </details>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb35"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href=""></a>regions <span class="ot">&lt;-</span> us_states <span class="sc">%&gt;%</span></span>
-<span id="cb35-2"><a href=""></a>  <span class="fu">group_by</span>(REGION) <span class="sc">%&gt;%</span> </span>
-<span id="cb35-3"><a href=""></a>  <span class="fu">summarize</span>(<span class="at">geometry =</span> <span class="fu">st_union</span>(geometry))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-
-<img data-src="SDS_Day_2_slides_files/figure-revealjs/Summarize%203-1.png" width="960" class="r-stretch"><details>
+<details>
 <summary>
 results
 </summary>
@@ -698,21 +758,20 @@ results
 </div>
 </font>
 </details>
+</div></div>
 </section></section>
 <section>
 <section id="area-calculations" class="title-slide slide level1 center">
 <h1>Area Calculations</h1>
-<ul>
-<li>Determine the interior area of a polygon.</li>
-</ul>
+<p>calculate the area of a polygon</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb36"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb36-1"><a href=""></a><span class="fu">st_area</span>(chi_neighb)[<span class="dv">1</span><span class="sc">:</span><span class="dv">5</span>] <span class="co"># restrict to 5 neighborhoods </span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb41"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb41-1"><a href=""></a><span class="fu">st_area</span>(chi_neighb)[<span class="dv">1</span><span class="sc">:</span><span class="dv">5</span>] <span class="co"># restrict to 5 neighborhoods </span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>Units: [m^2]
 [1]  4498293.6   200563.5  3016684.2   972375.8 11596322.7</code></pre>
 </div>
 </div>
-<p>These data are always returned in units of meters, regardless of the coordinate system specifications. However, different Coordinate Systems will give different results</p>
+<p>Data returned in m<sub>^2</sub> regardless of the CRS. However, different projected CRS will give different results</p>
 <div class="cell" data-layout-align="center">
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 2</code></pre>
@@ -731,11 +790,19 @@ results
 <pre><code>integer(0)</code></pre>
 </div>
 </div>
-<img data-src="SDS_Day_2_slides_files/figure-revealjs/Area%203-1.png" class="quarto-figure quarto-figure-center r-stretch" style="width:50.0%"><p>When we use the ‘which’ logical test, we see that all areas in the results from both sets of area calculations are different. When we plot the values we see that both sets have nearly perfect correlation.</p>
+<img data-src="SDS_Day_2_slides_files/figure-revealjs/Area%203-1.png" class="quarto-figure quarto-figure-center r-stretch" style="width:50.0%"></section>
+<section id="area-calculations-accuracy" class="slide level2">
+<h2>Area Calculations Accuracy</h2>
+<p>When we use the ‘which’ logical test, we see that all areas in the results from both sets of area calculations are different. When we plot the values we see that both sets have nearly perfect correlation.</p>
 <p>But neither of these values are as accurate as they could be. We want to use an Equal Area projected coordinate system instead.</p>
 <p>Here we use the NAD83 Conus Albers, a favorite of the United States Geological Survey (USGS).</p>
-<p>While metric values are easy to convert by ‘hand’, we can also convert them using the ‘units’ package.</p>
+</section>
+<section id="area-calculcations-conversion" class="slide level2">
+<h2>Area Calculcations conversion</h2>
+<p>Values by converted by looking up constants, or by using the <code>units</code> package.</p>
 <div class="cell">
+<div class="sourceCode cell-code" id="cb48"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb48-1"><a href=""></a><span class="fu">units</span>(equal_areas_proj) <span class="ot">&lt;-</span> units<span class="sc">::</span><span class="fu">make_units</span>(km<span class="sc">^</span><span class="dv">2</span>)</span>
+<span id="cb48-2"><a href=""></a><span class="fu">head</span>(equal_areas_proj)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>Units: [km^2]
 [1] 0.08197562 0.15334617 0.20086333 0.25781909 0.31268312 0.32418268</code></pre>
@@ -811,7 +878,7 @@ Largest
 <li>Calculate the length of a linestring</li>
 </ul>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb44"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb44-1"><a href=""></a><span class="fu">st_length</span>(NU_campuses)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb50"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb50-1"><a href=""></a><span class="fu">st_length</span>(NU_campuses)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>18578.52 [m]</code></pre>
 </div>
@@ -838,8 +905,8 @@ Largest
 <li>If the centroid would fall outside of the polygons interior, use <code>st_point_on_surface</code> to constrain it</li>
 </ul>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb47"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb47-1"><a href=""></a>chi_cent <span class="ot">&lt;-</span> <span class="fu">st_centroid</span>(chi_neighb)</span>
-<span id="cb47-2"><a href=""></a>chi_pos <span class="ot">&lt;-</span> <span class="fu">st_point_on_surface</span>(chi_neighb)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb53"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb53-1"><a href=""></a>chi_cent <span class="ot">&lt;-</span> <span class="fu">st_centroid</span>(chi_neighb)</span>
+<span id="cb53-2"><a href=""></a>chi_pos <span class="ot">&lt;-</span> <span class="fu">st_point_on_surface</span>(chi_neighb)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="cell" data-layout-align="center">
 <div class="cell-output-display">

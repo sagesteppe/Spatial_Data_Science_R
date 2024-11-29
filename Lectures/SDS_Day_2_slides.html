@@ -223,7 +223,9 @@ Reed Benkendorf
 </section>
 <section id="section" class="slide level2" data-background-image="../pictures/Pioneer_Mtns_ID.jpg">
 <h2></h2>
+<div style="float: center; width: 80%; font-size: 1.1em; color: #2f2d2d ; text-align: center;">
 <p>Assigned Reading: Chapter 3 of Spatial Data Science</p>
+</div>
 </section>
 <section>
 <section id="topology" class="title-slide slide level1 center">
@@ -317,7 +319,7 @@ dim[I(a)∩B(b)] = 1
 <section id="theoretical-properties" class="slide level2">
 <h2>Theoretical Properties</h2>
 <div style="float: center; width: 100%; font-size: 0.6em; color: #cbc4c3; text-align: center;">
-<div class="cell">
+<div class="cell" data-layout-align="center">
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure>
@@ -361,7 +363,7 @@ dim[I(a)∩B(b)] = 1
 <summary>
 sf implementation
 </summary>
-<div class="cell">
+<div class="cell" data-layout-align="center">
 <div class="cell-output cell-output-stdout">
 <pre><code>st_disjoint(A, B_disjoint, sparse = F): TRUE</code></pre>
 </div>
@@ -389,7 +391,7 @@ sf implementation
 <summary>
 postGIS implementation
 </summary>
-<div class="cell">
+<div class="cell" data-layout-align="center">
 <div class="cell-output cell-output-stdout">
 <pre><code>st_intersects(A, B_touches, sparse = F): TRUE</code></pre>
 </div>
@@ -420,7 +422,7 @@ postGIS implementation
 <section id="spatial-join" class="slide level2">
 <h2>Spatial Join</h2>
 <p>Combine objects based on their spatial relations.</p>
-<div class="cell">
+<div class="cell" data-layout-align="center">
 <div class="sourceCode cell-code" id="cb16"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href=""></a>nghbrhd_parks <span class="ot">&lt;-</span> <span class="fu">st_join</span>(</span>
 <span id="cb16-2"><a href=""></a>  chi_neighb, chi_parks, </span>
 <span id="cb16-3"><a href=""></a>  <span class="at">join =</span> st_intersects, </span>
@@ -428,11 +430,11 @@ postGIS implementation
 <span id="cb16-5"><a href=""></a>  <span class="fu">count</span>(pri_neigh) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div style="float: center; width: 75%; font-size: 0.6em; color: #cbc4c3; text-align: center;">
-<div class="cell">
+<div class="cell" data-layout-align="center">
 <div class="cell-output-display">
-<div>
+<div class="quarto-figure quarto-figure-center">
 <figure>
-<p><img data-src="SDS_Day_2_slides_files/figure-revealjs/Spatial%20Joins%202-1.png" style="height:10.0%" width="960"></p>
+<p><img data-src="SDS_Day_2_slides_files/figure-revealjs/Spatial%20Joins%202-1.png" class="quarto-figure quarto-figure-center" style="height:10.0%" width="960"></p>
 </figure>
 </div>
 </div>
@@ -447,7 +449,7 @@ postGIS implementation
 <section id="import-a-vector-file" class="slide level2">
 <h2>Import a Vector file</h2>
 <p>Many formats of vector files may be imported to R. Here we import a shapefile, but the process is the same for geopackages etc.</p>
-<div class="cell">
+<div class="cell" data-layout-align="center">
 <div class="sourceCode cell-code" id="cb17" data-code-line-numbers="4"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href=""></a>fp <span class="ot">&lt;-</span> <span class="fu">file.path</span>(<span class="st">'..'</span>, <span class="st">'spatial_lecture_data'</span>, <span class="st">'Chicago_Neighborhoods'</span>)</span>
 <span id="cb17-2"><a href=""></a>files <span class="ot">&lt;-</span> <span class="fu">file.path</span>(fp, <span class="fu">list.files</span>(fp, <span class="st">".shp"</span>))</span>
 <span id="cb17-3"><a href=""></a></span>
@@ -458,7 +460,7 @@ postGIS implementation
 <h2>Convert to and from sp objects</h2>
 <p>Often needed to be done on the fly</p>
 <p>convert <code>sp</code> -&gt; <code>sf</code></p>
-<div class="cell">
+<div class="cell" data-layout-align="center">
 <div class="sourceCode cell-code" id="cb18"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href=""></a>us_states.sf <span class="ot">&lt;-</span> <span class="fu">st_as_sf</span>(us_states.sp)</span>
 <span id="cb18-2"><a href=""></a><span class="fu">class</span>(us_states.sf)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
@@ -466,7 +468,7 @@ postGIS implementation
 </div>
 </div>
 <p>convert <code>sf</code> -&gt; <code>sf</code></p>
-<div class="cell">
+<div class="cell" data-layout-align="center">
 <div class="sourceCode cell-code" id="cb20"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href=""></a>us_states.sp <span class="ot">&lt;-</span> <span class="fu">as</span>(us_states.sf, <span class="st">'Spatial'</span>)</span>
 <span id="cb20-2"><a href=""></a><span class="fu">class</span>(us_states.sp)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
@@ -481,7 +483,7 @@ attr(,"package")
 <p><code>coords</code> columns holding coordinates<br>
 <code>crs</code> The CRS the data are currently<br>
 <code>remove = F</code> Should the original coordinate holding columns be removed?</p>
-<div class="cell">
+<div class="cell" data-layout-align="center">
 <div class="sourceCode cell-code" id="cb22"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href=""></a>museums.sf <span class="ot">&lt;-</span> <span class="fu">st_as_sf</span>(</span>
 <span id="cb22-2"><a href=""></a>  museums, </span>
 <span id="cb22-3"><a href=""></a>  <span class="at">coords =</span> <span class="fu">c</span>(<span class="at">x =</span> <span class="st">'longitude'</span>, <span class="at">y =</span> <span class="st">'latitude'</span>), </span>
@@ -490,7 +492,7 @@ attr(,"package")
 <span id="cb22-6"><a href=""></a>  )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p><font size="5"></font></p><font size="5">
-<div class="cell">
+<div class="cell" data-layout-align="center">
 <div class="cell-output-display">
 <table class="caption-top">
 <thead>
@@ -526,7 +528,7 @@ attr(,"package")
 <summary>
 Check CRS
 </summary>
-<div class="cell">
+<div class="cell" data-layout-align="center">
 <div class="sourceCode cell-code" id="cb23"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href=""></a><span class="fu">st_crs</span>(museums.sf)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>Coordinate Reference System:
@@ -562,11 +564,11 @@ GEOGCRS["WGS 84",
 </div>
 </details>
 <p>project coordinates from one CRS to another. EPSG codes are numeric and simple to use!</p>
-<div class="cell">
+<div class="cell" data-layout-align="center">
 <div class="sourceCode cell-code" id="cb25"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href=""></a>museums.conus_albers <span class="ot">&lt;-</span> <span class="fu">st_transform</span>(museums.sf, <span class="at">crs =</span> <span class="dv">5070</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>verify the projection worked with <code>st_crs</code></p>
-<div class="cell">
+<div class="cell" data-layout-align="center">
 <div class="sourceCode cell-code" id="cb26"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href=""></a><span class="fu">st_crs</span>(museums.conus_albers)[[<span class="st">'input'</span>]]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] "EPSG:5070"</code></pre>
@@ -577,7 +579,7 @@ GEOGCRS["WGS 84",
 <h2>Remove simple feature list column</h2>
 <p>Oftentimes required to feed a data set into other packages, the list columns can confuse them.</p>
 <p><font size="5"></font></p><font size="5">
-<div class="cell">
+<div class="cell" data-layout-align="center">
 <div class="sourceCode cell-code" id="cb28"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href=""></a><span class="fu">head</span>(museums.sf)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>Simple feature collection with 2 features and 3 fields
@@ -593,7 +595,7 @@ Geodetic CRS:  WGS 84
 </div>
 </div>
 <p><br></p>
-<div class="cell">
+<div class="cell" data-layout-align="center">
 <div class="sourceCode cell-code" id="cb30"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href=""></a>museums <span class="ot">&lt;-</span> <span class="fu">st_drop_geometry</span>(museums.sf) <span class="co"># method one, pipe-able </span></span>
 <span id="cb30-2"><a href=""></a><span class="fu">st_geometry</span>(museums.sf) <span class="ot">&lt;-</span> <span class="cn">NULL</span> <span class="co"># method two, drop in place. </span></span>
 <span id="cb30-3"><a href=""></a><span class="fu">head</span>(museums)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -610,11 +612,11 @@ Geodetic CRS:  WGS 84
 <section id="make-geometry-a-valid-simple-feature" class="slide level2">
 <h2>Make geometry a valid Simple Feature</h2>
 <p>Some spatial data may not be in a simple format sf package can <em>generally</em> fix this</p>
-<div class="cell">
+<div class="cell" data-layout-align="center">
 <div class="sourceCode cell-code" id="cb32"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href=""></a><span class="fu">st_is_valid</span>(p1)</span>
 <span id="cb32-2"><a href=""></a><span class="fu">st_is_valid</span>(p1, <span class="at">reason =</span> <span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div class="cell">
+<div class="cell" data-layout-align="center">
 <div class="cell-output cell-output-stdout">
 <pre><code>st_is_valid(p1): FALSE</code></pre>
 </div>
@@ -623,7 +625,7 @@ Geodetic CRS:  WGS 84
 </div>
 </div>
 <p>making the geometry simple with st_make_valid()</p>
-<div class="cell">
+<div class="cell" data-layout-align="center">
 <div class="sourceCode cell-code" id="cb35"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href=""></a>p2 <span class="ot">&lt;-</span> <span class="fu">st_make_valid</span>(p1)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
@@ -633,14 +635,14 @@ Geodetic CRS:  WGS 84
 Split by removal of self-intersection at position X5, Y5.</p>
 <div class="columns">
 <div class="column" style="width:50%;">
-<div class="cell">
+<div class="cell" data-layout-align="center">
 <div class="sourceCode cell-code" id="cb36"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb36-1"><a href=""></a><span class="fu">class</span>(p1)[<span class="dv">1</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] "sfc_POLYGON"</code></pre>
 </div>
 </div>
 </div><div class="column" style="width:50%;">
-<div class="cell">
+<div class="cell" data-layout-align="center">
 <div class="sourceCode cell-code" id="cb38"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb38-1"><a href=""></a><span class="fu">class</span>(p2)[<span class="dv">1</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] "sfc_MULTIPOLYGON"</code></pre>
@@ -652,18 +654,18 @@ Split by removal of self-intersection at position X5, Y5.</p>
 <section id="summarize-geometries-with-group_by" class="slide level2">
 <h2><code>summarize</code> geometries with <code>group_by</code></h2>
 <p><code>dplyr</code> can be used to union geometries by group</p>
-<div class="cell">
+<div class="cell" data-layout-align="center">
 <div class="sourceCode cell-code" id="cb40"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb40-1"><a href=""></a>regions <span class="ot">&lt;-</span> us_states <span class="sc">%&gt;%</span></span>
 <span id="cb40-2"><a href=""></a>  <span class="fu">group_by</span>(REGION) <span class="sc">%&gt;%</span> </span>
 <span id="cb40-3"><a href=""></a>  <span class="fu">summarize</span>(<span class="at">geometry =</span> <span class="fu">st_union</span>(geometry))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="columns">
 <div class="column" style="width:50%;">
-<div class="cell">
+<div class="cell" data-layout-align="center">
 <div class="cell-output-display">
-<div>
+<div class="quarto-figure quarto-figure-center">
 <figure>
-<p><img data-src="SDS_Day_2_slides_files/figure-revealjs/Summarize%203-1.png" width="960"></p>
+<p><img data-src="SDS_Day_2_slides_files/figure-revealjs/Summarize%203-1.png" class="quarto-figure quarto-figure-center" width="960"></p>
 </figure>
 </div>
 </div>
@@ -674,7 +676,7 @@ Split by removal of self-intersection at position X5, Y5.</p>
 input data
 </summary>
 <p><font size="4"></font></p><font size="4">
-<div class="cell">
+<div class="cell" data-layout-align="center">
 <div class="cell-output-display">
 <table class="caption-top">
 <thead>
@@ -726,7 +728,7 @@ input data
 results
 </summary>
 <p><font size="4"></font></p><font size="4">
-<div class="cell">
+<div class="cell" data-layout-align="center">
 <div class="cell-output-display">
 <table class="caption-top">
 <thead>
@@ -764,50 +766,34 @@ results
 <section id="area-calculations" class="title-slide slide level1 center">
 <h1>Area Calculations</h1>
 <p>calculate the area of a polygon</p>
-<div class="cell">
+<div class="cell" data-layout-align="center">
 <div class="sourceCode cell-code" id="cb41"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb41-1"><a href=""></a><span class="fu">st_area</span>(chi_neighb)[<span class="dv">1</span><span class="sc">:</span><span class="dv">5</span>] <span class="co"># restrict to 5 neighborhoods </span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>Units: [m^2]
 [1]  4498293.6   200563.5  3016684.2   972375.8 11596322.7</code></pre>
 </div>
 </div>
-<p>Data returned in m<sub>^2</sub> regardless of the CRS. However, different projected CRS will give different results</p>
+<p>Data returned in m<sup>2</sup> regardless of the CRS. However, different projected CRS will give different results</p>
 <div class="cell" data-layout-align="center">
-<div class="cell-output cell-output-stdout">
-<pre><code>[1] 2</code></pre>
-</div>
-<div class="cell-output cell-output-stdout">
-<pre><code>integer(0)</code></pre>
-</div>
-<div class="cell-output cell-output-stdout">
-<pre><code>81852.82 [m^2]</code></pre>
-</div>
-<div class="cell-output cell-output-stdout">
-<pre><code>42261063 [m^2]</code></pre>
-</div>
 
 <div class="cell-output cell-output-stdout">
 <pre><code>integer(0)</code></pre>
 </div>
 </div>
-<img data-src="SDS_Day_2_slides_files/figure-revealjs/Area%203-1.png" class="quarto-figure quarto-figure-center r-stretch" style="width:50.0%"></section>
-<section id="area-calculations-accuracy" class="slide level2">
-<h2>Area Calculations Accuracy</h2>
-<p>When we use the ‘which’ logical test, we see that all areas in the results from both sets of area calculations are different. When we plot the values we see that both sets have nearly perfect correlation.</p>
-<p>But neither of these values are as accurate as they could be. We want to use an Equal Area projected coordinate system instead.</p>
-<p>Here we use the NAD83 Conus Albers, a favorite of the United States Geological Survey (USGS).</p>
-</section>
-<section id="area-calculcations-conversion" class="slide level2">
-<h2>Area Calculcations conversion</h2>
+<img data-src="SDS_Day_2_slides_files/figure-revealjs/unnamed-chunk-6-1.png" class="quarto-figure quarto-figure-center r-stretch" width="960"></section>
+<section id="area-calculations-conversion" class="slide level2">
+<h2>Area Calculations conversion</h2>
 <p>Values by converted by looking up constants, or by using the <code>units</code> package.</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb48"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb48-1"><a href=""></a><span class="fu">units</span>(equal_areas_proj) <span class="ot">&lt;-</span> units<span class="sc">::</span><span class="fu">make_units</span>(km<span class="sc">^</span><span class="dv">2</span>)</span>
-<span id="cb48-2"><a href=""></a><span class="fu">head</span>(equal_areas_proj)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb44"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb44-1"><a href=""></a><span class="fu">units</span>(equal_areas_proj) <span class="ot">&lt;-</span> units<span class="sc">::</span><span class="fu">make_units</span>(ha)</span>
+<span id="cb44-2"><a href=""></a><span class="fu">head</span>(equal_areas_proj)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>Units: [km^2]
-[1] 0.08197562 0.15334617 0.20086333 0.25781909 0.31268312 0.32418268</code></pre>
+<pre><code>Units: [ha]
+[1]  8.197562 15.334617 20.086333 25.781909 31.268312 32.418268</code></pre>
 </div>
 </div>
+<div class="columns">
+<div class="column" style="width:60%;">
 <div class="cell" data-layout-align="center">
 <div class="cell-output-display">
 <table class="table table-striped caption-top" data-quarto-postprocess="true" style="font-size: 12px; width: auto !important; ">
@@ -829,9 +815,9 @@ Largest
 </tr>
 <tr class="even">
 <th style="text-align: right;" data-quarto-table-cell-role="th">Neighborhood</th>
-<th style="text-align: right;" data-quarto-table-cell-role="th">Area (m^2)</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">Area (ha)</th>
 <th style="text-align: right;" data-quarto-table-cell-role="th">Neighborhood</th>
-<th style="text-align: right;" data-quarto-table-cell-role="th">Area (m^2)</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">Area (ha)</th>
 </tr>
 </thead>
 <tbody>
@@ -871,117 +857,229 @@ Largest
 
 </div>
 </div>
+</div><div class="column" style="width:40%;">
+<div class="cell" data-layout-align="center">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img data-src="SDS_Day_2_slides_files/figure-revealjs/Area%207-1.png" class="quarto-figure quarto-figure-center" width="960"></p>
+</figure>
+</div>
+</div>
+</div>
+</div></div>
 </section>
 <section id="st_length-of-linestring" class="slide level2">
 <h2><code>st_length</code> of linestring</h2>
 <ul>
 <li>Calculate the length of a linestring</li>
 </ul>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb50"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb50-1"><a href=""></a><span class="fu">st_length</span>(NU_campuses)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="columns">
+<div class="column" style="width:60%;">
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb46"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb46-1"><a href=""></a><span class="fu">st_length</span>(NU_campuses)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>18578.52 [m]</code></pre>
 </div>
 </div>
-</section>
-<section id="boundary-calculations" class="slide level2">
-<h2>Boundary calculations</h2>
-<ul>
-<li>‘convert’ the exterior of a polygon to a linestring (more on this later…)</li>
-<li>calculate exterior using <code>st_length</code></li>
-</ul>
-<div class="cell">
-<div class="cell-output cell-output-stdout">
-<pre><code>10370.89 [m]</code></pre>
-</div>
-</div>
-</section></section>
-<section id="centroids-point-on-surface" class="title-slide slide level1 center">
-<h1>Centroids &amp; Point on Surface</h1>
-<div style="float: left; width: 25%;">
-<ul>
-<li>Centroid the “geometric center of mass of a geometry” of an object.<br>
-</li>
-<li>If the centroid would fall outside of the polygons interior, use <code>st_point_on_surface</code> to constrain it</li>
-</ul>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb53"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb53-1"><a href=""></a>chi_cent <span class="ot">&lt;-</span> <span class="fu">st_centroid</span>(chi_neighb)</span>
-<span id="cb53-2"><a href=""></a>chi_pos <span class="ot">&lt;-</span> <span class="fu">st_point_on_surface</span>(chi_neighb)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
+</div><div class="column" style="width:40%;">
 <div class="cell" data-layout-align="center">
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure>
-<p><img data-src="SDS_Day_2_slides_files/figure-revealjs/Centroid%20and%20POS%20Plot-1.png" class="quarto-figure quarto-figure-center" style="width:75.0%"></p>
+<p><img data-src="SDS_Day_2_slides_files/figure-revealjs/unnamed-chunk-7-1.png" class="quarto-figure quarto-figure-center" width="960"></p>
 </figure>
 </div>
 </div>
 </div>
-</div>
-<div style="float: right; width: 75%;">
-<div class="cell">
-<div class="cell-output-display">
-<div>
-<figure>
-<p><img data-src="SDS_Day_2_slides_files/figure-revealjs/Neighborhood%20Centroids-1.png" style="width:50.0%"></p>
-</figure>
-</div>
-</div>
-<div class="cell-output-display">
-<div>
-<figure>
-<p><img data-src="SDS_Day_2_slides_files/figure-revealjs/Neighborhood%20Centroids-2.png" style="width:50.0%"></p>
-</figure>
-</div>
-</div>
-</div>
-</div>
+</div></div>
 </section>
+<section id="boundary-length-calculation" class="slide level2">
+<h2>Boundary length calculation</h2>
+<ul>
+<li>extract the boundary of the polygon as a linestring<br>
+</li>
+<li>calculate length using <code>st_length</code></li>
+</ul>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb48" data-code-line-numbers="6"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb48-1"><a href=""></a>rogers_park <span class="ot">&lt;-</span> <span class="fu">filter</span>(chi_neighb, pri_neigh <span class="sc">==</span> <span class="st">'Rogers Park'</span>)</span>
+<span id="cb48-2"><a href=""></a></span>
+<span id="cb48-3"><a href=""></a>rogers_park <span class="ot">&lt;-</span> <span class="fu">st_cast</span>(rogers_park, <span class="at">to =</span> <span class="st">'MULTILINESTRING'</span>)</span>
+<span id="cb48-4"><a href=""></a>rogers_park <span class="ot">&lt;-</span> <span class="fu">st_cast</span>(rogers_park, <span class="at">to =</span> <span class="st">'LINESTRING'</span>)</span>
+<span id="cb48-5"><a href=""></a></span>
+<span id="cb48-6"><a href=""></a><span class="fu">st_length</span>(rogers_park)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="columns">
+<div class="column" style="width:50%;">
+<div class="cell" data-layout-align="center">
+<div class="cell-output cell-output-stdout">
+<pre><code>10370.89 [m]</code></pre>
+</div>
+</div>
+</div><div class="column" style="width:50%;">
+<div class="cell" data-layout-align="center">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img data-src="SDS_Day_2_slides_files/figure-revealjs/boundary%203-1.png" class="quarto-figure quarto-figure-center" width="960"></p>
+</figure>
+</div>
+</div>
+</div>
+</div></div>
+</section></section>
+<section>
+<section id="centroids" class="title-slide slide level1 center">
+<h1>Centroids</h1>
+<blockquote>
+<p>“the geometric center of mass of a geometry”</p>
+</blockquote>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb50"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb50-1"><a href=""></a>chi_cent <span class="ot">&lt;-</span> <span class="fu">st_centroid</span>(chi_neighb)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
 
+<img data-src="SDS_Day_2_slides_files/figure-revealjs/Neighborhood%20Centroids-1.png" class="quarto-figure quarto-figure-center r-stretch" style="width:50.0%"></section>
+<section id="point-on-surface" class="slide level2">
+<h2>Point on Surface</h2>
+<p>If the centroid would fall outside of a geometry, constrain it with <code>st_point_on_surface</code></p>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb51"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb51-1"><a href=""></a>chi_pos <span class="ot">&lt;-</span> <span class="fu">st_point_on_surface</span>(chi_neighb)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+
+<img data-src="SDS_Day_2_slides_files/figure-revealjs/Point%20on%20Surface%20Plot-1.png" class="quarto-figure quarto-figure-center r-stretch" width="960"></section></section>
 <section>
 <section id="combine-union-features" class="title-slide slide level1 center">
 <h1>Combine &amp; Union Features</h1>
 <ul>
-<li><em>Combine</em> will form a multipolygon
+<li>Retain geometry information, but simplify any attribute information<br>
+</li>
+<li>Useful for performing lower level spatial operations or cartography</li>
+</ul>
+</section>
+<section id="combine-features" class="slide level2">
+<h2>Combine Features</h2>
+<ul>
+<li><code>st_combine</code> will form a multi* geometry
 <ul>
 <li>Retain all geometries as a multipolygon collection</li>
 <li>Lose the attributes of each feature</li>
 </ul></li>
-<li><em>Union</em> will form a multipolygon
+</ul>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb52"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb52-1"><a href=""></a>chi_combine <span class="ot">&lt;-</span> <span class="fu">st_combine</span>(chi_neighb)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="columns">
+<div class="column" style="width:50%;">
+<p><font size="4"></font></p><font size="4">
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb53"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb53-1"><a href=""></a><span class="fu">head</span>(chi_neighb)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Simple feature collection with 6 features and 4 fields
+Geometry type: MULTIPOLYGON
+Dimension:     XY
+Bounding box:  xmin: -87.74141 ymin: 41.80189 xmax: -87.60641 ymax: 41.93272
+Geodetic CRS:  WGS84(DD)
+# A tibble: 6 × 5
+  pri_neigh          sec_neigh    shape_area shape_len                  geometry
+  &lt;chr&gt;              &lt;chr&gt;             &lt;dbl&gt;     &lt;dbl&gt;        &lt;MULTIPOLYGON [°]&gt;
+1 Grand Boulevard    BRONZEVILLE   48492503.    28197. (((-87.60671 41.81681, -…
+2 Printers Row       PRINTERS ROW   2162138.     6864. (((-87.62761 41.87437, -…
+3 United Center      UNITED CENT…  32520513.    23101. (((-87.66707 41.88885, -…
+4 Sheffield &amp; DePaul SHEFFIELD &amp;…  10482592.    13227. (((-87.65833 41.92166, -…
+5 Humboldt Park      HUMBOLDT PA… 125010426.    46127. (((-87.7406 41.88782, -8…
+6 Garfield Park      GARFIELD PA…  89976070.    44461. (((-87.6954 41.88819, -8…</code></pre>
+</div>
+</div>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb55"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb55-1"><a href=""></a><span class="fu">head</span>(chi_combine)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Geometry set for 1 feature 
+Geometry type: MULTIPOLYGON
+Dimension:     XY
+Bounding box:  xmin: -87.94011 ymin: 41.64454 xmax: -87.52414 ymax: 42.02304
+Geodetic CRS:  WGS84(DD)</code></pre>
+</div>
+</div>
+</font><p><font size="4"></font></p>
+</div><div class="column" style="width:50%;">
+<div class="cell" data-layout-align="center">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img data-src="SDS_Day_2_slides_files/figure-revealjs/Combine%20Plots-1.png" class="quarto-figure quarto-figure-center" style="width:95.0%"></p>
+</figure>
+</div>
+</div>
+</div>
+</div></div>
+</section>
+<section id="union-features" class="slide level2">
+<h2>Union Features</h2>
+<ul>
+<li><code>st_union</code> will form a multi* geometry
 <ul>
 <li>Retain only outer boundary geometries of features</li>
 <li>Lose the attributes of each feature</li>
 </ul></li>
 </ul>
 <div class="cell" data-layout-align="center">
-<div class="cell-output-display">
-<div class="quarto-figure quarto-figure-center">
-<figure>
-<p><img data-src="SDS_Day_2_slides_files/figure-revealjs/Combine%20Plots-1.png" class="quarto-figure quarto-figure-center" style="width:75.0%"></p>
-</figure>
+<div class="sourceCode cell-code" id="cb57"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb57-1"><a href=""></a>chi_union <span class="ot">&lt;-</span> <span class="fu">st_union</span>(chi_neighb)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="columns">
+<div class="column" style="width:50%;">
+<p><font size="4"></font></p><font size="4">
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb58"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb58-1"><a href=""></a><span class="fu">head</span>(chi_neighb)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Simple feature collection with 6 features and 4 fields
+Geometry type: MULTIPOLYGON
+Dimension:     XY
+Bounding box:  xmin: -87.74141 ymin: 41.80189 xmax: -87.60641 ymax: 41.93272
+Geodetic CRS:  WGS84(DD)
+# A tibble: 6 × 5
+  pri_neigh          sec_neigh    shape_area shape_len                  geometry
+  &lt;chr&gt;              &lt;chr&gt;             &lt;dbl&gt;     &lt;dbl&gt;        &lt;MULTIPOLYGON [°]&gt;
+1 Grand Boulevard    BRONZEVILLE   48492503.    28197. (((-87.60671 41.81681, -…
+2 Printers Row       PRINTERS ROW   2162138.     6864. (((-87.62761 41.87437, -…
+3 United Center      UNITED CENT…  32520513.    23101. (((-87.66707 41.88885, -…
+4 Sheffield &amp; DePaul SHEFFIELD &amp;…  10482592.    13227. (((-87.65833 41.92166, -…
+5 Humboldt Park      HUMBOLDT PA… 125010426.    46127. (((-87.7406 41.88782, -8…
+6 Garfield Park      GARFIELD PA…  89976070.    44461. (((-87.6954 41.88819, -8…</code></pre>
 </div>
 </div>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb60"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb60-1"><a href=""></a><span class="fu">head</span>(chi_union)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Geometry set for 1 feature 
+Geometry type: MULTIPOLYGON
+Dimension:     XY
+Bounding box:  xmin: -87.94011 ymin: 41.64454 xmax: -87.52414 ymax: 42.02304
+Geodetic CRS:  WGS84(DD)</code></pre>
 </div>
+</div>
+</font><p><font size="4"></font></p>
+</div><div class="column" style="width:50%;">
 <div class="cell" data-layout-align="center">
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure>
-<p><img data-src="SDS_Day_2_slides_files/figure-revealjs/Union%20Plots-1.png" class="quarto-figure quarto-figure-center" style="width:75.0%"></p>
+<p><img data-src="SDS_Day_2_slides_files/figure-revealjs/Union%20Plots-1.png" class="quarto-figure quarto-figure-center" style="width:95.0%"></p>
 </figure>
 </div>
 </div>
 </div>
+</div></div>
 </section>
 <section id="st_cast" class="slide level2">
 <h2><code>st_cast</code></h2>
 <ul>
 <li>Can be used to extract types of geometries from a multi(polygon, line, point)geometry, or geometry collection.</li>
 </ul>
-<div class="cell">
+<div class="cell" data-layout-align="center">
 <div class="cell-output-display">
-<div>
+<div class="quarto-figure quarto-figure-center">
 <figure>
-<p><img data-src="SDS_Day_2_slides_files/figure-revealjs/Cast%201-1.png" width="960"></p>
+<p><img data-src="SDS_Day_2_slides_files/figure-revealjs/Cast%201-1.png" class="quarto-figure quarto-figure-center" style="height:25.0%" width="960"></p>
 </figure>
 </div>
 </div>
@@ -989,11 +1087,12 @@ Largest
 <ul>
 <li>Divide a Multipolygon into individual polygons.</li>
 </ul>
+<div style="float: center; width: 100%; font-size: 0.8em; color: #cbc4c3; text-align: center;">
 <div class="cell" data-layout-align="center">
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure>
-<p><img data-src="SDS_Day_2_slides_files/figure-revealjs/Cast%203-1.png" class="quarto-figure quarto-figure-center" style="width:25.0%"></p>
+<p><img data-src="SDS_Day_2_slides_files/figure-revealjs/Cast%203-1.png" class="quarto-figure quarto-figure-center" style="width:95.0%"></p>
 </figure>
 </div>
 </div>
@@ -1010,28 +1109,28 @@ Largest
 </thead>
 <tbody>
 <tr class="odd">
-<td style="text-align: left;">Riverdale</td>
-<td style="text-align: left;">MULTIPOLYGON (((-87.60157 4…</td>
+<td style="text-align: left;">Lake View</td>
+<td style="text-align: left;">MULTIPOLYGON (((-87.66402 4…</td>
 </tr>
 <tr class="even">
-<td style="text-align: left;">Sauganash,Forest Glen</td>
-<td style="text-align: left;">MULTIPOLYGON (((-87.76919 4…</td>
+<td style="text-align: left;">Magnificent Mile</td>
+<td style="text-align: left;">MULTIPOLYGON (((-87.62373 4…</td>
 </tr>
 <tr class="odd">
-<td style="text-align: left;">Boystown</td>
-<td style="text-align: left;">MULTIPOLYGON (((-87.64878 4…</td>
+<td style="text-align: left;">Wrigleyville</td>
+<td style="text-align: left;">MULTIPOLYGON (((-87.66225 4…</td>
 </tr>
 <tr class="even">
-<td style="text-align: left;">South Chicago</td>
-<td style="text-align: left;">MULTIPOLYGON (((-87.54398 4…</td>
+<td style="text-align: left;">East Side</td>
+<td style="text-align: left;">MULTIPOLYGON (((-87.52462 4…</td>
 </tr>
 <tr class="odd">
-<td style="text-align: left;">Galewood</td>
-<td style="text-align: left;">MULTIPOLYGON (((-87.78523 4…</td>
+<td style="text-align: left;">Washington Park</td>
+<td style="text-align: left;">MULTIPOLYGON (((-87.60604 4…</td>
 </tr>
 <tr class="even">
-<td style="text-align: left;">Clearing</td>
-<td style="text-align: left;">MULTIPOLYGON (((-87.73762 4…</td>
+<td style="text-align: left;">River North</td>
+<td style="text-align: left;">MULTIPOLYGON (((-87.63145 4…</td>
 </tr>
 </tbody>
 </table>
@@ -1046,7 +1145,7 @@ Largest
 </thead>
 <tbody>
 <tr class="odd">
-<td style="text-align: left;">MULTIPOLYGON (((-87.78527 4…</td>
+<td style="text-align: left;">MULTIPOLYGON (((-87.61748 4…</td>
 </tr>
 </tbody>
 </table>
@@ -1061,80 +1160,86 @@ Largest
 </thead>
 <tbody>
 <tr class="odd">
-<td style="text-align: left;">POLYGON ((-87.78527 41.9164…</td>
+<td style="text-align: left;">POLYGON ((-87.61748 41.8810…</td>
 </tr>
 <tr class="even">
-<td style="text-align: left;">POLYGON ((-87.64866 41.9399…</td>
+<td style="text-align: left;">POLYGON ((-87.64216 41.6853…</td>
 </tr>
 <tr class="odd">
-<td style="text-align: left;">POLYGON ((-87.61417 41.8884…</td>
+<td style="text-align: left;">POLYGON ((-87.65454 41.9544…</td>
 </tr>
 <tr class="even">
-<td style="text-align: left;">POLYGON ((-87.76919 42.0048…</td>
+<td style="text-align: left;">POLYGON ((-87.52463 41.6919…</td>
 </tr>
 <tr class="odd">
-<td style="text-align: left;">POLYGON ((-87.66268 41.9543…</td>
+<td style="text-align: left;">POLYGON ((-87.67308 41.7356…</td>
 </tr>
 <tr class="even">
-<td style="text-align: left;">POLYGON ((-87.71378 41.8043…</td>
+<td style="text-align: left;">POLYGON ((-87.61673 41.8579…</td>
 </tr>
 </tbody>
 </table>
 </div>
 </div>
-</section></section>
-<section id="buffers-convex-hulls" class="title-slide slide level1 center">
-<h1>Buffers &amp; Convex Hulls</h1>
-<ul>
-<li>Buffer: Enlarge a feature by a specified distance in X &amp; Y dimensions</li>
-<li>Convex Hull: Encapsulate a feature in X &amp; Y dimensions.</li>
-</ul>
-<div class="cell" data-layout-align="center">
-<div class="cell-output-display">
-<div class="quarto-figure quarto-figure-center">
-<figure>
-<p><img data-src="SDS_Day_2_slides_files/figure-revealjs/Buffer%20and%20Convex%20Hull%202-1.png" style="width:75.0%"></p>
-<figcaption>Buffer</figcaption>
-</figure>
-</div>
-</div>
-</div>
-<div class="cell" data-layout-align="center">
-<div class="cell-output-display">
-<div class="quarto-figure quarto-figure-center">
-<figure>
-<p><img data-src="SDS_Day_2_slides_files/figure-revealjs/Buffer%20and%20Convex%20Hull%203-1.png" style="width:75.0%"></p>
-<figcaption>Convex Hull of Chicago Neighborhoods, The City, and a buffer of 3km</figcaption>
-</figure>
-</div>
-</div>
 </div>
 </section>
+<section id="buffers" class="slide level2">
+<h2>Buffers</h2>
+<p>Enlarge a feature by a specified distance in X &amp; Y dimensions</p>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb62" data-code-line-numbers="3"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb62-1"><a href=""></a>chi_union <span class="ot">&lt;-</span> sf<span class="sc">::</span><span class="fu">st_transform</span>(chi_union, <span class="dv">32616</span>) <span class="co"># project into a planar system</span></span>
+<span id="cb62-2"><a href=""></a><span class="co"># with constant units i.e. meters. </span></span>
+<span id="cb62-3"><a href=""></a>chi_buffer_3k <span class="ot">&lt;-</span> <span class="fu">st_buffer</span>(chi_union, <span class="at">dist =</span> <span class="dv">3000</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
 
+<img data-src="SDS_Day_2_slides_files/figure-revealjs/Buffer%202-1.png" class="quarto-figure quarto-figure-center r-stretch" style="width:75.0%"></section>
+<section id="convex-hulls" class="slide level2">
+<h2>Convex Hulls</h2>
+<ul>
+<li>Convex Hull: Encapsulate a feature space</li>
+</ul>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb63"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb63-1"><a href=""></a>chi_ch_by_neigh <span class="ot">&lt;-</span> <span class="fu">st_convex_hull</span>(chi_neighb)</span>
+<span id="cb63-2"><a href=""></a>chi_ch_cit <span class="ot">&lt;-</span> <span class="fu">st_convex_hull</span>(chi_union)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+
+<img data-src="SDS_Day_2_slides_files/figure-revealjs/Buffer%20and%20Convex%20Hull%203-1.png" class="quarto-figure quarto-figure-center r-stretch" style="width:75.0%"></section></section>
+<section>
 <section id="measuring-distances" class="title-slide slide level1 center">
 <h1>Measuring Distances</h1>
-<p>Theory: Remember the earth is a ellipsoid, distances must be calculated along the earths curved surface</p>
+<p>Earth is a ellipsoid, distances must be calculated along the earths curved surface</p>
+<div style="float: left; width: 50%;">
+<p><span class="math inline">\(P\)</span> Point of origin<br>
+<span class="math inline">\(Q\)</span> destination<br>
+<span class="math inline">\(u\)</span> &amp; <span class="math inline">\(v\)</span> : antipodal points, positions across the ellipsoid from each other</p>
+</div>
+<div style="float: right; width: 50%; font-size: 0.6em; color: #cbc4c3; text-align: center;">
 <div class="cell" data-layout-align="center">
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure>
-<p><img data-src="../pictures/Great_Circle_Distance_CheCheDaWaff.png" style="width:35.0%"></p>
+<p><img data-src="../pictures/Great_Circle_Distance_CheCheDaWaff.png" style="width:75.0%"></p>
 <figcaption>Great Circle Distance (ChecCheDaWaff)</figcaption>
 </figure>
 </div>
 </div>
 </div>
-<ul>
-<li><em>P</em> Point of origin</li>
-<li><em>Q</em> destination</li>
-<li><em>u</em> &amp; <em>v</em> : antipodal points, positions across the ellipsoid from each other</li>
-</ul>
+</div>
+</section>
+<section id="measuring-distance-ii" class="slide level2">
+<h2>Measuring Distance II</h2>
+<p><code>st_distance</code> will calculate distance between locations using great circle distance</p>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb64"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb64-1"><a href=""></a>AM_FM <span class="ot">&lt;-</span> <span class="fu">st_distance</span>(AM, FM)</span>
+<span id="cb64-2"><a href=""></a>AM_FM <span class="ot">&lt;-</span> <span class="fu">as.numeric</span>(units<span class="sc">::</span><span class="fu">set_units</span>(AM_FM, <span class="st">'kilometer'</span>)) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div style="float: left; width: 50%; font-size: 0.8em;">
 <div class="cell" data-layout-align="center">
 <div class="cell-output-display">
 <table class="caption-top">
 <thead>
 <tr class="header">
-<th style="text-align: right;">Distance (Km)</th>
+<th style="text-align: right;">Distance (km)</th>
 <th style="text-align: left;">Journey</th>
 </tr>
 </thead>
@@ -1155,7 +1260,9 @@ Largest
 </table>
 </div>
 </div>
-<p>We can visualize this with some help from Charlie Joey Hadley whom some sf compliant great circle distance code</p>
+</div>
+<div style="float: right; width: 50%; font-size: 0.6em; color: #cbc4c3; text-align: center;">
+<p><br></p>
 <div class="cell" data-layout-align="center">
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
@@ -1165,21 +1272,26 @@ Largest
 </div>
 </div>
 </div>
+</div>
+</section>
+<section id="measuing-distances-iii" class="slide level2">
+<h2>Measuing Distances III</h2>
+<p>We can measure distances between many objects and get a matrix of distances</p>
 <div class="cell" data-layout-align="center">
-<div class="cell-output-display">
-<div class="quarto-figure quarto-figure-center">
-<figure>
-<p><img data-src="SDS_Day_2_slides_files/figure-revealjs/A%20dense%20distance%20matrix%20B-1.png" class="quarto-figure quarto-figure-center" style="width:75.0%"></p>
-</figure>
+<div class="sourceCode cell-code" id="cb65"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb65-1"><a href=""></a>neighborhood_centroid_dist <span class="ot">&lt;-</span> <span class="fu">st_distance</span>(</span>
+<span id="cb65-2"><a href=""></a>  <span class="fu">st_centroid</span>(chi_neighb) <span class="co"># st_distance requires points  </span></span>
+<span id="cb65-3"><a href=""></a>  )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-</div>
+<div style="float: left; width: 50%;">
+<p><font size="5"></font></p><font size="5">
+<div class="cell" data-layout-align="center">
 <div class="cell-output-display">
 <table class="caption-top">
 <caption>The five most Central Chicago Neighborhoods</caption>
 <thead>
 <tr class="header">
 <th style="text-align: left;">Neighborhood</th>
-<th style="text-align: right;">Distance</th>
+<th style="text-align: right;">Mean Distance (m)</th>
 </tr>
 </thead>
 <tbody>
@@ -1207,8 +1319,20 @@ Largest
 </table>
 </div>
 </div>
-</section>
-
+</font><p><font size="5"></font></p>
+</div>
+<div style="float: right; width: 50%;">
+<div class="cell" data-layout-align="center">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img data-src="SDS_Day_2_slides_files/figure-revealjs/Distance%20plot-1.png" class="quarto-figure quarto-figure-center" width="960"></p>
+</figure>
+</div>
+</div>
+</div>
+</div>
+</section></section>
 <section>
 <section id="an-introduction-to-some-types-of-spatial-analyses" class="title-slide slide level1 center">
 <h1>An introduction to some types of Spatial Analyses</h1>
@@ -1216,116 +1340,182 @@ Largest
 </section>
 <section id="voronoi-polygons" class="slide level2">
 <h2>Voronoi Polygons</h2>
-<ul>
-<li>Find the areas which are closest to objects</li>
-</ul>
-
-<img data-src="SDS_Day_2_slides_files/figure-revealjs/Create%20Voronoi%20Polygons-1.png" width="960" class="r-stretch"></section>
+<p>Partition space to the closest object</p>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb66"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb66-1"><a href=""></a>vorons <span class="ot">&lt;-</span> <span class="fu">st_voronoi</span>(<span class="fu">st_union</span>(plants)) <span class="sc">%&gt;%</span>  <span class="co"># need a multipoint object</span></span>
+<span id="cb66-2"><a href=""></a>  <span class="fu">st_collection_extract</span>() <span class="sc">%&gt;%</span> <span class="co"># st_voronoi returns a multipolygon, extract</span></span>
+<span id="cb66-3"><a href=""></a>  <span class="fu">st_as_sf</span>(<span class="at">crs =</span> <span class="dv">32610</span>) <span class="co"># each of the polygons</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div style="float: left; width: 55%;">
+<p><br></p>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb67"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb67-1"><a href=""></a>vorons <span class="ot">&lt;-</span> vorons <span class="sc">%&gt;%</span> </span>
+<span id="cb67-2"><a href=""></a>  <span class="fu">mutate</span>( <span class="co"># ancillary information </span></span>
+<span id="cb67-3"><a href=""></a>    <span class="at">pt =</span> <span class="fu">unlist</span>(<span class="fu">st_intersects</span>(plants, ,)), <span class="co"># match the input points to polygons</span></span>
+<span id="cb67-4"><a href=""></a>    <span class="at">area =</span> <span class="fu">as.numeric</span>(<span class="fu">st_area</span>(.)), <span class="at">.before =</span> <span class="dv">1</span> <span class="co"># calculate the area of each polygon</span></span>
+<span id="cb67-5"><a href=""></a>  )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div>
+<div style="float: right; width: 40%;">
+<p><br></p>
+<div class="cell" data-layout-align="center">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img data-src="SDS_Day_2_slides_files/figure-revealjs/Plot%20voronoi%20polygons-1.png" class="quarto-figure quarto-figure-center" width="960"></p>
+</figure>
+</div>
+</div>
+</div>
+</div>
+</section>
 <section id="identifying-distance-based-neighbors" class="slide level2">
 <h2>Identifying Distance Based Neighbors</h2>
 <ul>
-<li>One can find neighboring objects via distance thresholds using the spdep package</li>
-<li>these neighbors can be used in many types of linear regression for spatial analyses</li>
+<li>find neighbors via distance thresholds using <code>spdep</code><br>
+</li>
+<li>neighbors can be used in spatial regression as weights</li>
 </ul>
 <div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb68"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb68-1"><a href=""></a>neighborhood_object <span class="ot">&lt;-</span> <span class="fu">dnearneigh</span>(plants, <span class="at">d1 =</span> <span class="dv">1</span>, <span class="at">d2 =</span> <span class="dv">200</span>) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div style="float: left; width: 50%;">
+<p><font size="5"></font></p><font size="5">
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb69"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb69-1"><a href=""></a><span class="fu">summary</span>(neighborhood_object)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>Neighbour list object:
-Number of regions: 81 
+Number of regions: 79 
 Number of nonzero links: 1780 
-Percentage nonzero weights: 27.13001 
-Average number of links: 21.97531 
-2 regions with no links:
-13, 43
-3 disjoint connected subgraphs
+Percentage nonzero weights: 28.52107 
+Average number of links: 22.53165 
 Link number distribution:
 
- 0  4  5  6  7  8  9 15 17 18 20 21 22 23 24 25 26 27 28 29 30 32 33 34 
- 2  1  1  1  4  3  2  2  2  1  5  3  1  2  9 10  8  9  2  3  3  1  4  2 
+ 4  5  6  7  8  9 15 17 18 20 21 22 23 24 25 26 27 28 29 30 32 33 34 
+ 1  1  1  4  3  2  2  2  1  5  3  1  2  9 10  8  9  2  3  3  1  4  2 
 1 least connected region:
-81 with 4 links
+79 with 4 links
 2 most connected regions:
-26 27 with 34 links</code></pre>
+25 26 with 34 links</code></pre>
 </div>
-
 </div>
-<img data-src="SDS_Day_2_slides_files/figure-revealjs/Distance%20Based%20Neighbors-1.png" class="quarto-figure quarto-figure-center r-stretch" width="960"></section>
+</font><p><font size="5"></font></p>
+</div>
+<div style="float: left; width: 50%;">
+<div class="cell" data-layout-align="center">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img data-src="SDS_Day_2_slides_files/figure-revealjs/Distance%20Based%20Neighbors%203-1.png" class="quarto-figure quarto-figure-center" width="960"></p>
+</figure>
+</div>
+</div>
+</div>
+</div>
+</section>
 <section id="kernel-density-estimation-of-a-point-pattern" class="slide level2">
 <h2>Kernel Density Estimation of a Point Pattern</h2>
 <ul>
-<li>estimate the <em>intensity</em> in a sense, the density of a process in space</li>
+<li>estimate the <em>intensity</em>, ~ the density of a process in space</li>
 <li>more widely used for building models than simply estimating densities via projections</li>
 </ul>
 
 <img data-src="SDS_Day_2_slides_files/figure-revealjs/Kernel%20Density%20of%20a%20Point%20Pattern%20Process-1.png" class="quarto-figure quarto-figure-center r-stretch" width="960"></section>
+<section id="determine-whether-points-have-a-non-random-distribution" class="slide level2">
+<h2>Determine whether points have a non-random distribution</h2>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb71"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb71-1"><a href=""></a>ripleys_K <span class="ot">&lt;-</span> <span class="fu">Kest</span>(pp1, <span class="at">correction=</span><span class="st">"all"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div style="float: left; width: 50%;">
+<p><font size="6"> - Ripley’s K<br>
+- Determine whether a point process has a non-random distribution<br>
+- Can fit multiple distributions<br>
+- models above the poisson curve have clustered distributions, below repelled<br>
+- processes which can be modelled<br>
+</font></p>
+</div>
+<div style="float: right; width: 50%;">
+<p><br></p>
+<div class="cell" data-layout-align="center">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img data-src="SDS_Day_2_slides_files/figure-revealjs/Plot%20Ripleys%20K-1.png" class="quarto-figure quarto-figure-center" style="width:95.0%"></p>
+</figure>
+</div>
+</div>
+</div>
+</div>
+</section>
 <section id="cluster-a-point-pattern" class="slide level2">
 <h2>Cluster a Point Pattern</h2>
 <ul>
 <li><p><strong>D</strong>ensity-<strong>B</strong>ased <strong>S</strong>patial <strong>C</strong>lustering of <strong>A</strong>pplications with <strong>N</strong>oise (DBSCAN).</p></li>
-<li><p>Classification algorithm for grouping objects in space</p></li>
+<li><p>Algorithm for grouping objects in space</p></li>
 <li><p>Developed in the mid 90’s, still used and highly cited!</p></li>
 <li><p>Requires two terms</p>
 <ul>
 <li>minium points: the number of points required to form a cluster</li>
 <li>eps: loosely related to distance for which neighbor searches can occur</li>
 </ul></li>
-<li><p>Ripley’s K</p>
+</ul>
+</section>
+<section id="dbscan" class="slide level2">
+<h2>DBSCAN</h2>
 <ul>
-<li>Determine whether a point process is not randomly distributed</li>
-<li>Points can be fit with models of distributions</li>
-<li>segments of a models fit above the poisson curve have clustered distributions</li>
-<li>a process which can be worth modeling.</li>
-</ul></li>
+<li><code>MinPts</code>: the number of points required to form a cluster</li>
+<li><code>eps</code>: ~ distance for which neighbor searches occur</li>
 </ul>
 <div class="cell" data-layout-align="center">
-<div class="cell-output-display">
-<div class="quarto-figure quarto-figure-center">
-<figure>
-<p><img data-src="SDS_Day_2_slides_files/figure-revealjs/Cluster%20Points%20in%20Space%20Ripleys%20K-1.png" class="quarto-figure quarto-figure-center" style="width:50.0%"></p>
-</figure>
+<div class="sourceCode cell-code" id="cb72"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb72-1"><a href=""></a>clustered <span class="ot">&lt;-</span> fpc<span class="sc">::</span><span class="fu">dbscan</span>(<span class="fu">st_coordinates</span>(plants), <span class="at">eps =</span> <span class="dv">70</span>, <span class="at">MinPts =</span> <span class="dv">3</span>) </span>
+<span id="cb72-2"><a href=""></a></span>
+<span id="cb72-3"><a href=""></a>plants <span class="ot">&lt;-</span> <span class="fu">mutate</span>(plants, <span class="at">cluster =</span> <span class="fu">factor</span>(clustered<span class="sc">$</span>cluster), </span>
+<span id="cb72-4"><a href=""></a>       <span class="at">.before =</span> geometry) <span class="co"># assign to sf object</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
+
+<img data-src="SDS_Day_2_slides_files/figure-revealjs/Cluster%20Points%20in%20Space%20-%20DBSCAN-1.png" class="quarto-figure quarto-figure-center r-stretch" width="960"></section>
+<section id="putting-it-all-together" class="slide level2">
+<h2>Putting it all together</h2>
+<div style="float: left; width: 45%;">
+<ul>
+<li>Predicting population genetic structure</li>
+<li>Plants within clusters are likely to be more related to each other</li>
+</ul>
 </div>
+<div style="float: right; width: 55%;">
+<ul>
+<li>Neighbors are more likely to be siblings</li>
+<li>Gene banking of population should occur across cluster to maintain most diversity<br>
+</li>
+</ul>
 </div>
-<div class="cell" data-layout-align="center">
-<div class="cell-output-display">
-<div class="quarto-figure quarto-figure-center">
-<figure>
-<p><img data-src="SDS_Day_2_slides_files/figure-revealjs/Cluster%20Points%20in%20Space%20-%20DBSCAN-1.png" class="quarto-figure quarto-figure-center" width="960"></p>
-</figure>
-</div>
-</div>
-</div>
-<div class="cell" data-layout-align="center">
-<div class="cell-output-display">
-<div class="quarto-figure quarto-figure-center">
-<figure>
-<p><img data-src="SDS_Day_2_slides_files/figure-revealjs/Visualize%20Clusters%20and%20Distance%20based%20Neighbors-1.png" class="quarto-figure quarto-figure-center" width="960"></p>
-</figure>
-</div>
-</div>
-</div>
-</section></section>
+
+<img data-src="SDS_Day_2_slides_files/figure-revealjs/Visualize%20Clusters%20and%20Distance%20based%20Neighbors-1.png" class="quarto-figure quarto-figure-center r-stretch" width="960"></section></section>
+<section>
 <section id="wrapping-up-the-spatial-data-science-module" class="title-slide slide level1 center">
 <h1>Wrapping up the Spatial Data Science Module:</h1>
-<p><strong>Future Bonus SDS Office Hours</strong> Wednesday Night at 5:00 - 6:00 in F-413.</p>
-<p><strong>Notes on this Lab</strong> My lecture notes are in the R script I used to generate all of the novel figures for this presentation. This script is much longer and more complex than Lecture 1’s script. Likewise this presentation is an .HTML file and can be launched from your computer (it was rendered directly from R using the script).</p>
+<p><strong>Future Bonus SDS Office Hours</strong><br>
+Wednesday Night at 5:00 - 6:00 in F-413.</p>
+<p><strong>Notes on this Lab</strong><br>
+My lecture notes are in the R script I used to generate all of the novel figures for this presentation. This script is much longer and more complex than Lecture 1’s script. Likewise this presentation is an .HTML file and can be launched from your computer (it was rendered directly from R using the script!).</p>
 </section>
-
-<section>
-<section id="works-cited" class="title-slide slide level1 center">
-<h1>Works Cited</h1>
-<p>https://cran.r-project.org/web/packages/gstat/vignettes/gstat.pdf Accessed 1.21.2021</p>
-<p>Bivand, R. https://cran.r-project.org/web/packages/spdep/vignettes/nb_sf.html Accessed 1.17.2021</p>
+<section id="works-cited" class="slide level2">
+<h2>Works Cited</h2>
+<p><font size="5"></font></p><font size="5">
 <p>Clementini, Eliseo; Di Felice, Paolino; van Oosterom, Peter (1993). “A small set of formal topological relationships suitable for end-user interaction”. In Abel, David; Ooi, Beng Chin (eds.). Advances in Spatial Databases: Third International Symposium, SSD ’93 Singapore, June 23–25, 1993 Proceedings. Lecture Notes in Computer Science. 692/1993. Springer. pp.&nbsp;277–295. doi:10.1007/3-540-56869-7_16. ISBN 978-3-540-56869-8. Accessed 1.16.2021</p>
 <p>Egenhofer, M.J.; Herring, J.R. (1990). “A Mathematical Framework for the Definition of Topological Relationships”</p>
 <p>Ester, Martin; Kriegel, Hans-Peter; Sander, Jörg; Xu, Xiaowei (1996). Simoudis, Evangelos; Han, Jiawei; Fayyad, Usama M. (eds.). A density-based algorithm for discovering clusters in large spatial databases with noise. Proceedings of the Second International Conference on Knowledge Discovery and Data Mining (KDD-96). AAAI Press. pp.&nbsp;226–231. CiteSeerX 10.1.1.121.9220. ISBN 1-57735-004-9.</p>
-<p>Hadley, C.J. https://www.findingyourway.io/blog/2018/02/28/2018-02-28_great-circles-with-sf-and-leaflet/ Accessed 1.16.2021</p>
-<p>Gimond, M. https://mgimond.github.io/Spatial/point-pattern-analysis-in-r.html Accessed 1.22.2022</p>
-<p>Moreno, M., Basille, M. https://r-spatial.org/r/2018/10/25/ggplot2-sf-2.html Accessed 1.22.2022</p>
-<p>Dennett, A. https://rstudio-pubs-static.s3.amazonaws.com/126356_ef7961b3ac164cd080982bc743b9777e.html Accessed 1.21.2022</p>
+<p><a href="https://cran.r-project.org/web/packages/gstat/vignettes/gstat.pdf">gstat</a> Accessed 1.21.2021</p>
+<p><a href="https://cran.r-project.org/web/packages/spdep/vignettes/nb_sf.html">spdep</a> Accessed 1.17.2021</p>
+<p><a href="https://www.findingyourway.io/blog/2018/02/28/2018-02-28_great-circles-with-sf-and-leaflet/">Great Circle Distances</a> Accessed 1.16.2021</p>
+<p><a href="https://mgimond.github.io/Spatial/point-pattern-analysis-in-r.html">Point Pattern Analysis in R</a> Accessed 1.22.2022</p>
+<p><a href="https://r-spatial.org/r/2018/10/25/ggplot2-sf-2.html">GGplot2 and sf</a> Accessed 1.22.2022</p>
+<p><a href="https://rstudio-pubs-static.s3.amazonaws.com/126356_ef7961b3ac164cd080982bc743b9777e.html">An Introduction to Analysing Spatial Patterns</a> Accessed 1.21.2022</p>
+</font><p><font size="5"></font></p>
 </section>
 <section id="packages-cited" class="slide level2">
-<h2>Packages cited:</h2>
-<div class="cell">
+<h2>Packages cited</h2>
+<div class="cell" data-layout-align="center">
 <div class="cell-output cell-output-stdout">
 <pre><code>[[1]]
 Hijmans R (2024). _raster: Geographic Data Analysis and Modeling_. R

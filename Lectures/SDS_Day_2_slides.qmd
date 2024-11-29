@@ -34,10 +34,17 @@ include-in-header:
       </style>
 ---
 
-## {background-image=../pictures/Pioneer_Mtns_ID.jpg}
-Assigned Reading: Chapter 3 of Spatial Data Science
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE, message = FALSE, warning = FALSE, comment = "", fig.align="center")
+```
 
-```{r Load Libraries, message = F, warning = F, echo = F}
+## {background-image=../pictures/Pioneer_Mtns_ID.jpg}
+
+::: {style="float: center; width: 80%; font-size: 1.1em; color: #2f2d2d ; text-align: center;"}
+Assigned Reading: Chapter 3 of Spatial Data Science
+:::
+
+```{r Load Libraries}
 shhh <- suppressPackageStartupMessages #  silence messages.
 
 shhh(library(tidyverse))
@@ -55,14 +62,14 @@ source('../scripts/functions.R')
 rm(shhh)
 ```
 
-```{r Import Chicago Neighborhoods Polygons, warning = F, echo = F}
+```{r Import Chicago Neighborhoods Polygons}
 files <- paste0('../spatial_lecture_data/Chicago_Neighborhoods/',
                 list.files('../spatial_lecture_data/Chicago_Neighborhoods', ".shp"))
 chi_neighb <- read_sf(files)
 rm(files)
 ```
 
-```{r Import Chicago Park District Polygons, warning = F, echo = F, cache = T}
+```{r Import Chicago Park District Polygons, cache = T}
 files <- paste0('../spatial_lecture_data/Chicago_Park_District_Park_Boundaries/' ,
                 list.files('../spatial_lecture_data/Chicago_Park_District_Park_Boundaries', ".shp"))
 chi_parks <- read_sf(files) %>% 
@@ -82,7 +89,7 @@ park_areas <- chi_neighb1 %>%
 rm(files, chi_neighb1)
 ```
 
-```{r Create Museum Dummy Data, echo = F, message = F, warning = F}
+```{r Create Museum Dummy Data}
 AM <- as_tibble(cbind(attribute = 'American',
                 latitude = 40.781563, 
                 longitude = -73.974751)) %>% 
@@ -102,7 +109,7 @@ SM <- as_tibble(cbind(attribute = 'Smithsonian',
 ```
 
 
-```{r Create Polygons to test spatial predicates, echo  = F}
+```{r Create Polygons to test spatial predicates}
 
 A <- st_polygon( # complete
   list(
@@ -272,7 +279,7 @@ Many/Most geographic operations are geometric in nature
 :::
 
 ::: {style="float: right; width: 50%; font-size: 0.8em; color: #cbc4c3; text-align: center;"}
-```{r, out.width = "85%", fig.show='hold', echo = F, fig.cap = "DE-9IM (Krauss)", fig.align="center", out.height="50%"}
+```{r, out.width = "85%", fig.show='hold', fig.cap = "DE-9IM (Krauss)", out.height="50%"}
 knitr::include_graphics('../pictures/DE-9IM_By_Krauss.png')
 ```
 
@@ -734,9 +741,9 @@ st_area(chi_neighb)
 st_area(chi_neighb)[1:5] # restrict to 5 neighborhoods 
 ```
 
-Data returned in m~^2~ regardless of the CRS. However, different projected CRS will give different results 
+Data returned in m^2^ regardless of the CRS. However, different projected CRS will give different results 
 
-```{r Area 3, message = F, comment = "", echo = F, fig.align="center", out.width = "50%"}
+```{r Area 3, results = 'hide', comment = "", echo = F, fig.align="center", out.width = "50%"}
 areas_proj <- chi_neighb %>% 
   st_transform(32610) %>% 
   st_area() 
@@ -760,28 +767,22 @@ max(areas_proj)
 
 #  what is the correlation between the two methods of measurement?
 res <- cor.test(areas_proj, areas_geog,  method="kendall") # tau of 1, perfect correlation
+```
 
+```{r}
 # what is the relationship.
 plot(x = areas_geog, y = areas_proj, pch = 18, xlim = c(min(areas_geog),max(areas_proj)), 
      ylim = c(min(areas_geog), max(areas_proj)), 
-     main = "Area of Geographic CRS Polgyons plotted against Projected CRS")  
+     main = "Area of Geographic CRS Polygons plotted against Projected CRS")  
   abline(0,1, lty = 2) 
   text(min(areas_geog)*25, max(areas_proj)*0.975, 
        paste0("tau = ", res[["estimate"]][["tau"]])) +
   text(min(areas_geog)*60, max(areas_proj)*0.90,
        paste0("p-value = ", " < 0.001"))
-  
 ```
 
-## Area Calculations accuracy 
-
-When we use the 'which' logical test, we see that all areas in the results from both sets of area calculations are different. When we plot the values we see that both sets have nearly perfect correlation. 
-
-But neither of these values are as accurate as they could be. We want to use an Equal Area projected coordinate system instead. 
-
-Here we use the NAD83 Conus Albers, a favorite of the United States Geological Survey (USGS). 
 ```{r Area 4, message = F, comment = ""}
-equal_areas_proj <- chi_neighb%>% 
+equal_areas_proj <- chi_neighb %>% 
   st_transform(5070) %>% 
 # We want to use an equal area projection! 
   st_area()
@@ -793,17 +794,21 @@ equal_areas_proj <- sort(equal_areas_proj)
 
 Values by converted by looking up constants, or by using the `units` package.
 
-```{r Area 5, message = F, comment = "", echo = TRUE}
-units(equal_areas_proj) <- units::make_units(km^2)
+```{r Area 5, comment = "", echo = TRUE}
+units(equal_areas_proj) <- units::make_units(ha)
 head(equal_areas_proj)
 ```
 
-```{r Area - 6, message = F, echo = F, fig.align="center", warning = F}
+:::: {.columns}
+::: {.column width = '60%'}
 
-equal_areas_proj <- chi_neighb%>% 
+```{r Area - 6, fig.align="center"}
+
+equal_areas_proj <- chi_neighb %>% 
   st_transform(5070) %>% 
 # if for some reason need a project system - use equal area! 
   st_area()
+
 areas <- as.numeric(equal_areas_proj)
 
 areas <- cbind(chi_neighb, areas) 
@@ -818,26 +823,45 @@ smallest <- areas %>%
   slice_head(n = 5) %>% 
   st_drop_geometry() %>% 
   dplyr::select(1,5) %>% 
-  dplyr::rename(Neigh = pri_neigh,  
-                Area = areas) 
+  dplyr::rename(
+    Neigh = pri_neigh,  
+    Area = areas) 
 
 cbind(smallest, largest) %>% knitr::kable( 
       booktabs = T, 
       align = c("r"), 
       caption = "Size of the Largest and Smallest Neighborhoods in Chicago", 
-      col.names = c("Neighborhood", "Area (m^2)","Neighborhood", "Area (m^2)")) %>% 
+      col.names = c("Neighborhood", "Area (ha)","Neighborhood", "Area (ha)")) %>% 
   kableExtra::kable_styling("striped", full_width = F, 
                 position = "left", font_size = 12) %>% 
   kableExtra::add_header_above(c("Smallest" = 2, "Largest" = 2)) 
 
-rm(areas, smallest, largest, areas_geog, areas_proj, equal_areas_proj, res)
+rm( areas_geog, areas_proj, equal_areas_proj, res)
 ```
 
+:::
 
-```{r Area 7}
+::: {.column width = '40%'}
 
+```{r Area 7, warning  = FALSE }
+
+tolabel <- filter(areas, pri_neigh %in% c(smallest$Neigh, largest$pri_neigh))
+ggplot() + 
+  geom_sf(data = areas, aes(fill = areas)) + 
+  ggsflabel::geom_sf_label_repel(
+    data = tolabel, 
+    alpha = 0.8,
+    aes(label = pri_neigh),
+    segment.color = 'black') + 
+  scale_fill_viridis_c('Area (ha)', option = "plasma") + 
+  labs(title = 'Area of Neighborhoods') + 
+  theme_void() 
+
+rm(areas, smallest, largest)
 ```
 
+:::
+::::
 
 ## `st_length` of linestring
 
@@ -854,44 +878,78 @@ NU_campuses <- st_linestring(
   st_as_sf(crs = 4326)
 ```
 
+:::: {.columns}
+::: {.column width = '60%'}
 ```{r Length 2, message = F, comment = "", echo = TRUE}
 st_length(NU_campuses)
 ```
+:::
 
-## Boundary calculations
+::: {.column width = '40%'}
 
-- 'convert' the exterior of a polygon to a linestring (more on this later...)
-- calculate exterior using `st_length` 
+```{r}
+lake_neighs <- chi_neighb[unlist(sf::st_intersects(NU_campuses, st_transform(chi_neighb, st_crs(NU_campuses)))),]
+ggplot() + 
+  geom_sf(data = lake_neighs) + 
+  geom_sf(data = NU_campuses) +
+  labs(title = 'A linestring between Campuses') + 
+  theme_bw()
+```
 
-```{r Boundary 1, message = F, warning = F, comment = ""}
-rogers_park <- chi_neighb %>% 
-  filter(pri_neigh == 'Rogers Park')
+:::
+::::
+
+## Boundary length calculation 
+
+- extract the boundary of the polygon as a linestring  
+- calculate length using `st_length` 
+
+```{r Boundary 1, comment = "", echo = TRUE, results = 'hide'}
+#| code-line-numbers: "6"
+rogers_park <- filter(chi_neighb, pri_neigh == 'Rogers Park')
 
 rogers_park <- st_cast(rogers_park, to = 'MULTILINESTRING')
 rogers_park <- st_cast(rogers_park, to = 'LINESTRING')
-```
 
-```{r Boundary 2, message = F, warning = F, comment = ""}
 st_length(rogers_park)
 ```
 
-```{r, echo = F, warning = F}
+:::: {.columns}
+::: {.column width = '50%'}
+```{r boundary 2}
+st_length(rogers_park)
+```
+
+:::
+
+::: {.column width = '50%'}
+
+```{r boundary 3, fig.align='center'}
+nw <- filter(chi_neighb, pri_neigh %in% c('Edgewater', 'West Ridge'))
+ggplot() + 
+  geom_sf(data = nw) + 
+  geom_sf_label(data = nw, aes(label = pri_neigh)) + 
+  geom_sf(data = rogers_park) + 
+  theme_void()
+```
+
+:::
+::::
+
+```{r}
 rm(rogers_park, NU_campuses)
 ```
 
-# Centroids & Point on Surface
+# Centroids 
 
-::: {style="float: left; width: 25%;"}
+> "the geometric center of mass of a geometry"     
 
-Centroid the "geometric center of mass of a geometry" of an object.  
-If the centroid would fall outside of the polygons interior, use `st_point_on_surface` to constrain it   
-
-```{r Centoid and POS, message = F, warning = F, echo = TRUE}
+```{r Centoid, echo = TRUE}
 chi_cent <- st_centroid(chi_neighb)
-chi_pos <- st_point_on_surface(chi_neighb)
 ```
 
-```{r Centroid and POS Plot, echo = F, fig.align="center", out.width = "75%", warning = F}
+
+```{r Centroid and POS Plot}
 
 c_line <- st_linestring( 
     rbind(
@@ -913,13 +971,6 @@ c_line_cen <- st_centroid(c_line)
 c_poly_cen <- st_centroid(c_polygon)
 c_line_pos <- st_point_on_surface(c_line)
 c_poly_pos <- st_point_on_surface(c_polygon)
-
-ggplot() +
-  geom_sf(data = chi_neighb, fill = "#B3DDF2", color ="#FFFFFF") +
-  geom_sf(data = chi_cent, color = "#FF0000") +
-  labs(title = "Centroids of Neighborhoods") +
-  theme_light() +
-  theme(plot.title = element_text(hjust = 0.5)) 
 
 a <- ggplot(c_line) +
   geom_sf()+
@@ -945,42 +996,61 @@ d <- ggplot(c_polygon) +
 
 ```
 
-:::
-
-::: {style="float: right; width: 75%;"}
-
-```{r Neighborhood Centroids, out.width="50%"}
-cowplot::plot_grid(a, c, b,  d,  nrow = 2)
-
+```{r Neighborhood Centroids, out.width="50%", fig.align="center"}
 ggplot() +
   geom_sf(data = chi_neighb, fill = "#B3DDF2", color ="#FFFFFF") +
-  geom_sf(data = chi_pos, color = "#FF0000") +
-  labs(title = "Point on Surface of Neighborhoods") +
+  geom_sf(data = chi_cent, color = "#FF0000") +
+  labs(title = "Centroids of Neighborhoods") +
   theme_light() +
   theme(plot.title = element_text(hjust = 0.5))
+```
+
+## Point on Surface 
+
+If the centroid would fall outside of a geometry, constrain it with `st_point_on_surface`   
+
+```{r Centoid and POS, echo = TRUE}
+chi_pos <- st_point_on_surface(chi_neighb)
+```
+
+```{r Point on Surface Plot, fig.align="center"}
+cowplot::plot_grid(a, c, b,  d,  nrow = 2)
 
 rm(chi_pos, chi_cent, a, b, c,d, c_line, c_polygon, c_line_cen, c_poly_cen, c_line_pos, c_line_pos)
 ```
 
-:::
 
 # Combine & Union Features
 
-- *Combine* will form a multipolygon
+- Retain geometry information, but simplify any attribute information  
+- Useful for performing lower level spatial operations or cartography  
+
+## Combine Features
+
+- `st_combine` will form a multi* geometry 
   - Retain all geometries as a multipolygon collection
   - Lose the attributes of each feature 
-  
-- *Union* will form a multipolygon
-  - Retain only outer boundary geometries of features
-  - Lose the attributes of each feature
 
-```{r Combine and Union}
+```{r Combine and Union, echo = TRUE}
 chi_combine <- st_combine(chi_neighb)
-chi_union <- st_union(chi_neighb)
 ```
 
-```{r Combine Plots, echo = F, out.width = "75%", fig.align="center"}
+:::: {.columns}
+::: {.column width = '50%'}
+<font size="4">
+```{r, echo = TRUE}
+head(chi_neighb)
+```
 
+```{r, echo = TRUE}
+head(chi_combine)
+```
+</font>
+:::
+
+::: {.column width = '50%'}
+
+```{r Combine Plots, out.width = "95%", fig.align="center"}
 ggplot() +
   geom_sf(data = chi_combine, fill = "#B3DDF2", color ="#FFFFFF") +
   labs(title = "Combine forms a Multipolygon without feature attributes") +
@@ -990,19 +1060,48 @@ ggplot() +
 rm(chi_combine)
 ```
 
-```{r Union Plots, echo = F, out.width = "75%", fig.align="center"}
+:::
+::::
+
+## Union Features 
+
+- `st_union` will form a multi* geometry
+  - Retain only outer boundary geometries of features
+  - Lose the attributes of each feature
+  
+```{r, echo = TRUE}
+chi_union <- st_union(chi_neighb)
+```
+  
+:::: {.columns}
+::: {.column width = '50%'}
+<font size="4">
+```{r, echo = TRUE}
+head(chi_neighb)
+```
+
+```{r, echo = TRUE}
+head(chi_union)
+```
+</font>
+:::
+
+::: {.column width = '50%'}
+```{r Union Plots, out.width = "95%", fig.align="center"}
 ggplot() +
   geom_sf(data = chi_union, fill = "#B3DDF2", color ="#FFFFFF") +
   labs(title = "Union also forms a multi*polygon without feature attributes") +
   theme_light() +
   theme(plot.title = element_text(hjust = 0.5))
 ```
+:::
+::::
 
 ## `st_cast`
 
 - Can be used to extract types of geometries from a multi(polygon, line, point)geometry, or geometry collection. 
 
-```{r Cast 1, echo = F, message = F, warning = F, message = F}
+```{r Cast 1, echo = F, message = F, warning = F, message = F, out.height="25%"}
 nc = st_read(system.file("shape/nc.shp", package="sf"), quiet = T)
 mpl <- nc$geometry[[4]]
 
@@ -1055,7 +1154,9 @@ chi_union <- st_union(chi_sub)
 chi_cast <- st_cast(chi_union, to = "POLYGON")
 ```
 
-```{r Cast 3, message = F, echo = F, out.width = "25%", fig.align="center"}
+::: {style="float: center; width: 100%; font-size: 0.8em; color: #cbc4c3; text-align: center;"}
+
+```{r Cast 3, message = F, echo = F, out.width = "95%", fig.align="center"}
 
 a <- ggplot() +
   geom_sf(data = chi_sub, fill = "#B3DDF2", color = "#FF0000") +
@@ -1083,41 +1184,49 @@ knitr::kable(head(chi_sub[,c(1,5)]),
              col.names = c('Neighborhood', 'geometry'),
              caption = "Original data")
 
-knitr::kable(chi_union,
+knitr::kable(chi_union, 
              caption = "Unioned Data")
 
-knitr::kable(head(chi_cast),
+knitr::kable(head(chi_cast), 
              caption = "Data Cast to Polygons")
 
 rm(chi_sub, chi_cast, chi_union, a, b, c)
 chi_union <- st_union(chi_neighb)
 ```
 
-# Buffers & Convex Hulls
+:::
 
-- Buffer: Enlarge a feature by a specified distance in X & Y dimensions
-- Convex Hull: Encapsulate a feature in X & Y dimensions.
+## Buffers 
 
-```{r Buffer and Convex Hull 1, message = F, warning = F}
-chi_buffer_5k <- st_buffer(chi_union, dist = 3000)
+Enlarge a feature by a specified distance in X & Y dimensions 
 
-chi_ch_by_neigh <- st_convex_hull(chi_neighb)
-chi_ch_cit <- st_convex_hull(chi_union)
-chi_ch_buf <- st_convex_hull(st_buffer(chi_union, dist = 3000))
+```{r Buffer 1, echo = TRUE}
+#| code-line-numbers: "3"
+chi_union <- sf::st_transform(chi_union, 32616) # project into a planar system
+# with constant units i.e. meters. 
+chi_buffer_3k <- st_buffer(chi_union, dist = 3000)
 ```
 
-```{r Buffer and Convex Hull 2, message = F, warning = F, echo = F, out.width = "75%", fig.align="center", fig.cap = "Buffer"}
+```{r Buffer 2, out.width = "75%", fig.align="center"}
 ggplot() +
-  geom_sf(data = chi_buffer_5k, fill = "#FF0000") +
+  geom_sf(data = chi_buffer_3k, fill = "#FF0000") +
   geom_sf(data = chi_neighb, fill = "#B3DDF2", color ="#FFFFFF") +
   labs(title = "Chicago Buffered by 3 kilometers") +
   theme_light() +
   theme(plot.title = element_text(hjust = 0.5))
 ```
 
-```{r Buffer and Convex Hull 3, message = F, warning = F, echo = F, out.width = "75%", fig.align="center", fig.cap = "Convex Hull of Chicago Neighborhoods, The City, and a buffer of 3km"} 
+## Convex Hulls
+
+- Convex Hull: Encapsulate a feature space  
+
+```{r Buffer and Convex Hull 1, echo = TRUE}
+chi_ch_by_neigh <- st_convex_hull(chi_neighb)
+chi_ch_cit <- st_convex_hull(chi_union)
+```
+
+```{r Buffer and Convex Hull 3, out.width = "75%", fig.align="center"} 
 ggplot() +
-  geom_sf(data = chi_ch_buf, color = NA, fill = "#FF0000", line = 2) +
   geom_sf(data = chi_ch_cit, color = NA, fill = "#B3DDF2", lty = 5, line = 2) +
   geom_sf(data = chi_neighb, fill = 'white', border = NA, color = NA) +
   geom_sf(data = chi_ch_by_neigh,  fill = NA, lwd = 1) +
@@ -1125,32 +1234,45 @@ ggplot() +
   theme_light() +
   theme(plot.title = element_text(hjust = 0.5))
   
-rm(chi_buffer_5k, chi_ch_cit, chi_ch_buf, chi_union, chi_ch_by_neigh)
+rm(chi_buffer_3k, chi_ch_cit, chi_ch_buf, chi_union, chi_ch_by_neigh)
 ```
 
-# Measuring Distances
+# Measuring Distances  
 
-Theory: Remember the earth is a ellipsoid, distances must be calculated along the earths curved surface
+Earth is a ellipsoid, distances must be calculated along the earths curved surface
 
-```{r, out.width = "35%", fig.align="center", fig.show='hold', echo = F, fig.cap = "Great Circle Distance (ChecCheDaWaff)"}
+::: {style="float: left; width: 50%;"} 
+$P$ Point of origin  
+$Q$ destination  
+$u$ & $v$ : antipodal points, positions across the ellipsoid from each other  
+:::
+
+::: {style="float: right; width: 50%; font-size: 0.6em; color: #cbc4c3; text-align: center;"}
+```{r, out.width = "75%", fig.align="center", fig.show='hold', echo = F, fig.cap = "Great Circle Distance (ChecCheDaWaff)"}
 knitr::include_graphics("../pictures/Great_Circle_Distance_CheCheDaWaff.png")
 ```
+:::
 
-- *P* Point of origin 
-- *Q* destination
-- *u* & *v* : antipodal points, positions across the ellipsoid from each other
+## Measuring Distance II
+
+`st_distance` will calculate distance between locations using great circle distance 
+
+```{r Pairwise Distance example I, echo = TRUE}
+AM_FM <- st_distance(AM, FM)
+AM_FM <- as.numeric(units::set_units(AM_FM, 'kilometer')) 
+```
 
 ```{r Pairwise Distance between three Natural History Museums 1}
-AM_FM <- st_distance(AM, FM)
 AM_SM <- st_distance(AM, SM)
 FM_SM <- st_distance(FM, SM)
 ```
 
 ```{r Pairwise Distance between three Natural History Museums 2, echo = F}
-AM_FM <- as.numeric(units::set_units(AM_FM, 'kilometer')) 
 AM_SM <- as.numeric(units::set_units(AM_SM, 'kilometer'))
 FM_SM <- as.numeric(units::set_units(FM_SM, 'kilometer'))
 ```
+
+::: {style="float: left; width: 50%; font-size: 0.8em;"}
 
 ```{r Distance between three natural history museums 3, echo = F, fig.align='center'}
 st_dist_results <- data.frame(rbind(
@@ -1159,16 +1281,24 @@ st_dist_results <- data.frame(rbind(
   c(FM_SM, 'Field to Smithonian')
   )
 )
+
 colnames(st_dist_results) <- c('Distance_st', 'Journey')
 st_dist_results$Distance_st <- round(as.numeric(st_dist_results$Distance_st), 1)
 
-knitr::kable(st_dist_results, col.names = c("Distance (Km)",'Journey'))
+knitr::kable(st_dist_results, col.names = c("Distance (km)",'Journey'))
 rm(AM_FM, AM_SM, FM_SM, st_dist_results)
 ```
 
-We can visualize this with some help from Charlie Joey Hadley whom some sf compliant great circle distance code
+:::
+
+::: {style="float: right; width: 50%; font-size: 0.6em; color: #cbc4c3; text-align: center;"}
+
+<br> 
 
 ```{r Create Plot of Great Circle Distances, echo = F, fig.align="center", out.width = "75%"}
+
+# We can visualize this with some help from Charlie Joey Hadley who wrote some sf compliant great circle distance code
+
 museums <- rbind(AM, FM, SM) %>%  # we want to map this
   mutate(
     across(
@@ -1201,11 +1331,12 @@ ggplot() +
   geom_sf(data = museums, size = 3) +
   geom_sf(data = great_circle_routes, lwd = 1) +
   coord_sf(xlim = c(bound[1],bound[3]), ylim = c(bound[2],bound[4])) +
-  labs(title="Great Circle Distance Between Three Museums of Natural History") +
+  labs(title="Great Circle Distance Between Three Natural History Museums") +
   theme_light() +
   theme(plot.title = element_text(hjust = 0.5))
-  #geom_sf_label(data = museums, aes(longitude, latitude, label = attribute), colour = "black")
 ```
+
+:::
 
 ```{r Length on Great Circle Distance Linestrings}
 gcr_distance <- st_length(great_circle_routes)
@@ -1215,23 +1346,25 @@ gcr_distance <- st_length(great_circle_routes)
 rm(AM, FM, SM, bound, museums, journey_data, great_circle_routes, gcr_distance, us_states, journeys_to_sf, world)
 ```
 
-```{r A dense distance matrix, message=F, warning = F}
-neighborhood_centroid_dist <- st_distance(st_centroid(chi_neighb))
+## Measuing Distances III 
+
+We can measure distances between many objects and get a matrix of distances
+
+```{r A dense distance matrix, echo = TRUE}
+neighborhood_centroid_dist <- st_distance(
+  st_centroid(chi_neighb) # st_distance requires points  
+  )
 ```
 
-```{r A dense distance matrix B, echo = F, out.width = "75%", fig.align="center"}
+```{r A dense distance matrix B, out.width = "75%", fig.align="center"}
 neighborhood_centroid_dist <- units::drop_units(neighborhood_centroid_dist)
 mean_distance <- colSums(neighborhood_centroid_dist)/(nrow(neighborhood_centroid_dist)-1)
 chi_neighb1 <- cbind(chi_neighb, mean_distance) 
+```
 
-ggplot() +
-  geom_sf(data = chi_neighb1, aes(fill = mean_distance), alpha = 0.95) +
-  scale_fill_viridis_c(option = "plasma") +
-  labs(fill="Mean Distance (m)") +
-  labs(title="Mean Distance Between all Neighborhoods in Chicago") +
-  theme_light() +
-  theme(plot.title = element_text(hjust = 0.5))
-
+::: {style="float: left; width: 50%;"} 
+<font size = "5">
+```{r distance table}
 chi_neighb1 %>% 
   st_drop_geometry() %>% 
   arrange(mean_distance) %>% 
@@ -1239,79 +1372,127 @@ chi_neighb1 %>%
   dplyr::select(pri_neigh, mean_distance) %>% 
   knitr::kable(
   caption = "The five most Central Chicago Neighborhoods ",
-  col.names = c("Neighborhood",'Distance'))
+  col.names = c("Neighborhood",'Mean Distance (m)'))
+```
+</font>
+:::
 
+::: {style="float: right; width: 50%;"} 
+```{r Distance plot}
+ggplot() +
+  geom_sf(data = chi_neighb1, aes(fill = mean_distance), alpha = 0.95) +
+  scale_fill_viridis_c(option = "plasma") +
+  labs(fill="Mean Distance (m)") +
+  labs(title="Mean Distance Between all Neighborhoods in Chicago") +
+  theme_light() +
+  theme(plot.title = element_text(hjust = 0.5))
+```
+:::
+
+```{r, echo = F, out.width = "75%", fig.align="center"}
 rm(neighborhood_centroid_dist, mean_distance, chi_neighb1)
 ```
 
 # An introduction to some types of Spatial Analyses
 
-
 ## Voronoi Polygons
 
-- Find the areas which are closest to objects
+Partition space to the closest object 
 
 ```{r Import example data, echo = F, comment = "", fig.align="center"}
 plants <- read.csv("../spatial_lecture_data/Solidago_Erigeron_Lanphere.csv") %>% 
-  st_as_sf(coords = c(y = 'longitude', x ='latitude'), crs = 4269)  %>% 
+  st_as_sf(coords = c(y = 'longitude', x ='latitude'), crs = 4269, remove = F)  %>% 
   st_transform(32610) %>% 
-  distinct(individual, .keep_all = T) 
-
-dat1 <- plants %>%
-    mutate(longitude = unlist(map(plants$geometry,1)),
-           latitude = unlist(map(plants$geometry,2))) %>% 
-  st_drop_geometry() %>% 
-  dplyr::select(-taxon)
+  distinct(individual, .keep_all = T) %>% 
+  filter(!individual %in% c(13, 43)) 
 ```
 
-```{r Create Voronoi Polygons, echo = F, warning = F}
+```{r Create Voronoi Polygons, echo = TRUE}
+vorons <- st_voronoi(st_union(plants)) %>%  # need a multipoint object
+  st_collection_extract() %>% # st_voronoi returns a multipolygon, extract
+  st_as_sf(crs = 32610) # each of the polygons
+```
 
-dat2 <- dat1 %>% 
-  filter(!individual %in% c(13, 43)) %>% 
-  st_as_sf(coords = c(y = 'longitude', x ='latitude'), crs = 32610) 
+::: {style="float: left; width: 55%;"} 
 
-pols <- st_collection_extract(st_voronoi(do.call(c, st_geometry(dat2))))
-pols <- pols %>% st_as_sf(crs = 32610) 
+<br>
 
-res <- st_intersects(dat2, pols) %>% 
-  unlist()
+```{r, echo = TRUE}
+vorons <- vorons %>% 
+  mutate( # ancillary information 
+    pt = unlist(st_intersects(plants, ,)), # match the input points to polygons
+    area = as.numeric(st_area(.)), .before = 1 # calculate the area of each polygon
+  )
+```
 
-pols <- pols %>% mutate(pt = res) 
-pols$area <- st_area(pols) %>% 
-  as.numeric()
+:::
 
+::: {style="float: right; width: 40%;"} 
+
+<br>
+
+```{r Plot voronoi polygons}
 ggplot() +
-  geom_sf(data = pols, aes(fill = area), colour = 'grey60') +
-  geom_sf(data = dat2, shape = 19, colour = 'gold1') +
-  coord_sf(ylim = c(4527046, 4527830), xlim = c(403150,403700))  +
-  labs(fill = bquote("Area"~ m^2), title = "Areas which are closest to Observations; Voronoi Polygons") +
+  geom_sf(data = vorons, aes(fill = area), colour = 'grey60') +
+  geom_sf(data = plants, shape = 19, colour = 'gold1') +
+  coord_sf(ylim = c(4527046, 4527830), xlim = c(403150,403700))  + 
+  labs(fill = bquote("Area"~ m^2), 
+       subtitle = 'Voronoi Polygons', 
+       title = "Areas closest to Observations") +
   theme(plot.title = element_text(hjust = 0.5),
         axis.text.x = element_text(angle = 45, vjust = 0.5)) 
 
 rm(res, dat2, pols)
 ```
 
+:::
+
 ## Identifying Distance Based Neighbors
 
-- One can find neighboring objects via distance thresholds using the spdep package
-- these neighbors can be used in many types of linear regression for spatial analyses
+- find neighbors via distance thresholds using `spdep`  
+- neighbors can be used in spatial regression as weights 
 
-```{r Distance Based Neighbors, echo = F, comment = "", fig.align="center"}
+```{r Distance Based Neighbors 1, echo = TRUE}
+neighborhood_object <- dnearneigh(plants, d1 = 1, d2 = 200) 
+```
 
-neighborhood_object <- dnearneigh(plants, d1 = 1, d2 = 200) # identify neighbors
+::: {style="float: left; width: 50%;"} 
+
+<font size="5">
+
+```{r Distance Based Neighbors 2, echo = TRUE}
 summary(neighborhood_object)
+```
+
+</font>
+
+:::
+
+::: {style="float: left; width: 50%;"} 
+
+```{r Distance Based Neighbors 3,  fig.align="center"}
+
+dat1 <- data.frame(
+  cbind(
+    plants$individual, 
+    st_coordinates(plants)
+  )
+) |>
+  setNames(c('individual', 'longitude', 'latitude'))
 
 links <- neighborhood_object %>% 
   purrr::map(., as.integer) %>% 
   purrr::map(., as_tibble) %>% 
-  map2_df(plants$individual,~mutate(.x,Focal_id=.y)) %>% 
+  map2_df(plants$individual, ~mutate(.x,Focal_id=.y)) %>% 
   rename(Neighbor = value) %>% 
   left_join(., dat1, by = c('Focal_id' = 'individual')) %>% 
-  rename(longitude.id = longitude,
-         latitude.id = latitude) %>% 
+  rename( 
+    longitude.id = longitude,
+    latitude.id = latitude) %>% 
   left_join(., dat1, by = c('Neighbor' = 'individual')) %>% 
-  rename(longitude.nb = longitude,
-         latitude.nb = latitude)  %>% 
+  rename(
+    longitude.nb = longitude,
+    latitude.nb = latitude)  %>% 
   drop_na() %>% 
   mutate(Link = as.numeric(paste0(Focal_id, Neighbor)))
 
@@ -1348,10 +1529,11 @@ ggplot() +
 rm(ex_linestring, neighborhood_object, i, links)
 ```
 
+:::
 
-## Kernel Density Estimation of a Point Pattern
+## Kernel Density Estimation of a Point Pattern  
 
-- estimate the *intensity* in a sense, the density of a process in space
+- estimate the *intensity*, ~ the density of a process in space
 - more widely used for building models than simply estimating densities via projections
 
 ```{r Kernel Density of a Point Pattern Process, echo = F, fig.align="center"}
@@ -1369,35 +1551,58 @@ plot(density(pp1), main = "Intensity of a Plant Across a Landscape")
 rm(q)
 ```
 
-## Cluster a Point Pattern
+## Determine whether points have a non-random distribution  
+
+```{r Cluster Points in Space Ripleys K, echo = TRUE}
+ripleys_K <- Kest(pp1, correction="all")
+```
+
+::: {style="float: left; width: 50%;"} 
+
+<font size ="6">
+- Ripley's K  
+  - Determine whether a point process has a non-random distribution  
+  - Can fit multiple distributions  
+  - models above the poisson curve have clustered distributions, below repelled  
+  - processes which can be modelled  
+</font>
+
+:::
+
+::: {style="float: right; width: 50%;"} 
+
+<br> 
+```{r Plot Ripleys K, out.width="95%", fig.align="center"}
+plot(ripleys_K)
+```
+
+:::
+
+## Cluster a Point Pattern  
 
 - **D**ensity-**B**ased **S**patial **C**lustering of **A**pplications with **N**oise (DBSCAN).
-- Classification algorithm for grouping objects in space
-- Developed in the mid 90's, still used and highly cited!
+- Algorithm for grouping objects in space 
+- Developed in the mid 90's, still used and highly cited! 
 
 - Requires two terms
   - minium points: the number of points required to form a cluster
   - eps: loosely related to distance for which neighbor searches can occur
 
-- Ripley's K
-  - Determine whether a point process is not randomly distributed
-  - Points can be fit with models of distributions
-  - segments of a models fit above the poisson curve have clustered distributions
-  - a process which can be worth modeling.
+## DBSCAN 
 
-```{r Cluster Points in Space Ripleys K, echo = F, warning = F, message = F, out.width="50%", fig.align="center"}
-ripleys_K <- Kest(pp1, correction="all")
-plot(ripleys_K)
+- `MinPts`: the number of points required to form a cluster
+- `eps`: ~ distance for which neighbor searches occur
+  
+```{r, echo = TRUE }
+clustered <- fpc::dbscan(st_coordinates(plants), eps = 70, MinPts = 3) 
+
+plants <- mutate(plants, cluster = factor(clustered$cluster), 
+       .before = geometry) # assign to sf object
 ```
 
-```{r Cluster Points in Space - DBSCAN, echo = F, warning = F, message = F, fig.align="center"}
+```{r Cluster Points in Space - DBSCAN, echo = F, fig.align="center"}
 
-dat1 <- data.frame(dat1[,2:3])
-clustered <- fpc::dbscan(dat1, eps = 70, MinPts = 3)
-dat1$cluster <- clustered$cluster
-
-dat1 <- dat1 %>% st_as_sf(coords = c(y = 'longitude', x ='latitude'), crs = 32610) 
-hulls <- dat1 %>% 
+hulls <- plants %>% 
   filter(cluster != 0) %>% 
   st_buffer(25) %>% 
   group_by(cluster) %>% 
@@ -1405,11 +1610,9 @@ hulls <- dat1 %>%
   st_convex_hull() %>% 
   mutate(cluster = as_factor(cluster))
 
-dat1 <- dat1 %>% 
-  mutate(cluster = as_factor(cluster))
 ggplot() +
   geom_sf(data = hulls, aes(fill = cluster), alpha = 0.5) +
-  geom_sf(data = dat1,  color = "darkorchid3") +
+  geom_sf(data = plants,  color = "darkorchid3") +
   coord_sf(ylim = c(4527046, 4527830), xlim = c(403150,403700)) +
   scale_color_manual(values = c('#1b9e77','#d95f02','#d95f02','#e7298a'))+
   labs(title = "DBSCAN Clusters") +
@@ -1420,11 +1623,25 @@ ggplot() +
 rm(pp1, ripleys_K)
 ```
 
-```{r Visualize Clusters and Distance based Neighbors, echo = F, warning = F, message = F, fig.align="center"}
+
+## Putting it all together 
+
+
+::: {style="float: left; width: 45%;"} 
+- Predicting population genetic structure
+- Plants within clusters are likely to be more related to each other 
+:::
+
+::: {style="float: right; width: 55%;"} 
+- Neighbors are more likely to be siblings 
+- Gene banking of population should occur across cluster to maintain most diversity  
+:::
+
+```{r Visualize Clusters and Distance based Neighbors, fig.align="center"}
 ggplot() +
   geom_sf(data = link_collection) +
   geom_sf(data = hulls, aes(fill = cluster), alpha = 0.5) +
-  geom_sf(data = dat1,  color = "darkorchid3") +
+  geom_sf(data = plants,  color = "darkorchid3") +
   coord_sf(ylim = c(4527046, 4527830), xlim = c(403150,403700)) +
   scale_color_manual(values = c('#1b9e77','#d95f02','#d95f02','#e7298a'))+
   labs(title = "DBSCAN Clusters with Neighbors") +
@@ -1433,23 +1650,22 @@ ggplot() +
         axis.text.x = element_text(angle = 45, vjust = 0.5))
 ```
 
+
 ```{r Clear environment from main lecture, echo = F, warning = F, message = F}
 rm(chi_neighb, clustered, dat1, hulls, link_collection, r, plants)
 ```
 
 # Wrapping up the Spatial Data Science Module:
 
-**Future Bonus SDS Office Hours**
-Wednesday Night at 5:00 - 6:00 in F-413.
+**Future Bonus SDS Office Hours**  
+Wednesday Night at 5:00 - 6:00 in F-413.  
 
-**Notes on this Lab**
-My lecture notes are in the R script I used to generate all of the novel figures for this presentation. This script is much longer and more complex than Lecture 1's script. Likewise this presentation is an .HTML file and can be launched from your computer (it was rendered directly from R using the script). 
+**Notes on this Lab**  
+My lecture notes are in the R script I used to generate all of the novel figures for this presentation. This script is much longer and more complex than Lecture 1's script. Likewise this presentation is an .HTML file and can be launched from your computer (it was rendered directly from R using the script!). 
 
-# Works Cited
+## Works Cited  
 
-https://cran.r-project.org/web/packages/gstat/vignettes/gstat.pdf Accessed 1.21.2021
-
-Bivand, R. https://cran.r-project.org/web/packages/spdep/vignettes/nb_sf.html Accessed 1.17.2021
+<font size="5">
 
 Clementini, Eliseo; Di Felice, Paolino; van Oosterom, Peter (1993). "A small set of formal topological relationships suitable for end-user interaction". In Abel, David; Ooi, Beng Chin (eds.). Advances in Spatial Databases: Third International Symposium, SSD '93 Singapore, June 23–25, 1993 Proceedings. Lecture Notes in Computer Science. 692/1993. Springer. pp. 277–295. doi:10.1007/3-540-56869-7_16. ISBN 978-3-540-56869-8. Accessed 1.16.2021
 
@@ -1457,15 +1673,22 @@ Egenhofer, M.J.; Herring, J.R. (1990). "A Mathematical Framework for the Definit
 
 Ester, Martin; Kriegel, Hans-Peter; Sander, Jörg; Xu, Xiaowei (1996). Simoudis, Evangelos; Han, Jiawei; Fayyad, Usama M. (eds.). A density-based algorithm for discovering clusters in large spatial databases with noise. Proceedings of the Second International Conference on Knowledge Discovery and Data Mining (KDD-96). AAAI Press. pp. 226–231. CiteSeerX 10.1.1.121.9220. ISBN 1-57735-004-9.
 
-Hadley, C.J. https://www.findingyourway.io/blog/2018/02/28/2018-02-28_great-circles-with-sf-and-leaflet/ Accessed 1.16.2021
+[gstat](https://cran.r-project.org/web/packages/gstat/vignettes/gstat.pdf) Accessed 1.21.2021
 
-Gimond, M. https://mgimond.github.io/Spatial/point-pattern-analysis-in-r.html Accessed 1.22.2022
+[spdep](https://cran.r-project.org/web/packages/spdep/vignettes/nb_sf.html) Accessed 1.17.2021
 
-Moreno, M., Basille, M. https://r-spatial.org/r/2018/10/25/ggplot2-sf-2.html Accessed 1.22.2022
+[Great Circle Distances](https://www.findingyourway.io/blog/2018/02/28/2018-02-28_great-circles-with-sf-and-leaflet/) Accessed 1.16.2021
 
-Dennett, A. https://rstudio-pubs-static.s3.amazonaws.com/126356_ef7961b3ac164cd080982bc743b9777e.html Accessed 1.21.2022
+[Point Pattern Analysis in R](https://mgimond.github.io/Spatial/point-pattern-analysis-in-r.html) Accessed 1.22.2022
 
-## Packages cited:
+[GGplot2 and sf](https://r-spatial.org/r/2018/10/25/ggplot2-sf-2.html) Accessed 1.22.2022
+
+[An Introduction to Analysing Spatial Patterns](https://rstudio-pubs-static.s3.amazonaws.com/126356_ef7961b3ac164cd080982bc743b9777e.html)  Accessed 1.21.2022  
+
+</font>
+
+## Packages cited 
+
 ```{r Packages cited, comment = ""}
 c("raster", "sp", "sf", "tidyverse", "terra", 'spData', 'spdep', 'gstat', 'spatstat', 'fields' ) %>%
   map(citation) %>%

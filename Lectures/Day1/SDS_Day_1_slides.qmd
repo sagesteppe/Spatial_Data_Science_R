@@ -1,0 +1,1359 @@
+---
+title: "R Data Science: Spatial Data Science I"
+subtitle: "R for Data Science"
+author: "Reed Benkendorf"
+date: "2024-November-21"
+date-format: long
+format: 
+  revealjs:
+    theme: black
+    highlight: pygments
+    preview-links: auto
+    logo: ../../pictures/CBG_Logos/NegauneeInstitute_CBG-Logo-FlowerMark.png
+    chalkboard: 
+      boardmarker-width: 5
+    reveal_options:
+      width: 1920
+      height: 1080
+      fontsize: 22pt
+css: custom.css
+editor: 
+  markdown: 
+    wrap: 72
+include-in-header:
+  - text: |
+      <style>
+      #title-slide .title {
+        font-size: 1.5em;
+      }
+      #image tags .center {
+        text-align: center;
+        font-size: 4em;
+        font-color: cbc4c3;
+      }
+      </style>
+---
+
+## {background-image=../../pictures/Sacramento_Mtns_NM.jpg}
+
+Assigned Reading: Geocomputation with R Chapter 2.
+
+```{r Load Libraries, message = F, warning = F, echo = F}
+shhh <- suppressPackageStartupMessages 
+
+shhh(library(sp))
+shhh(library(sf))
+shhh(library(raster))
+shhh(library(tidyverse))
+shhh(library(terra))
+
+rm(shhh)
+```
+
+```{r import Vector Data, echo = F, warning = F}
+
+path <- file.path('..', '..', 'spatial_lecture_data', 'sentinel_imagery')
+files <- list.files(path, ".shp")
+
+dec_lakes_v <- read_sf(file.path(path, files), quiet = T) %>% 
+  mutate(Data_source = 'Sentinel2') %>% 
+  mutate(Processing = 'DL from Earth Explorer, manually georeferenced, and mapped') %>% 
+  mutate(Date = as.POSIXct('2021/12/05', '%Y/%m/%d', tz = "US/Pacific-New"))
+
+st_precision(dec_lakes_v) <- 50 # note I am saying each of the points I drew were within 50 meters of the true location. This is not important but I populate for an example below. We are in meters because we are in UTM. 
+
+oct_lakes_v <- dec_lakes_v %>% filter(id %in% c(1,2,3,5,6,12)) %>% 
+  mutate(Date = as.POSIXct('2021/10/16', '%Y/%m/%d', tz = "US/Pacific-New"))# gui's are confusing. 
+# these bodies of water were not present in the earlier time period, but I am too stupid to make the GUI work and so remove them programmatically.
+
+rm(files.shp, oct_lakes_v)
+```
+
+```{r import Raster data, echo = F, warning = F, message = F}
+
+files.tif <- list.files(path, ".tif")
+dec_lakes_r <- raster(file.path(path, files.tif[1]))
+oct_lakes_r <- raster(file.path(path, files.tif[3]))
+
+#crs(dec_lakes_r)
+#newproj <- CRS("+proj=utm +zone=10 +datum=WGS84")
+#dec_lakes_r <- projectRaster(dec_lakes_r, crs=newproj)
+
+rm(files.tif, path)
+```
+
+```{r Quickly Reclassify Rasters for an example, echo = F}
+reclass_first <- matrix(
+  c(0, 1, NA,
+    1 ,50, 0,
+  50, 250, 1),
+        nrow = 3, 
+        ncol = 3,
+       byrow = T) 
+
+dec_lakes_r_classified_c <- reclassify(dec_lakes_r, reclass_first)
+oct_lakes_r_classified_c <- reclassify(oct_lakes_r, reclass_first)
+
+#plot(dec_lakes_r_classified_c) # check this has an intermediate 
+# step we will be able to remove some of
+#barplot(dec_lakes_r_classified_c,
+#        main = "Number of pixels in each class")
+
+dec_lakes_r_classified_f <- aggregate(dec_lakes_r_classified_c, 7.0)
+oct_lakes_r_classified_f <- aggregate(oct_lakes_r_classified_c, 7.0)
+
+reclass_second <- matrix(
+  c(0, 0.5, 0,
+    0.5, 1, 1),
+        nrow = 2, 
+        ncol = 3,
+       byrow = T)
+
+dec_lakes_r_classified_f <- reclassify(dec_lakes_r_classified_f, reclass_second)
+oct_lakes_r_classified_f <- reclassify(oct_lakes_r_classified_f, reclass_second)
+
+rm(reclass_first, reclass_second, dec_lakes_r_classified_c, oct_lakes_r_classified_c, oct_lakes_r)
+
+```
+
+```{r Define some raster helper functions, echo = F}
+cell_count <- function(x){
+  obj_name <- deparse(substitute(x))
+  writeLines(paste0('This ', obj_name, ' contains: ', nrow(x) * ncol(x), ' elements'))
+}
+
+resolution_of_raster <- function(x){
+  writeLines(paste0('The width of each raster cell is: ',
+               round((x@extent@xmax - x@extent@xmin)/x@ncols, 5),
+               ' meters'))
+  writeLines(paste0('The height of each raster cell is: ',
+               round((x@extent@ymax - x@extent@ymin)/x@nrows, 5),
+               ' meters'))
+}
+
+```
+
+```{r Create Empty Raster and Populate, echo = F, comment = ""}
+
+ext_rast <- st_bbox(dec_lakes_r)
+grid <- st_make_grid(ext_rast,  # create a fishnet to emulate the idea of an empty raster ! :-)
+  n = c(118, 118),
+  what = "polygons",
+  square = TRUE,
+  flat_topped = FALSE)
+# st_write(grid, 'Example_HoneyLake_Grid.shp')
+
+empty_raster <- raster(
+  # A raster is composed of four perpendicular lines.
+  # Here we define each 'edge' of the raster'
+                         xmn = 697129.7, 
+                         xmx = 811775.7, 
+                         ymn = 4388466,
+                         ymx = 4502382,
+                         
+                         nrows = 118, # we are creating 100 cells.  
+                         ncols = 118, # We can calculate the resolution of these below.
+                         
+                         crs = "+proj=utm +zone=10 +datum=WGS84", 
+                         # set the rasters Coordinate Reference System
+                         )
+
+rast_vals_num <- as.integer(as.vector(as.numeric(dec_lakes_r_classified_f@data@values)))
+
+raster_matrix <- matrix(rast_vals_num, # fill matrix with values, 
+                       nrow = empty_raster@nrows, # create matrix same dimensions as raster
+                       ncol = empty_raster@ncols, # create matrix same dimensions as raster
+                       byrow = T) #ensure filling of matrix goes from upper left to lower right.
+
+example_raster_dec <- setValues(empty_raster, raster_matrix)
+example_raster_oct <- setValues(empty_raster, oct_lakes_r_classified_f@data@values )
+# plot(example_raster_dec)
+# plot(example_raster_oct)
+
+fake_data <- matrix(c(0,1,1,0,1,0),
+                    nrow = 6,
+                    ncol = 8,
+                    byrow=T)
+
+rm(fake_data, ext_rast, grid)
+```
+
+# What is a Geographic Information System?
+
+## What is a GIS
+
+::: {style="float: left; width: 70%;"}
+- a **G**eographic **I**nformation **S**ystem is a system for producing, managing, displaying, and analyzing geographic information.
+- GIS do not require computers, but are often synonymous with software 
+- *Spatial Data Science* is an emergent field which utilizes data science approaches in a **GIS**, and is a natural extension of a **GIS**
+:::
+
+::: {style="float: right; width: 30%; font-size: 0.8em; color: #cbc4c3; text-align: center;"}
+![A GIS (Anne Sexton)](`r file.path('..', '..', 'pictures', 'USGS_GIS_Anne_Sexton.jpg')`){
+  height=550 
+  fig-align='right' 
+}
+:::
+
+
+## A Brief History
+
+:::: {.columns}
+::: {.column width = '60%'}
+::: {.incremental} 
+- 1854 Cholera outbreak in Soho London kills 616 people 
+- Dr. John Snow used both *maps* and *statistics* to identify the source (water pumps) and stop the outbreak.
+- foundation of both Epidemiology & GIS. 
+:::
+:::
+
+::: {style="float: right; width: 40%; font-size: 0.8em; color: #cbc4c3; text-align: center;"}
+![The Broad Street Pump (John Snow/ National Geographic)](`r` file.path('..', '..', 'pictures', 'John_Snow_Cholera_by_National_Geographic.jpg')`){
+  width=500 
+  fig-align='right' 
+}
+:::
+::::
+
+::: {.incremental} 
+- Took until the 1990s, when compute power become strongrer, for GIS to flourish.    
+:::
+
+## What is Spatial Data Science?
+
+::: {.fragment}
+GIS has always had big data, and distinct statistics...  
+:::
+<br>
+
+::: {.fragment}
+- Geographic insights, and geospatial analyses *to* big tabular data sets  
+- Including spatial terms in statistical models  
+:::
+
+<br>
+
+::: {.fragment}
+- Advanced statistics ML, and exploratory processes to develop hypotheses  
+- Feature engineering of spatial products  
+:::
+
+## Why use R as a GIS and for Spatial Data Science ?
+
+::: {.incremental}
+- Work flow automation
+- Rich ecosystem (packages, functions, code-sharing, etc.)
+- Reproducible
+- Self documenting
+- Computationally efficient
+- Parallel processing/HPC interfaces
+:::
+
+## Why use RStudio as an IDE 
+
+::: {.incremental}
+- the rich ecosystem of geospatial tools extends beyond R!
+- can use (and document) shell scripts used to download and pre-process data  
+- can integrate with python 
+- can even save and document code used in other GIS systems (e.g. GRASS)
+- tie together with rmarkdown! ;-)
+:::
+
+# Geodesy 
+
+> *'Geodesy is the science of accurately measuring and understanding the Earth's geometric shape, orientation in space, and gravity field.'* 
+- NOAA
+
+## Earth is not a **perfect** sphere
+
+::::{.columns}
+
+::: {.column width = '50%'}
+- Circumference at equator:	40,075 km (24,901 mi)
+- Circumference along meridians: 40,009 km (24,860 mi)
+- Certain areas depressed (e.g. Indian Ocean) others raised (e.g. Europe)
+:::
+
+::: {style="float: right; width: 50%; font-size: 0.8em; color: #cbc4c3; text-align: center;"}
+![Blue Marble 2012 (Suomi NPP)](`r file.path('..', '..', 'pictures', 'NASA_Blue-Marble_2012_Suomi_NPP.jpg')`){
+  width=1000 
+  fig-align='right' 
+}
+:::
+::::
+
+## The Earth can be represented as an Ellipsoid
+
+::::{.columns}
+::: {.column width = '50%'}
+- A simple 3d geometric shape
+- An ellipsoid is a slightly to greatly ovaliform shape
+:::
+
+::: {.column width = '50%'}
+- Modeling the Earth as an ellipsoid increases the accuracy of point locations
+:::
+
+::: {style="float: center; width: 100%; font-size: 0.8em; color: #cbc4c3; text-align: center;"}
+```{r, out.width = "50%", fig.show='hold', echo = F, fig.align="center", fig.cap = "Ellipsoids", fig.asp=0.50}
+knitr::include_graphics(file.path('..', '..', 'pictures', 'Spheroids.png'))
+```
+:::
+::::
+
+## However, the Earth's surface is not smooth - Geoid
+
+::::{.columns}
+::: {.column width = '50%'}
+- Types of models to represent planet Earth  
+- Include gravity, excluding winds and tides  
+- Very accurate since GPS  
+:::
+
+::: {style="float: right; width: 50%; font-size: 0.8em; color: #cbc4c3; text-align: center;"}
+```{r, out.width = "40%", fig.show='hold', echo = F, fig.align="center"}
+knitr::include_graphics(file.path('..', '..', 'pictures', 'geoid_cross_section.png'))
+knitr::include_graphics(file.path('..', '..', 'pictures', 'Geoid_undulation_10k_ICGEM.jpg'))
+```
+Geoid Cross Section & IGCM Geoid 
+:::
+::::
+
+## Geodetic Datums
+
+::::{.columns}
+
+::: {.column width = '70%'}
+::: {.fragment}
+<font size = '5'> 
+- Reference frame established to represent locations within the frame.  
+- Historically these were locally focused and based on Geoids.  
+- either horizontal (X & Y) or vertical (Z) features.  
+- locations are then measured in relation to the control points.  
+:::
+
+::: {.fragment}
+- Components: 
+    - reference ellipsoid or geoid  
+    - origin point (from which measurements run)  
+    - control points very strictly measured from the origin
+    
+:::
+
+</font> 
+::: 
+::: 
+
+::: {style="float: right; width: 30%; font-size: 0.8em; color: #cbc4c3; text-align: center;"}
+```{r, out.width = "85%", fig.show='hold', echo = F, fig.align="center", fig.cap = "Number One City Datum (Cosmo1976)"}
+knitr::include_graphics(file.path('..', '..', 'pictures', 'Number_One_City_Datum_Cosmo1976.jpg'))
+```
+
+```{r Map of Chicago Datum, fig.align="center", fig.cap = "Control Points Number One City Datum", out.width = "85%", echo = F}
+p <- file.path('..', '..', 'spatial_lecture_data', 'Elevation_Benchmarks.csv')
+
+chicago_cntrl_pts <- read_sf(p)[c(1:4,8:12)] %>% 
+  st_as_sf(coords = c(y = 'LONGITUDE', x = 'LATITUDE'), crs = 4326) %>% 
+  janitor::clean_names() %>% 
+  mutate(elevation = as.numeric(elevation))
+
+origin_point <- chicago_cntrl_pts %>% 
+  filter(benchmark_number == 1)
+
+p <- file.path('..', '..', 'spatial_lecture_data', 'Chicago_Neighborhoods')
+files <- file.path(p, list.files(p, ".shp"))
+chicago_nghbrh <- read_sf(files)
+
+ggplot() +
+  geom_sf(data = chicago_nghbrh, alpha = 0.4) +
+  geom_sf(data = chicago_cntrl_pts, aes(color = elevation)) +
+  geom_sf(data = origin_point, shape = 8, size = 3, color = "red") +
+  labs(title = 'Control Points for Number One City Datum') +
+  theme_linedraw() +
+  theme(plot.title = element_text(hjust = 0.5), 
+        legend.position = c(0.001, 0.001), legend.justification = c(0, 0), 
+        legend.box.background = element_rect(color="black", size=1), 
+        legend.box.margin = margin(0, 0, 4, 0))
+
+rm(chicago_cntrl_pts, files, chicago_nghbrh, origin_point)
+```
+
+:::
+::::
+
+## Geodetic Coordinates
+
+<font size = '5'> 
+
+> "The geodetic (or geographic) latitude is the angle between the equatorial plane and the normal (vertical) to the ellipsoid surface at the considered point."
+- Proj
+
+</font>
+
+:::: {.columns}
+
+::: {.column width = '60%'}
+  - $\phi$ = geodetic latitude (north/south) 
+  - $\lambda$ =longitude (east/west) 
+  - *h* = ellipsoidal height  
+  - N = Normal (plane at right angle to the ellipsoid surface) 
+  
+:::
+
+::: {style="float: right; width: 40%; font-size: 0.8em; color: #cbc4c3; text-align: center;"}
+```{r, out.width = "50%", fig.show='hold', fig.align="center", echo = F, fig.cap="Angles on Ellipsoid and Geodetic Coordinates (Peter Mercator)"}
+knitr::include_graphics(file.path('..', '..', 'pictures', 'Geodetic_Coordinates1_Peter_Mercator.png'))
+knitr::include_graphics(file.path('..', '..', 'pictures', 'geodetic_coordinates_Peter_Mercator.png'))
+```
+:::
+::::
+
+## Coordinate Notation - Trigonometric
+
+- Trigonometric
+  - Degrees Minutes Seconds (DMS), e.g. 42°03'27.7" N
+    - Sexagesimal/base 60 (think: minutes in an hour) 
+  - Decimal Degrees (DD), e.g. 42.05759 N
+    - Decimal Fractions of a Degree (portion of 360/2)
+    
+- DMS; seldom used in digital formats  
+- DD; almost exclusively used  
+
+
+## Coordinate Notation - Conversion  
+
+$$
+\text{Latitude of Tech} =  42°03'27.7" N
+$$
+
+<font size = '5'> 
+Convert the latitude of the tech building from DMS to DD 
+
+$$
+\text{Decimal Degrees} = \text{Degrees } + \frac{\text{Minutes}}{60} + \frac{\text{Seconds}}{3600} 
+$$
+
+:::{.scrolling}
+<details> 
+<summary>Workflow</summary>
+$$
+42 + (\frac{03'}{60}) + (\frac{27.7"}{3600})
+$$
+
+$$
+42 + 0.05 + 0.007694 = 42.05759 \text{N Decimal Degrees}
+$$
+</details> 
+:::
+</font> 
+
+## Coordinate Notation - UTM
+
+:::: {.columns} 
+::: {.column width = '70%'}
+- Universal Transverse Mercator 
+  - Divides the world into 60 zones
+  - Flattens each zone
+  - Measures distances in Meters
+:::
+
+::: {.column width = '30%'}
+Common for field work, planar measurements of meters. 
+:::
+::::
+
+::: {style="float: center; width: 100%; font-size: 0.8em; color: #cbc4c3; text-align: center;"}
+```{r UTM Zones of the Continental USA,   fig.align="center", echo = F, message = F, warning=F, fig.cap = "UTM Zones of the Conterminous USA (ESRI)", out.width="45%"}
+
+utm_grid <- read_sf(
+  file.path('..', '..', 'spatial_lecture_data', 'World_UTM_Grid',
+            '0f893164-d038-48ff-98dd-9fefb26127d3202034-1-145zfwr.nwf1.shp')) %>% 
+  filter(ZONE > 9 & ZONE < 20) %>% 
+  filter(ROW_ %in% LETTERS[18:21]) %>% 
+  group_by(ZONE) %>% 
+  summarize(geometry = st_union(geometry))
+
+bound <- st_bbox(utm_grid)
+bound <- c(bound[1]+2,
+            bound[2]+2,
+            bound[3]-2,
+            bound[4]-2)
+
+world <- st_read(system.file("shapes/world.gpkg", package="spData"), quiet = T)
+
+ggplot(utm_grid) +
+  geom_sf(data = world) +
+  geom_sf(fill = NA, color = "black") +
+  geom_sf_label(aes(label = ZONE)) +
+  theme_classic() +
+  labs(title="UTM Zones of the Continental USA") +
+  coord_sf(xlim = c(bound[1],bound[3]), ylim = c(bound[2],bound[4])) +
+  theme(plot.title = element_text(hjust = 0.5))
+
+rm(utm_grid, bound, world)
+```
+</center> 
+:::
+
+## Coordinate Reference System (CRS)
+
+:::: {.columns}
+::: {.column width = '60%'}
+- System for specifying a location on Earth's surface
+- Composed of:
+  - a model of earths shape (*Geoid* or Ellipsoid)
+  - geodetic *datum*
+  - generally also a *projection*
+:::
+
+::: {style="float: right; width: 40%; font-size: 0.8em; color: #cbc4c3; text-align: center;"}
+```{r, out.width = "100%", fig.align="center", fig.show='hold', echo = F, fig.cap = "Geographic CRS (A. Krystalli)"}
+knitr::include_graphics(file.path('..', '..', 'pictures', 'Geographic_Coordinate_Reference_System.jpg'))
+```
+:::
+::::
+
+## Problems with working on flat surfaces
+
+Going from three to two dimensions does not work well. But we have worked around this. *sort of*
+
+<center>
+```{r, out.width = "75%", fig.align="center", fig.show='hold', echo = F, fig.cap = "Orange Peel (N. Belz)"}
+knitr::include_graphics(file.path('..', '..', 'pictures', 'Orange_peel_Nathan_Belz.png'))
+```
+</center>
+
+## Geographic & Projected  Coordinate System 
+
+- Geographic: location on a three-dimensional model of Earths Surface
+- Projected: location on a two-dimensional model of Earths Surface
+
+## Major Map Projections I 
+
+- Thousands of projections for maps. None are perfect. 
+- There are three main types of projections 
+
+<font size = '5'> 
+
+|     Type        |      Examples       |               Pros                 |                 Cons               |
+|-----------------|---------------------|----------------------------------- |------------------------------------|
+|   Equal Area    | Lambert Cylindrical | No distortion of area near equator |     Distorts area near the Poles   |
+| Equal Distance  |  Equi-rectangular   | Looks good in mapping applications | Distorts both shape and directions |
+|    Conformal    |     Mercator        |       Boundaries are accurate      |    Distorts area near the Poles    |
+|   Compromise    |                     | Sensitive to area and direction    |   Sensitive to area and direction  |
+
+</font> 
+
+## Major Map Projections II
+
+::: {style="float: center; width: 100%; font-size: 0.8em; color: #cbc4c3; text-align: center;"}
+```{r, out.width = "100%", fig.align="center", fig.show='hold', echo = F, fig.cap = "Map Projections (D. Strebe)"}
+knitr::include_graphics(file.path('..', '..', 'pictures', 'Projection_Maps.png'))
+```
+:::
+
+## Geodesy Takeaways
+
+::: {.incremental}
+
+<font size="6"> 
+- There are various models (geoids & ellipsoids) to represent the earths shape   
+- Different datums are used to represent different parts of the earth.   
+- You will almost always use WGS 84 (based on a ellipsoid – which is fit through a special model of earths gravitational fields a geoid) NAD83 (based on a ellipsoid) for a geographic coordinate system.  These +/-1 m from each other across much of North America. More useful than a geoid.  
+- You will usually want to use a UTM grid based on WGS or State Planes based on NAD83 for projections.  
+- Different coordinates notation systems are used, focus on decimal degrees.  
+</font> 
+
+:::
+
+# Geographic Data Models 
+
+- **Vector Data Model** represents discrete features on the planet using geometries such as: points, lines, and polygons. 
+- **Raster Data Model** represents (usually) continuous features on the plant using continuous surfaces, like a tile. 
+
+Vector data tends to only include features of interest, e.g. bodies of water; whereas a Raster will include, **explicitly**, the absence of features (e.g. both water and terrestrial areas).
+
+## Geographic Data Models 
+
+::: {style="float: center; width: 100%; font-size: 0.8em; color: #cbc4c3; text-align: center;"}
+```{r, out.width = "85%", fig.align="center", fig.show='hold', echo = F, fig.cap = "Vector and Raster Data Models"}
+knitr::include_graphics(file.path('..', '..', 'pictures', 'vector_raster.png'))
+```
+:::
+
+## Vector Data in R
+
+- **Vector Data Model** represents discrete features on the planet using geometries such as: points, lines, and polygons.  
+
+## simple features - standards
+
+- Open Geospatial Consortium ISO 19125-1:2004: adhered to in ESRI, and GDAL.
+- Features have *geometries* describing their location, and properties described by *attributes.*
+- Polygons are composed of points, connected by straight lines. 
+- Lines composing polygons cannot intersect 
+
+## simple features (sf) 1 - attributes
+
+- Attributes of the feature, theoretically devoid of spatial context.
+- Described in text, numbers, stored in a data frame type object.
+- Essentially the fields of a data frame  
+
+```{r Simple Features 1 - Attributes, echo = F}
+attributes <- tibble(
+  TAXON = c('Robinia pseudoacacia', 'Quercus alba'), 
+  DBH = c(40, 32), 
+  HEIGHT = c(24, 21)
+)
+
+knitr::kable(attributes)
+```
+
+## sf 2 - coordinates form a point 
+
+- all geometries are composed of points.
+- points only require two coordinates, X & Y. 
+  - Y Latitude (necessary), X Longitude (necessary)  
+  - Z Elevation/Depth (uncommon)  
+  - M Time or uncertainty of measurement (uncommon)  
+
+```{r sf 2 - Coordinates form a Point, echo = F, fig.align="center", out.width = "75%"}
+
+ex <- data.frame(X = c(-7, -5, 0, 5, 9), Y = c(-8, 6, 0, -4, 5))
+ex$Name <- paste0("c(", "x = ",  ex$X, ", y = ", ex$Y, ")")
+
+ggplot(ex, aes(x = X, y = Y, label = Name), size = 5) +
+  geom_point() +
+  xlim(-10, 10) +
+  ylim(-10, 10) +
+  ggrepel::geom_label_repel(aes(label = Name),
+                  box.padding   = 0.5, 
+                  point.padding = 0.5,
+                  segment.color = 'purple') 
+  
+rm(ex)
+```
+
+## sf 3 - Points form a sf geometry (sfg's)
+
+- SFG is the spatial topology associated with a feature
+
+- *POINT* - one-dimensional location  
+- *LINESTRING* - two points connected by a string    
+- *POLYGON* - Sequence of points connected by strings    
+
+```{r sf 3 - Points are/form a SF Geometry (sfg), echo = F, fig.align="center" }
+# Input example coordinates here and draw them in a facet grid via par
+ex_point <- st_point(c(0,0))
+
+ex_linestring <- st_linestring(
+  rbind(
+    c(-1.5,-2.5), c(-2,-2.25), c(-2.0,2.25), c(-1.5,2.5)
+  )
+)
+
+ex_polygon <- st_polygon(
+  list(
+    rbind(
+      c(0,-5), c(-2.5,-2.5), c(-2.5,2.5), 
+      c(0,5),c(2.5,2.5), c(2.5, -2.5), 
+      c(0,-5) # note we have to close the POLYGON, the last pt is same as the first!
+    )
+  )
+)
+
+ex_point_plot <- ggplot(ex_point) +
+  geom_sf() +
+  xlim(-5, 5) +
+  ylim(-5, 5) +
+  labs(title="Point") +
+  theme(plot.title = element_text(hjust = 0.5))
+ex_linestring_plot <- ggplot(ex_linestring) +
+  geom_sf() +
+  xlim(-5, 5) +
+  ylim(-5, 5) +
+  labs(title="Linestring") +
+  theme(plot.title = element_text(hjust = 0.5))
+ex_polygon_plot <- ggplot(ex_polygon) +
+  geom_sf() +
+  xlim(-5, 5) +
+  ylim(-5, 5) +
+  labs(title="Polygon") +
+  theme(plot.title = element_text(hjust = 0.5))
+
+cowplot::plot_grid(ex_point_plot, ex_linestring_plot, ex_polygon_plot, labels = NULL, ncol = 3)
+```
+
+## sf 4 - combining geometries (sfg's) 
+
+- Two or more *points*, and sets of *linestrings*, and *polygons* can be the geometries of a single feature
+- Multi(POINT), multi(LINESTRING), multi(POLYGON)  
+- *GEOMETRYCOLLECTION* - A mixed set of geometry types in the same geometry
+
+```{r sf 4 - Geometries can form Geometries (sfg), echo = F, fig.align="center"}
+
+ex_multipoint <- st_multipoint(
+  rbind(
+    c(0,-4.0), c(-3,-2.5), c(-3, 2.5), 
+    c(0, 4.0), c( 3, 2.5), c( 3,-2.5)
+  )
+)
+
+ex_multilinestring <- st_multilinestring(
+  list(
+    rbind(c(-1.5,-2.5), c(-2,-2.25), c(-2.0,2.25), c(-1.5,2.5)),
+    rbind(c( 1.5,-2.5), c( 2,-2.25), c( 2.0,2.25), c( 1.5,2.5))
+  )
+)
+  
+ex_multipolygon <- st_multipolygon(
+  list(
+    list(
+      rbind(c(-3,-1), c(-3,1), c(-4,1), c(-4,-1), c(-3,-1))
+    ), 
+    list(
+      rbind(c( 3,-1), c( 3,1), c( 4,1), c( 4,-1), c( 3,-1))
+    )
+  )
+) 
+
+ex_geometrycollection <- st_geometrycollection(list(ex_linestring, ex_polygon, 
+                                                    ex_multipoint, ex_multilinestring, ex_multipolygon, ex_point))
+
+ex_multipoint_plot <- ggplot(ex_multipoint) +
+  geom_sf() +
+  xlim(-5, 5) +
+  ylim(-5, 5)  +
+  labs(title="Multipoint") +
+  theme(plot.title = element_text(hjust = 0.5))
+ex_multilinestring_plot <- ggplot(ex_multilinestring) +
+  geom_sf() +
+  xlim(-5, 5) +
+  ylim(-5, 5)  +
+  labs(title="Multilinestring") +
+  theme(plot.title = element_text(hjust = 0.5))
+ex_multipolygon_plot <- ggplot(ex_multipolygon) +
+  geom_sf() +
+  xlim(-5, 5) +
+  ylim(-5, 5)  +
+  labs(title="Multipolygon") +
+  theme(plot.title = element_text(hjust = 0.5))
+ex_geometrycollection_plot <- ggplot(ex_geometrycollection) +
+  geom_sf() +
+  xlim(-5, 5) +
+  ylim(-5, 5)  +
+  labs(title="Geometycollection") +
+  theme(plot.title = element_text(hjust = 0.5))
+
+#ex_polygon[["data"]]$geometry
+#ex_multilinestring[["data"]]$geometry
+
+cowplot::plot_grid(ex_multipoint_plot, ex_multilinestring_plot, ex_multipolygon_plot, ex_geometrycollection_plot, labels = NULL, ncol = 4)
+
+rm(ex_point, ex_linestring, ex_polygon,ex_multipoint, ex_multilinestring, ex_multipoint_plot, ex_multilinestring_plot, ex_multipolygon_plot, ex_geometrycollection_plot, ex_point_plot, ex_geometrycollection, ex_linestring_plot, ex_polygon_plot)
+```
+
+## sf 5 - geometries and spatial information form a collection (sfc)
+
+- A list column of S3 type containing attributes of the Geometry/Geometries
+
+- Coordinate Reference System ('crs')  
+- Precision ('precision')  
+- Bounding box ('bbox')  
+- Number Empty ('n_empty')  
+
+## sf 6 - recapped 
+
+<font size="5">
+
+```{r sf 6 Recapped,  echo = F, message = F, comment = ""}
+attributes <- attributes %>% 
+  mutate(LONG =  c(-87.676068, -87.673992)) %>% 
+  mutate(LAT = c(42.056629, 42.057151)) %>% 
+  st_as_sf(coords = c(x = 'LONG', y = 'LAT'), crs = 4326, remove = F)
+
+knitr::kable(attributes)
+```
+
+```{r}
+st_precision(attributes) <- 2
+attributes$geometry[1]
+str(attributes$geometry[1])
+
+rm(attributes)
+```
+
+</font>
+
+- We now finally have *both* attributes and coordinates which are forming a point geometry.
+- This is a Simple Feature. 
+
+# sp
+
+- Predecessor to the 'sf' R package  
+- Some spatial statistics programs still only take sp objects as input  
+- A good introduction to S4 objects; popular in new spatial packages too!  
+
+## sp - History
+
+- Released in 2005 
+- First package to hold all major vector types of geometries  
+- Unified spatial class allowed for support in many spatial statistics packages  
+- Improved mapping of spatial objects  
+
+- Formed the centerpiece of spatial statistics in R for over a dozen years. 
+
+## sp - Spatial Classes for Topology
+
+- SF holds different geometries in list columns, sp has *many* different types of objects/classes for holding geometries.
+
+- Spatial**Multi**Points  
+- Spatial**Multi**Lines  
+- Spatial**Multi**Polygons  
+- Spatial**Multi**Grids  
+
+## sp - Structures of the object
+
+- Less detailed than `sf` ('n_missing', 'precision' lacking) 
+
+```{r Structure of Spatial class, echo = F}
+xc <- round(runif(15, min = 80, max = 130), 2) * -1
+yc <- round(runif(15), 5) * 100
+xy <- cbind(xc, yc)
+
+sPoints <- SpatialPoints(xy)
+slot(sPoints, "proj4string") <- CRS(SRS_string = "EPSG:4326")
+
+str(sPoints)
+```
+
+## sp - Attributes - DataFrame
+
+- Attachment of attributes (e.g. data frame), to a Spatial topology
+- Each S*DF is accessed the same way:
+  - SPDF@data[['col_name']]  
+  - SPDF$col_name  
+  
+```{r Attributes of SP classes, echo = F}
+df <- data.frame(temperature = round(5 + rnorm(15), 2), aspect = sample(1:45, size = 15, replace = F))
+SPDF <- SpatialPointsDataFrame(sPoints, df)
+```
+
+```{r Show data frame within sp object, echo = TRUE}
+str(SPDF@data)
+```
+
+::: notes
+We see here that SF contains all of the spatial information in a Simple Feature Collection which can be tidily tucked away in the geometry list column, in SP the analogue to the SFC is the object itself. 
+
+SP is mostly geometry with a data slot, SF is mostly data frame with a geometry column. 
+::: 
+
+## sp overview of a Spatial*DataFrame
+
+```{r Creat some Spatial Classes, echo = F, fig.align='center'}
+
+plot(SPDF, col=SPDF@data[['temperature']], pch = 25, xlim = c(0,1))
+plot(gridlines(SPDF), add = TRUE, col = grey(.8))
+text(labels(gridlines(SPDF)), col = grey(.7))
+title("Example SP Plot")
+
+rm(xc, yc, df, SPDF, xy, sPoints)
+```
+
+- Data frame is held in a different slot from the geometry and topology
+- Data frame columns accessed via object@data[['colname']] indexing
+
+## sp - Recapped  
+
+- If you need to use spatial statistics, you will come across these objects.
+- Don't sweat them **too** much; you can always convert from and to sf to run 
+certain analyses
+
+# Raster data in R
+
+::: {style="float: left; width: 60%;"}
+- Rasters are used to represent (continuous) features on the planet using grids  
+- Each raster is composed of grids   
+- Raster data sets are often distributed in adjoining *tiles*  
+:::
+
+::: {style="float: right; width: 40%; font-size: 0.8em; color: #cbc4c3; text-align: center;"}
+```{r, out.width = "75%", fig.show='hold', echo = F, fig.align="center", fig.cap = "Each cell is a tile, one raster."}
+knitr::include_graphics(file.path('..', '..', 'pictures', 'Western_Plant_Predictors.png'))
+```
+:::
+
+## Raster Components
+
+- Bounding Coordinate(s)
+- Cell Resolution (Size of cell)
+- Dimensions (No of cells in rows and columns)
+- Coordinate Reference System (CRS)
+
+Note that both *cell sizes*, and the *resolution of the values* in cells can, within reason, be converted to finer and coarser resolution. We will discuss these types of calculations next class. 
+
+## Example Raster 1 Create Frame
+
+<vcenter>
+Rasters tend to confuse people. We are going to create our own example here before we talk about them much more.
+</vcenter> 
+
+## Example Raster 1 Background 
+
+- Fairy shrimp (endangered) live in bodies of water which dry out in late Spring, and refill in early Fall (playas).  
+- Determine suitable habitat for fairy shrimp   
+- Satellite imagery at two time points  
+
+<center> 
+::: {style="font-size: 0.8em; color: #cbc4c3; text-align: center;"}
+```{r, out.width = "40%", fig.align="center", fig.show='hold', echo = F, fig.cap = "Suprise Valley by: John Glen"}
+knitr::include_graphics(file.path('..', '..', 'pictures', 'SurpriseValley_JohnathonGlen_USGS.jpg'))
+```
+:::
+</center> 
+
+## Example Raster 1  
+
+```{r Create Empty Raster and Populate - 2 with output,  comment = "", warning = F, echo = TRUE}
+empty_raster <- raster(
+  # rasters have 4 bounding edges
+  # Here we define each 'corner' of the raster'
+    xmn = 697129.7, 
+    xmx = 811775.7,
+    ymn = 4388466,
+    ymx = 4502382,
+    
+  # Here we set the number of cells 118*118
+    nrows = 118, 
+    ncols = 118,
+
+  # set the rasters Coordinate Reference System
+    crs = "+proj=utm +zone=10 +datum=WGS84", 
+  # we are using the WGS84 ellipsoid, with a UTM planar projection 
+)
+```
+
+## Example Raster 1  
+
+```{r Create Empty Raster and Populate - 3 with output, fig.align="center", echo = F, comment = "", warning = F}
+
+e <- extent(dec_lakes_r)
+ext_rast <- st_bbox(dec_lakes_r)
+
+# create a fishnet to emulate the idea of an empty raster ! :-)
+grid <- st_make_grid(
+  ext_rast,  
+  n = c(118, 118),
+  what = "polygons",
+  square = TRUE,
+  flat_topped = FALSE
+  ) %>% 
+  st_transform(32610)
+# st_write(grid, 'Example_HoneyLake_Grid.shp')
+
+ggplot(grid) +
+  geom_sf(fill = NA) +
+  coord_sf(datum = st_crs(grid)) +
+  theme_classic() +
+  labs(x = 'Easting', y = 'Northing')
+
+rm(e)
+```
+
+The raster currently looks like this, a frame in space with a specified origin, CRS, and cells, but lacking any content (values).  
+
+```{r Create Empty Raster and Populate - 4 with output, echo = F, comment = "", warning = F}
+rast_vals_num <- as.integer(as.vector(as.numeric(dec_lakes_r_classified_f@data@values)))
+```
+
+## Example Raster 2 Set Values
+
+```{r Create Empty Raster and Populate - 5 with output,  comment = "", warning = F}
+raster_matrix <- matrix(rast_vals_num, # # fill matrix with values, 
+                       nrow = empty_raster@nrows, # create matrix same dimensions.
+                       ncol = empty_raster@ncols, # create matrix same dimensions
+#ensure filling of matrix goes from upper left to lower right.
+                       byrow = T) 
+
+raster_matrix[90:118,112:118] <- 1 # fix the clipping image at edge. 
+```
+
+<font size = "5">
+
+```{r Create Empty Raster and Populate - 6 with output, echo = F, comment = "", warning = F}
+fake_data <- matrix(
+  c(0,1,1,0,1,0),
+  nrow = 6,
+  ncol = 8,
+  byrow=T
+  )
+knitr::kable(fake_data, caption = "Example Matrix showing values underlaying a raster layer.")
+```
+
+</font> 
+
+- The values of a raster are essentially a matrix. 
+
+```{r Create Empty Raster and Populate - 7 with output, comment = "", warning = F}
+example_raster_dec <- setValues(empty_raster, raster_matrix)
+```
+
+## Example Raster 3 
+
+```{r Create Empty Raster and Populate - 8 with output, fig.align="center",  comment = "", warning = F, echo = F}
+raster_matrix <- raster::as.matrix(oct_lakes_r_classified_f)
+raster_matrix[90:118,112:118] <- 1 
+
+example_raster_oct <- setValues(empty_raster, raster_matrix)
+
+tmap::tm_shape(example_raster_oct) +
+tmap::tm_raster(style= "cat", title="Standing Water", 
+                labels = c("0 = Open Water", "1 = Upland"), 
+                palette = c("deepskyblue", "beige")) +
+tmap::tm_layout(legend.outside = TRUE)
+
+resolution_of_raster(example_raster_dec)
+cell_count(example_raster_dec)
+
+rm(newproj, resolution_of_raster, cell_count, fake_data, ext_rast, grid, empty_raster, dec_lakes_r_classified_f, oct_lakes_r_classified_f, dec_lakes_r)
+```
+
+# Raster Package - in R! 
+
+- Does not need to load all files into active memory at once, allows ambitious projects.  
+- Many functions use generics from base R  
+
+## Raster Layer
+
+A single raster layer
+
+## Raster Stack 
+
+```{r Raster Stack, echo=F, warning = F, message = F, out.width = "75%"}
+path <- file.path('..', '..', 'spatial_lecture_data', 'sentinel_imagery')
+files.jpg <- list.files(path, ".jpg$")
+oct_lakes_img <- terra::rast(file.path(path, files.jpg[2]))
+dec_lakes_img <- terra::rast(file.path(path, files.jpg[4]))
+my_cols <- c("Skyblue","Beige" )
+
+par(mfrow= c(2,2))
+plot(example_raster_oct, col=my_cols, main = "October")
+plot(example_raster_dec, col=my_cols, main = "December")
+terra::plotRGB(oct_lakes_img)
+terra::plotRGB(dec_lakes_img)
+```
+
+The main use of Raster Stacks is to hold layers of similar themes.
+
+1) Each layer is the same variable from a different time. e.g. mean temerpature by month (12 layers per stack) 
+2) Each layer is a different independent variable (theme) in an analysis. e.g. yearly mean temperature, mean precipitation, etc. 
+
+::: notes
+In general these are rasters which have been classified and we want to extract values from or run calculations with. 
+Now what is great about layers, is that we can do one big thing bricks cannot do, we can load in many layers from many files and create a stack of attributes we are interested in studying on the fly. 
+:::
+
+## Raster Brick
+
+- Multiple bands of imagery held in the same file  
+- The sensors of a camera, e.g. Red, Green, and Blue  
+- Used for performing image classification to produce data raster layers  
+
+::: notes
+As I have mentioned rasters are often generated from satellite imagery; we will discuss rasters which are not developed this way next lecture.
+Historically most pictures are imaged via the use of three bands.
+These having spectral values of Red, Green, and Blue (RGB) associated with them. For example our .tif file, is composed of three bands. 
+Note that a Rasterbrick is most often used for loading in these types of imaging data, which can then be processed to form a more typical 'raster' data set.
+::: 
+
+```{r Raster Brick, echo=F, warning = F, message = F, fig.align='center'}
+
+dec_lakes_brick <- raster::brick(file.path(path, files.jpg[4]))
+dec_lakes_img <- terra::rast(file.path(path, files.jpg[4]))
+
+grayscale_colors <- gray.colors(150, start = 0.0, end = 1.0, gamma = 2.2, 
+# [gamma] correction between how a digital 
+# camera sees the world and how human eyes see it
+                                alpha = NULL) 
+# this code from NEON, see citations
+
+par(mfrow=c(2,2))
+plot(dec_lakes_brick, 1, col=grayscale_colors, main = "band 1 - Red")
+plot(dec_lakes_brick, 2, col=grayscale_colors, main = "band 2 - Green")
+plot(dec_lakes_brick, 3, col=grayscale_colors, main = "band 3 - Blue")
+plotRGB(dec_lakes_img)
+
+rm(resolution_of_raster, cell_count, fake_data, ext_rast, grid, empty_raster, dec_lakes_r_classified_f, oct_lakes_r_classified_f, dec_lakes_r, rast_vals_char, raster_matrix, example_raster_dec)
+```
+
+# Terra
+
+- Developed by the same team as the Raster Package  
+- Functionally virtually identical to Raster, but calculations run more quickly ! :-)  
+- Rasterbricks/layers no longer need specification, all objects are Spatrasts  
+- Will supersede Raster, but see points 1 & 2. 
+
+# Cartography 
+
+- use `sf`!   
+- You have scripts to do many types of mapping in your course resources  
+- `sf` objects are `ggplot2` compatible   
+- the order of mapping operations is more important than code  
+
+## read in spatial data 
+
+- considerably integration of `sf` and `tidvyerse` 
+- allows for plotting of spatial data for maps  
+- maps should provide context of studies where results vary/informed by space 
+
+```{r sf with ggplot2 - 1, echo = TRUE}
+data("us_states", package = "spData") # lazy load
+us_states <- st_as_sf(us_states) # convert from sp to sf 
+
+north_carolina <- read_sf( # read in vector data from disk. 
+  system.file("shape/nc.shp", package = "sf")
+  )
+```
+
+## plot borders of sf  
+
+- Map an sf object using their own geom `geom_sf`
+```{r sf with ggplot2 - 2, out.width = "75%", fig.show='hold', fig.align="center", echo = TRUE}
+ggplot(north_carolina) + 
+  geom_sf() + 
+  theme_bw() # we will use this theme for class, play around with others, but more
+  # miniminal themes tend to be the best. It's very easy to clutter maps. 
+```
+
+## fill sf interiors 
+
+- Fill the interior of polygons by a variable
+```{r sf with ggplot2 - 3, out.width = "75%", fig.show='hold', fig.align="center", echo = TRUE}
+#| code-line-numbers: "2"
+ggplot(north_carolina) + 
+  geom_sf(aes(fill = BIR79)) + 
+  # fill the interior of polygons by a variable
+  theme_bw()
+```
+
+## colour sf borders I
+
+- Colour the borders of each polygon in an sf object 
+- But *why* are you doing this? 
+
+```{r sf with ggplot2 - 4, out.width = "75%", fig.show='hold', fig.align="center", echo = TRUE}
+#| code-line-numbers: "2-5"
+ggplot(north_carolina) +
+  geom_sf(
+    aes(color = BIR79),  # color the borders of polygons by a variable
+    lwd = 1 # just making the borders thicker.
+    )  +
+  scale_color_viridis_c(option = "plasma", trans = "sqrt") +
+  # just using a very colourful color scheme so you can see it. 
+  theme_bw()
+```
+
+## colour sf borders II
+
+- Colour the border and remove any fill from the polygon interior
+
+```{r sf with ggplot2 - 5a, out.width = "75%", fig.show='hold', fig.align="center", echo = TRUE}
+#| code-line-numbers: "2-6"
+ggplot(north_carolina) +
+  geom_sf(
+    aes(color = BIR79),
+    fill = NA  
+    # fill to 'NA' leaves only the borders of  polygons
+    ) + 
+  scale_color_viridis_c(option = "plasma", trans = "sqrt") +
+  theme_bw()
+```
+
+## fill interior & remove borders 
+
+- Colour the interior of polygons and remove the border
+- Can be useful to de-clutter maps
+
+```{r sf with ggplot2 - 5b, out.width = "75%", fig.show='hold', fig.align="center", echo = TRUE}
+#| code-line-numbers: "2-5" 
+ggplot(north_carolina) +
+  geom_sf(
+    aes(fill = BIR79),
+    color = NA  # set to 'NA' to 'remove' borders. 
+    ) +
+  scale_color_viridis_c(
+    option = "plasma", 
+    trans = "sqrt" # some data have a couple very large  values which can swamp the palettes
+    ) +
+  theme_bw()
+```
+
+## fill interior and colour borders 
+
+- fill the interior of polygons and colour the borders
+
+```{r sf with ggplot2 - 6, out.width = "75%", fig.show='hold', fig.align="center", echo = TRUE}
+#| code-line-numbers: "2-5"
+ggplot(north_carolina) +
+  geom_sf(
+    aes(fill = BIR79, 
+        color = FIPS)
+    ) + # both fill and color
+  guides(color = 'none') + # removed the categorical legend (is too big!)
+  theme_bw()
+```
+
+## do it all at once 
+
+- all of this could also have been done as: 
+```{r sf with ggplot2 - 7, out.width = "75%", fig.show='hold', fig.align="center", echo = TRUE}
+ggplot() + # leave empty
+  geom_sf(data = north_carolina, #  need to specify `data = object`. 
+          aes(fill = BIR79, 
+              color = FIPS)
+          ) + # both fill and color
+  guides(color = 'none') + # removed the categorical legend (is too big!)
+  theme_bw()
+```
+
+## multiple sf data sets on one map 
+
+- Use two data sets to create one map
+```{r sf with ggplot2 - 8, out.width = "75%", fig.show='hold', fig.align="center", echo = TRUE}
+#| code-line-numbers: "2-5"
+ggplot(us_states) + # two data sets.
+  geom_sf() + # will inherit 'us_states' from plot call 
+  geom_sf( # now specify the second data set
+    data = north_carolina, 
+    fill = 'purple', 
+    # set as constant color - don't map using aes()
+    color = NA 
+    # this removes borders for a cleaner map. 
+    ) +
+  theme_bw()
+```
+
+## order of data matters 
+
+- Be diligent about the order of data sets
+```{r sf with ggplot2 - 9, out.width = "75%", fig.show='hold', fig.align="center", echo = TRUE}
+#| code-line-numbers: "1,3"
+ggplot(north_carolina) + # oh no! we drew over North Carolina!
+  geom_sf(fill = 'purple') +
+  geom_sf(data = us_states) +
+  theme_bw()
+```
+
+## build plots from the bottom up
+
+- build plots and maps from the 'bottom' up
+```{r sf with ggplot2 - 10, out.width = "75%", fig.show='hold', fig.align="center", echo = TRUE}
+#| code-line-numbers: "2-3"
+ggplot() + # two data sets.
+  geom_sf(data = us_states, fill = NA) +
+  geom_sf(data = north_carolina, fill = 'purple') +
+  theme_bw()
+```
+
+## coord_sf 
+
+- `coord_sf` is a helpful modifier to geom_sf
+- Can set a CRS for the map, modify extent, and change some rendering styles
+```{r sf with ggplot2 - 11, out.width = "75%", fig.show='hold', fig.align="center", echo = TRUE}
+#| code-line-numbers: "4-7"
+ggplot() +
+  geom_sf(data = us_states) +
+  geom_sf(data = north_carolina) +
+  coord_sf(
+    crs = 4267, # we can convert each data set to the same CRS 
+    datum = NA # we can remove the grid lines/graticules from plot
+    )
+```
+
+## crop map extent 
+
+- clip the extent of a map using the bounding box of the data set of interest
+
+```{r sf with ggplot2 - 12, out.width = "75%", fig.show='hold', fig.align="center", echo = TRUE}
+#| code-line-numbers: "7-11"
+
+bound <- st_bbox(north_carolina) 
+# retrieve the bounding box from the sfc list column
+
+ggplot() +
+  geom_sf(data = us_states) +
+  geom_sf(data = north_carolina, aes(fill = BIR79)) +
+  coord_sf( # use the bbox to 'crop' the extent of the map
+           xlim = c(bound[1], bound[3]), 
+           ylim = c(bound[2], bound[4])
+           ) +
+  theme_bw()
+```
+
+```{r, echo = F}
+rm(bound, us_states, north_carolina)
+```
+
+# Assignments 
+
+**For next Lab: **
+Install these packages (if you have not done so already):
+```{r For Lab and Lecture, eval = F, echo = TRUE}
+install.packages("sf", "raster", "terra", "sp", "tmap", "leaflet", "ggmap")
+```
+
+optionally install these: 
+```{r Parallel processing packages, eval = F, echo = TRUE}
+install.packages('snow','parallel')
+```
+
+Download the labs .R script from the course website. 
+
+## Optional Assignments  
+If you are interested in how Drone/LiDAR data are collected please check out the 'RMBL Spatial Data Science Webinar Series':
+
+- https://github.com/ikb-rmbl/SpatialDataScienceWebinars2020 
+- Collecting UAS Data (Video): https://youtu.be/Pq8btEZRCvM (1.25 hours)
+
+## Assignments  
+**For next Lecture:**  
+Assigned Reading: Chapter 3 of Spatial Data Science
+
+**Future Bonus SDS Office Hours**  
+Wednesday Night at 5:00 - 6:00. 
+
+**Notes on this Lab**  
+My lecture notes are in the R script I used to generate all of the novel figures for this presentation. Likewise this presentation is an .HTML file and can be launched from your computer (it was rendered directly from R using the script).  
+
+# Works Cited
+
+<font size = "5">
+
+[Anna Krystalli](https://annakrystalli.me/intro-r-gis/gis.html) Accessed 01.20.2022
+
+[Geocomputation with R](https://geocompr.robinlovelace.net/spatial-class.html) Accessed 01.09.2022
+
+[raster](https://rspatial.org/raster/RasterPackage.pdf) Accessed 01.09.2022
+
+[NEON](https://www.neonscience.org/resources/learning-hub/tutorials/dc-multiband-rasters-r) Accessed 01.19.2022
+
+[sf](https://r-spatial.github.io/sf/articles/sf1.html) Accessed 01.10.2022
+
+[proj](https://proj.org/operations/conversions/geoc.html) Accessed 01.20.2022.
+
+[R spatial](https://rspatial.org/raster/spatial/8-rastermanip.html) Accessed 01.11.2022
+
+[Wikipedia](https://en.wikipedia.org/wiki/Open_Source_Geospatial_Foundation) Accessed 01.09.2022
+
+[NOAA](https://oceanservice.noaa.gov/facts/geodesy.html) Accessed 01.25.2022
+
+</font>
+
+# Packages  
+
+```{r Packages cited, comment = ""}
+c("raster", "sp", "sf", "tidyverse", "terra") %>%
+  map(citation) %>%
+  print(style = "text", na.print = '')
+```
+

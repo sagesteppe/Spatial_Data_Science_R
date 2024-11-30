@@ -1,5 +1,5 @@
 ---
-title: "ObjectedOrientedProgramming"
+title: "Objected Oriented Programming"
 subtitle: "R for Data Science"
 author: "Reed Benkendorf"
 date: "2022-February-06"
@@ -15,7 +15,7 @@ format:
     reveal_options:
       width: 1920
       height: 1080
-      fontsize: 22pt
+      fontsize: 20pt
 css: custom.css
 editor: 
   markdown: 
@@ -38,9 +38,9 @@ include-in-header:
 
 Assigned Reading: Advanced R chapters 12 - 16
 
-# Methods 
-
-## Libraries
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE, message = FALSE, warning = FALSE, comment = "", fig.align="center")
+```
 
 ```{r Load Libraries, message = F, warning = F, echo = F}
 
@@ -58,10 +58,11 @@ rm(shhh)
 
 ```{r import Vector Data, echo = F, warning = F, message = F}
 # getwd()
-path <- './spatial_lecture_data/sentinel_imagery'
+
+path <- file.path('..', 'spatial_lecture_data', 'sentinel_imagery')
 files.shp <- list.files(path, ".shp")
 
-dec_lakes_v <- read_sf(paste0(path,"/",files.shp), quiet = T) %>% 
+dec_lakes_v <- read_sf(file.path(path, files.shp), quiet = T) %>% 
   mutate(Data_source = 'Sentinel2') %>% 
   mutate(Processing = 'DL from Earth Explorer, manually georeferenced, and mapped') %>% 
   mutate(Date = as.POSIXct('2021/12/05', '%Y/%m/%d', tz = "US/Pacific-New"))
@@ -74,8 +75,8 @@ rm(files.shp)
 ```{r import Raster data, echo = F, warning = F, message = F}
 
 files.tif <- list.files(path, ".tif")
-dec_lakes_r <- raster(paste0(path,"/",files.tif[1]), )
-oct_lakes_r <- raster(paste0(path,"/",files.tif[3]))
+dec_lakes_r <- raster(file.path(path, files.tif[1]))
+oct_lakes_r <- raster(file.path(path, files.tif[3]))
 
 rm(files.tif, path)
 ```
@@ -106,7 +107,6 @@ dec_lakes_r_classified_f <- reclassify(dec_lakes_r_classified_f, reclass_second)
 oct_lakes_r_classified_f <- reclassify(oct_lakes_r_classified_f, reclass_second)
 
 rm(reclass_first, reclass_second, dec_lakes_r_classified_c, oct_lakes_r_classified_c, oct_lakes_r)
-
 ```
 
 ```{r Create Empty Raster and Populate, echo = F, comment = ""}
@@ -161,124 +161,213 @@ raster_dataframe <- as.data.frame(raster_matrix)
 colnames(raster_dataframe) <- c(1:ncol(raster_dataframe))
 ```
 
-# Obect Orientated Programming in R
+# Object Orientated Programming in R
 
-"Object-oriented programming (OOP) is a programming paradigm based on the concept of "objects", which can contain data and code: data in the form of fields (often known as attributes or properties), and code, in the form of procedures (often known as methods)." - from Wikipedia
+> "Object-oriented programming (OOP) is a programming paradigm based on the concept of "objects", which can contain data and code: data in the form of fields (often known as attributes or properties), and code, in the form of procedures (often known as methods)." - Wikipedia
 
-To date we have largely focused on functional programming. That changes now.
-
-```{r Object types - Create Types, echo = F, warning = F, message = F}
-dec_lakes_sf <- dec_lakes_v
+```{r Object types - Create Types, echo = F}
+dec_lakes_sf <- dec_lakes_v |> 
+  relocate(geometry, .after = 6 )
 dec_lakes_sp <- as(dec_lakes_v, 'Spatial')
 dates_of_imaging <- dec_lakes_sf$Date
+
 rm(dec_lakes_v)
 ```
 
+::: notes
+To date we have limited our focus to functional programming. 
+
 R uses upwards of 25 types of objects. Many of these are highly specialized and we will not go into them, however it is necessary to elaborate on some of the differences between them. To date we have largely been using what may be called 'base' objects, i.e. objects which lack a 'class'. A class contains attributes which define certain parameters of the object, note that each attribute is based off of a 'base' object at some point.
 
-## 10.1 Base Objects Reviewed
+::: 
 
-Some of the most common base objects are vectors, matrices, and lists.
+# Base Objects Reviewed
 
-```{r Object Types 1 make a vector, comment = ""}
-rast_vals_char[1:3]
+Some of the most common base objects are vectors, matrices, and lists. 
+
+```{r Object Types 1 make a vector, echo = TRUE}
+char_v <- c('Apple', 'Orange', 'Banana')
+num_v <- 1:3
+raster_matrix <- matrix(sample(0:1, size = 9, replace = TRUE), ncol = 3)
+
+raster_pieces_list <- list(
+  Vector = char_v, 
+  Matrix = raster_matrix, 
+  Dataframe = setNames(LETTERS[1:3], data.frame(raster_matrix))
+  )
 ```
 
-```{r Object Types 2 evaluate a vector, echo = F, comment=""}
-writeLines(paste0('The first element of this vector is: ', rast_vals_char[1]))
-writeLines(paste0('A vector is an object of type: ', otype(rast_vals_char)))
-writeLines(paste0('This vector objects inhereits of class: ', s3_class(rast_vals_char)))
+## Base Objects - Character Vectors 
+
+```{r Object Types 2 evaluate a vector, echo = TRUE}
+char_v
+otype(char_v)
+s3_class(char_v)
 ```
 
-if we use the function 'otype' from the sloop package we can see that this object is a 'base' object and is in a class defined as character
+## Base Objects - Numeric Vectors 
 
-```{r Object Types 3 make a matrix, comment = ""}
-raster_matrix <- matrix(c(1,0,1,
-                          0,1,1,
-                          1,0,0), 
-                        ncol = 3)
+Looking at our character vector we see that the output of `sloop:otype` (objectype) we see that this is a 'base object'. 
+
+```{r Object Types 3 evaluate a vector, echo = TRUE}
+num_v
+otype(num_v)
+s3_class(num_v)
 ```
 
-```{r Object Types 5 evaluate a matrix, echo = F, comment=""}
-knitr::kable(raster_matrix[1:3,1:3])
-writeLines(paste0('A matrix is an object of type: ', otype(raster_matrix)))
-writeLines(paste0('A matrix inherits classes of: ', s3_class(raster_matrix)))
+Looking at our numeric vector we see that this object inherits both an integer and numeric type. 
+
+## Base Objects - Matrix 
+
+We can essentially think of a matrix as being 3 vectors bound side by side, and entered by either the rows or columns. 
+
+```{r Object Types 5 evaluate a matrix, echo = TRUE, comment=""}
+raster_matrix
+otype(raster_matrix)
+s3_class(raster_matrix)
 ```
 
+The matrix inherits multiple base classes, it is both a double and numeric. 
+R has integers, doubles, and numeric types defined by is relatively loose with applying them.   
 
-```{r Object Types 6 make list, echo = F, comment = ""}
-raster_pieces_list <- list(Vector = rast_vals_char[1:3], 
-                           Matrix = raster_matrix[1:3,1:3], 
-                           Dataframe = raster_dataframe[1:3,1:3])
-```
+## Base Objects - List 
 
-```{r Object Types 7 evaluate a list, echo = F, comment = ""}
-writeLines(s3_class(raster_pieces_list))
-writeLines('I made a list out of the last 2 objects and a dataframe:')
-raster_pieces_list
-writeLines(paste0('A list is an object of type: ', otype(raster_pieces_list)))
+```{r Object Types 8 evaluate a list, echo = TRUE, comment = ""}
+s3_class(raster_pieces_list)
+otype(raster_pieces_list)
+
 rm(raster_pieces_list, rast_vals_char, raster_matrix)
 ```
 
-These base objects are more of less capable of just *storing* values. I.e. In a sense we can put whatever we want into a vector and it will work out - if we have mixed data types theywill be coerced to characters,  *but* we can do it.
+These base objects are more of less capable of just *storing* values. I.e. In a sense we can put whatever we want into a vector and it will work out - if we have mixed data types they will be coerced to characters,  *but* we can do it.
 
 ```{r Object Types 8 Junk Vector, comment = ""}
-junk <- c(1, 'A', 'alpahbet soup', '$')
-print(junk)
+junk <- c(1, 999, '9')
+s3_class(junk)
 ```
 
 ```{r Object Types 9 clean junk, echo = F}
 rm(junk)
 ```
 
-## 'Introduction' to S3 Objects
+# Intro to S3 Objects
 
-```{r Object Types POSIXct 1, echo = F, comment = "", warning = F, message = F}
-writeLines(paste0('This is an example of a POSIXct time: ', dates_of_imaging[1], ', to me it just looks like a character vector'))
+Let's take a look at our vector of `POSIXct` time zones, which to me (a human) look like numbers separated by dashes. 
+
+```{r Object Types POSIXct 1, echo = TRUE}
+dates_of_imaging[1]
 ```
-Let's take a look at our vector of POSIXct time zones, which superficially to me (an human) look like numbers separated by dashes. 
 
-```{r Object Types POSIXct 2, echo = F, comment = "", warning = F, message = F}
+However, it isn't a character vector (which we would expect because of the dashes), nor a numeric vector. 
+```{r, echo = TRUE}
+is.character(dates_of_imaging[1])
+is.numeric(dates_of_imaging[1])
+```
+
+## POSIXct 
+
+So what is a `POSIXct` then? 
+
+```{r Object Types POSIXct 2, echo = TRUE}
 attributes(dates_of_imaging)
 ```
 
+- an object with multiple attributes
+- one defines the time zone the data are stored as
+- the other defines a class 
+
+::: notes
 We see that two attributes are stored in that object. The first is the timezone, which is defined elsewhere in R (and I believe is inherited by R from other systems), but is notated within this object. Critically, We also have the formal 'class' definition of a POSIXct format.
+:::
+
+## POSIXct
 
 ```{r Object Types POSIXct 3, echo = F, comment = "", warning = F, message = F}
-writeLines(paste0("The amount of seconds since 1970 and ", dates_of_imaging[1], " is: ", as.numeric(dates_of_imaging[1])))
+writeLines(paste0("The amount of seconds between 1970 and ", dates_of_imaging[1], " is: ", as.numeric(dates_of_imaging[1])))
 ```
 
+- the values in a POSIXct are integers  
+- but the objects convert them to a human readable date for viewing 
+
+::: notes 
 POSIXct dates are all actually treated in R as the amount of seconds between an arbitrary date e.g. January 1st 1970, and the date of observation; so R is really keeping dates in a numeric format - but is hiding this from us! And converting the values into a more human friendly format more or less for display purposes only.
 
 This is a new level of functionality that we have not directly considered yet this quarter. As mentioned we have used objects much like book pages. Now we see that certain objects, are able to refer to themselves to perform, for example, calculations and conversions.
+:::
 
-```{r Object Types POSIXct 4, echo = F, comment = ""}
-writeLines(paste0('A POSIXct is an object of type: ', otype(dates_of_imaging)))
+## POSIXct is an S3 object 
+
+```{r Object Types POSIXct 4, echo = TRUE}
+as.numeric(dates_of_imaging[1])
+otype(dates_of_imaging)
+```
+
+- We know that at it's core our object contains the seconds between the event and 1970
+- It has multiple attributes 
+- And it can perform calculations on itself 
+
+::: notes 
+Objects with the capability to store values in fields, and perform procedures upon themselves form the basis of Object Orientated Programming. In R we have two main OOP classes, S3 and S4. In general objects of both of these classes are *'large'*, however this is not always the case. 
+:::
+
+```{r}
 rm(dates_of_imaging)
 ```
 
-Objects with the capability to store values in fields, and perform procedures upon themselves form the basis of Object Orientated Programming. In R we have two main OOP classes, S3 and S4. In general objects of both of these classes are *'large'*, however this is not always the case. 
+# Units objects 
 
-Another S3 object which superficially looks like a vector is an 'Units' object.
+Another S3 object which looks like a vector is an `units` object.
 
 When we define a units object, we can simply supply a number for value, and a unit of measurement. 
-```{r Object Types Units 1, comment = ""}
-fifty_meters <- units::set_units(50, meter)
-print(fifty_meters)
+```{r Object Types Units 1, echo = TRUE}
+dstnce <- units::set_units(1.42, meter)
+print(dstnce)
 ```
 
-These objects are capable of performing procedures on themselves, such as converting between meters and yards.
-```{r Object Types Units 2, comment = ""}
-units(fifty_meters) <- units::make_units(yards)
-print(fifty_meters)
+These objects can also perform procedures on themselves, such as converting between meters and yards.
+
+```{r Object Types Units 2, echo = TRUE}
+units(dstnce) <- units::make_units(yards) 
+print(dstnce)
+```
+
+## Units objects I  
+
+Let's take a look at the object type and it's class. 
+```{r echo = TRUE, eval = F}
+otype(dstnce)
+s3_class(dstnce)
 ```
 
 ```{r Object Types Units 3, echo = F, comment = ""}
-writeLines(paste0('A Units is an object of type: ', otype(fifty_meters)))
-writeLines(paste0('It is its own units class: ', s3_class(fifty_meters)))
-attributes(fifty_meters)
+writeLines(paste0('A Units is an object of type: ', otype(dstnce)))
+writeLines(paste0('It is its own units class: ', s3_class(dstnce)))
+```
 
-rm(fifty_meters)
+## Doing more with Units 
+
+We can take a look at the attributes of a units object. 
+
+:::: {.columns}
+::: {.column width = '50%'}
+```{r, echo = TRUE} 
+attributes(dstnce)
+```
+our 'denominator' slot is unused, let's populate it 
+:::
+
+::: {.column width = '50%'}
+let's establish our distance as a speed
+
+```{r, echo = TRUE}
+speed <- units::set_units(1.42, m/s)
+attributes(speed)
+```
+:::
+::::
+
+```{r}
+rm(speed, dstnce)
 ```
 
 ```{r Object Types 1 - Data Frame, echo = F, comment = ""}
@@ -287,136 +376,278 @@ colnames(raster_dataframe) <- sample(letters[1:11], size = ncol(raster_dataframe
 rownames(raster_dataframe) <- sample(LETTERS[14:26], size = nrow(raster_dataframe))
 ```
 
-A more shocking S3 object is the data frame
+## Data frame 
 
-```{r Object Types 2 - Data Frame, echo = F, comment = ""}
-writeLines(otype(raster_dataframe))
+A shocking S3 object is the data frame 
+it has a defined class 
+
+```{r Object Types 2 - Data Frame, echo = TRUE}
+otype(raster_dataframe)
 attributes(raster_dataframe)
-
-rm(raster_dataframe)
 ```
 
+::: notes
 We see that of the non-base objects, the most common object is S3. Actually, surprise surprise the amazing data frame has been hiding out as an S3 object this whole time! You may have actually seen an error message indicating this at some point...  So if we look at the attributes of a data frame we see that we have both row and columns names, and we also have a formal definition of the class being a data frame, which in part consists of code demanding that our data frame be rectangular in nature. 
 
 Finally we turn our attention to one slightly more complex S3 object.
+:::
 
-### Simple Features
+```{r}
+rm(raster_dataframe)
+```
 
-The incredibly popular Simple Features 'SF' package actually stores all it's features in S3 object. Given that a data frame is an S3 object, this is a necessity - but there are some big jumps under the hood. I bet, even more so than these objects being 'accessible' via tidyverse syntax the simplicity of the S3 object compared to S4 sp objects is what spurred there popularity
+# Simple Features 
 
-```{r Object Types - Tibble Simple Feature 1, echo = F, comment = ""}
+- are data frames so have to be S3... 
+- use a complex S3 list-column to store the geometry features 
+
+```{r Object Types - Tibble Simple Feature 1, echo = F}
 writeLines(paste0('A simple feature is an object of type: ', otype(dec_lakes_sf)))
 ```
 
-What is really neat about tibbles, and I am not sure if you all recall is that while they just look like a data frame they are capable of holding a list in a column, hence a 'list column'.
+What is really neat about tibbles is that while they just look like a data frame they are capable of holding a list in a column, hence a 'list column'.
 
-```{r Object Types - Tibble Simple Feature 2, echo = F, comment = ""}
+::: notes 
+The incredibly popular Simple Features 'sf' package actually stores all it's features in S3 object. Given that a data frame is an S3 object, this is a necessity - but there are some big jumps under the hood. I bet, even more so than these objects being 'accessible' via tidyverse syntax the simplicity of the S3 object compared to S4 sp objects is what spurred there popularity 
+::: 
+
+## list columns 
+
+:::: {.columns}
+::: {.column width = '45%'}
+<font size="5">
+```{r Object Types - Tibble Simple Feature 2, echo = TRUE}
 knitr::kable(head(iris))
 ```
 
-For example we can take the four columns of the Iris dataset which contain the measurement variables, and reduce them to two thematic list columns using the 'nest' function. 
+Create a list col of the Iris measurements by species and flower part. 
 
-```{r Object Types - Tibble Simple Feature 3, comment = ""}
-iris <- iris %>% 
-  nest(petal = starts_with("Petal"), 
-       sepal = starts_with("Sepal")
-       ) 
-
-iris 
-# Check the first row of the second column
-head(iris[[2]][[1]]) 
-# see the structure of the first row of the petal column
-str(iris$petal[[1]])
-
+```{r Object Types - Tibble Simple Feature 3, echo = TRUE}
+iris <- nest(iris, petal = starts_with("Petal"), 
+       sepal = starts_with("Sepal")) 
 ```
+</font>
+:::
 
+::: {.column width = '50%'}
+<font size="5">
+```{r Object Types - Tibble Simple Feature 4, echo = TRUE}
+head(iris)
+head(iris[[2]][[1]]) # see 1st row 2nd column
+str(iris$petal[[1]]) # structure of 1st row of petal column
+```
+</font> 
+
+:::
+::::
+
+::: notes
 If we take a close look at the first for of the second column, that for *I. setosa*, we see all of the short and narrow petal measurements we are familiar with for this species. 
 
 In this example we see that each element in 'petal' contains a list of its own, each of which has a data frame with a column storing *both* the Petal Length and Petal Width values. Each row of each list column (petal & sepal) we see in this tibble is like this.
 
+So what the developers of sf did is to create an S3 object which can hold all of the spatial information in a list column - without you really realizing this information is there. 
+:::
 
-So what the developers of SF did is to create an S3 object which can hold all of the spatial information in a list column - without you really realizing this information is there. 
+## sf object  
 
-```{r Object Types - Tibble Simple Feature 4, echo = F, comment = ""}
-print(s3_class(dec_lakes_sf))
-knitr::kable(head(dec_lakes_sf[,c(2:3,6)]))
+```{r Object Types - Tibble Simple Feature 5, echo = TRUE}
+s3_class(dec_lakes_sf)
+```
+
+<br>
+
+:::: {.columns}
+::: {.column width = '50%'}
+```{r Object Types - Tibble Simple Feature 6, echo = T, eval = F}
+head(dec_lakes_sf[,c(2:3,6)])
+```
+
+<font size = '4'>
+```{r Object Types - Tibble Simple Feature 6b, echo = F}
+head(dec_lakes_sf[,c(2:3,6)])
+```
+</font>
+:::
+
+::: {.column width = '50%'}
+```{r Object Types - Tibble Simple Feature 7, echo = T, eval = F}
 attributes(dec_lakes_sf$geometry)
+```
 
+<font size = '4'>
+```{r Object Types - Tibble Simple Feature 7b, echo = F}
+attributes(dec_lakes_sf$geometry)
+```
+</font>
+::: 
+::::
+
+::: notes
+This output is understandably a little much, but these are *all* of the attributes of a Simple Feature Collection which is hidden in the geometry column of a simple feature. Clever right?
+:::
+
+```{r}
 rm(iris, dec_lakes_sf)
 ```
 
-This is output is understandably a little much, but these are *all* of the attributes of a Simple Feature Collection which is hidden in the geometry column of a simple feature. Clever right?
+# S4 Objects
 
-## Introduction to S4 Objects
+While S3 objects are lax, S4 objects have more rigor for acceptable values 
 
-Now S3 objects, are somewhat lax. However there is an S4 object which is a little bit more complex.
+```{r Object Types - SpatialPolygonsDataFrame 1, echo = TRUE}
+otype(dec_lakes_sp)
+s3_class(dec_lakes_sp)
+```
 
+Slots can be accessed a couple ways, with the 1^st^ being preferred  
+```{r, echo = T, eval = F}
+#| code-line-numbers: "1"
+slot(dec_lakes_sp, 'polygons')
+dec_lakes_sp@polygons
+```
+
+::: notes
 Examples of S4 objects include the lovely Raster, and Spatial*(e.g. Points, Polygons, Dataframes...) objects. I find that lists, and S4 objects terrify virtually all of our students each year. Myself included, and in fact I am still slightly spooked by them. While I cannot teach you all how exactly to deal with them, I can teach you all of use them day to day. 
 
 S4 objects are not lax, they are the stricter implementation of S3 objects. The classes which compose S4 objects are incredibly well defined, and they are designed for very specific use cases. This may at times make them obnoxious to work with, when you need to build or modify values in them, but thye are worth the pain. 
+::: 
 
-```{r Object Types - SpatialPolygonsDataFrame 1, comment = ""}
-writeLines(otype(dec_lakes_sp))
-writeLines(s3_class(dec_lakes_sp))
+## Spatial* Objects
+
+Just like S3 objects, S4 objects classes follow certain schema. 
+We'll use a `SpatialPolygonsDataFrame` as our example here.
+
+## Slots 
+
+- Contain different forms of data, especially of unequal length and hence do not fit into a data frame  
+- S4 objects can be stored in S3, base, or other objects!  
+
+:::: {.columns}
+::: {.column width = '50%'}
+```{r Object Types - SpatialPolygonsDataFrame 2,  echo = TRUE, eval = F}
+str(dec_lakes_sp, max.level = 2)
 ```
 
-### Spatial* Objects
+<font size="5">
+```{r Object Types - SpatialPolygonsDataFrame 2b}
+str(dec_lakes_sp, max.level = 2)
+```
+</font>
+:::
 
-Just like as in S3 objects in S4 objects the classes follow certain schema. Note we use a SpatialPolygonsDataFrame as our example here.
+::: {.column width = '50%'}
+```{r Object Types - SpatialPolygonsDataFrame 2a, echo = TRUE}
+#| code-line-numbers: "4,8"
+sN <- slotNames(dec_lakes_sp)
+for (i in seq_along(sN)){
+  print(paste0(sN[i], ': ', 
+               otype(slot(dec_lakes_sp, sN[i])
+                     )))
+}
 
+otype(slot(dec_lakes_sp, 'polygons')[[1]])
+```
+
+:::
+::::
+
+::: notes
 In addition to their more strict definitions of classes, S4 objects have another feature which S3 objects lack - Slots. Slots superficially resemble lists in the viewer of RStudio, i.e. they have nested components, but are really their own distinct entities. A SpatialPolygonsDataFrame contains 4 slots, each of these contains a type of data. Note that each slot is accessed using an '@' (still pronounced: 'at') symbol. 
+::: 
 
-```{r  Object Types - SpatialPolygonsDataFrame 2, comment = ""}
-dec_lakes_sp@plotOrder
-otype(dec_lakes_sp@plotOrder)
-writeLines(s3_class(dec_lakes_sp@plotOrder))
+## DataFrame Slot
+
+:::: {.columns}
+::: {.column width = '50%'}
+```{r  Object Types - SpatialPolygonsDataFrame 3,  echo = TRUE, eval = F}
+head(slot(dec_lakes_sp, 'data'))[,c(2:3,5)]
 ```
 
+<font size="6">
+```{r  Object Types - SpatialPolygonsDataFrame 3b}
+head(slot(dec_lakes_sp, 'data'))[,c(2:3,5)]
+```
+</font>
+:::
+
+::: {.column width = '50%'}
+```{r Object Types - SpatialPolygonsDataFrame 4, echo = TRUE}
+attributes(slot(dec_lakes_sp, 'data'))
+otype(slot(dec_lakes_sp, 'data'))
+writeLines(s3_class(slot(dec_lakes_sp, 'data')))
+```
+:::
+::::
+
+::: notes 
 Here we access the contents of a slot named 'plotOrder'. We see that this slot simply contains an integer vector. What this vector specifies is the order in which the polygons in this object should be plotted if and when used for making maps. While this information is stored simply as an object of the class 'base', other parts of the SpatialPolygonsDataFrame know how to perform operations with this information.
-
-```{r  Object Types - SpatialPolygonsDataFrame 3, comment = ""}
-head(dec_lakes_sp@data)[,c(1:3,5)]
-```
 
 We can see that the 'DataFrame' portion of the SpatialPolygonsDataFrame has actually been relegated to it's own slot as well.
 
-```{r Object Types - SpatialPolygonsDataFrame 4, comment = ""}
-attributes(dec_lakes_sp@data)
-otype(dec_lakes_sp@data)
-writeLines(s3_class(dec_lakes_sp@data))
-```
-
 While the two slots above, @plotOrder & @data, contain relatively simple objects (base and S3 respectively). The remaining two slots, which are both S4 classes contain all of the spatial information. 
 
-```{r Object Types - SpatialPolygonsDataFrame 5, echo = F, comment = ""}
-writeLines(s3_class(dec_lakes_sp@proj4string))
-otype(dec_lakes_sp@proj4string)
-attributes(dec_lakes_sp@proj4string)
-```
+:::
 
+## Proj Slot
+
+:::: {.columns}
+::: {.column width = '50%'}
+```{r Object Types - SpatialPolygonsDataFrame 5, echo = TRUE}
+s3_class(slot(dec_lakes_sp, 'proj4string'))
+otype(slot(dec_lakes_sp, 'proj4string'))
+```
+:::
+
+::: {.column width = '50%'}
+```{r Object Types - SpatialPolygonsDataFrame 5B, echo = TRUE}
+attributes(slot(dec_lakes_sp, 'proj4string'))
+```
+:::
+::::
+
+::: notes
 The first of the S4 slots is the proj4string (Proj is an awesome open source library for performing conversions between projections), which contains a class "CRS" which defines the Coordinate Reference System of this SpatialPolygonsDataFrame. Hence any time you modify the CRS of a SPDF, you are interacting with this slot.
+:::
 
-The final, and most complex of the two S4 slots in a SpatialPolygonsDataFrame is the Polygons slot. This is where the coordintaes, and topological information, fo every single polygon is stored. 
-```{r Object Types - SpatialPolygonsDataFrame 6, echo = F, comment = ""}
-writeLines(otype(dec_lakes_sp@polygons[[9]]))
-attributes(dec_lakes_sp@polygons[[9]]) #  S4 object in this slot, contains all coordinates.
+## Polygons Slot 
 
-rm(dec_lakes_sp)
+:::: {.columns}
+::: {.column width = '50%'}
+```{r Object Types - SpatialPolygonsDataFrame 6, echo = TRUE, comment = ""}
+otype(slot(dec_lakes_sp, 'polygons')[[9]])
 ```
+
+Contains the actual spatial data, e.g. coordinates and their relations
+:::
+
+::: {.column width = '50%'}
+```{r Object Types - SpatialPolygonsDataFrame 7, echo = TRUE, comment = ""}
+attributes(slot(dec_lakes_sp, 'polygons')[[9]]) 
+```
+:::
+::::
+
+::: notes
+The final, and most complex of the two S4 slots in a SpatialPolygonsDataFrame is the Polygons slot. This is where the coordinates, and topological information, of each polygon is stored.
 
 Here we are looking at the smallest of the polygons in our SPDF (see the plotOrder?). These data are replicated appropriately for each of the other polygons in this object. 
 
 While this S3 object is more complex, we can see how the components held in multiple slots are able to work together to perform operations using the data held in disparate fields throughout the object.
+:::
 
-### Raster Objects
+```{r}
+rm(dec_lakes_sp)
+```
+
+## Raster Objects
 
 Finally we have the Raster Layer which is a rather large and complex S4 unit, composed of 12 main S4 slots... Each of these then having from 1 to 13 slots (these second slots quite small, and not uncommonly consisting of a single value). 
 
-```{r Object Types Raster Layer 1, echo = F, comment = ""}
-str(example_raster_dec)
+```{r Object Types Raster Layer 1, echo = TRUE}
+slotNames(example_raster_dec)
 ```
 
-Raster Layers are large enough that we unfortunately cannot go into it much during class, but I do encourage the curious you to investigate it on your own. Do keep in mind that it has a slot of 'CRS' which we just saw in our SP object, and it also has a slot of 'extent' which we defined ourselves earlier. 
 
 ```{r Object Types Raster Layer 2, echo = F, comment = ""}
 writeLines(paste0('Class: ', otype(example_raster_dec)))
@@ -427,21 +658,28 @@ writeLines(s3_class(example_raster_dec@data))
 writeLines(s3_class(example_raster_dec@data@values))
 ```
 
+::: notes
+Raster Layers are large enough that we unfortunately cannot go into it much during class, but I do encourage the curious to investigate it on your own. Do keep in mind that it has a slot of 'CRS' which we just saw in our SP object, and it also has a slot of 'extent' which we defined ourselves earlier. 
+
 If we look at our data slot we see that we have an 'integer numeric' type - which is typically how a raster is loaded. I will concede up to this point I said to think about a raster as matrix, but we see ours is actually loaded with an integer. Remember that in R both matrices and data frames are vectors. Remember a main difference between a vector and a matrix, is that a matrix has dimensions, i.e. it knows how many values need to be in each row. While these data are not explicit here, they can be found in another slot. 
+:::
 
 ```{r Object Types - Clean Environment, echo = F}
 rm(rast_vals_num, example_raster_dec)
 ```
 
-# Object Orientated Programming Bonus: Make our own S3 and s4 objects.
+# Make our own S3 and S4 objects 
 
 So we approached S3 and S4 objects from a very top down approach there, we looked at those constructed by others. But we can also create our own objects, so we can look at these from the bottom up. 
 
 ## Create a simple S3 object
 
-Maybe none of you have noticed yet but you will oon enough; your TA has some traits in common with say Luna Lovegood, and finds it hard to make it to meetings and things. Here we makes a course object which he can save into his R environment so he can just click on it to remind him when he is suppose to show up for class. 
+Creating an S3 object is as simple as defining a class with `class`
 
-```{r Create an S3 object 1, message = F, warning = F, comment = ""}
+:::: {.columns}
+::: {.column width = '50%'}
+
+```{r Create an S3 object 1, echo = TRUE}
 
 course <- list(
   name = c("Lecture", "Lecture", "Laboratory", "Laboratory"),
@@ -451,89 +689,141 @@ course <- list(
   time = c('3:30-4:50', '3:30-4:50', '12:00-12:50', '2:00-3:50')
 )
 
-writeLines(sloop::s3_class(course)) # we have only made a list so far 
-writeLines(sloop::otype(course))
+```
+:::
 
-class(course) <- "Class_times" # by setting a class attribute we have 
+::: {.column width = '50%'}
+```{r Create an S3 object 1b, echo = TRUE}
+# we have only made a list so far 
+s3_class(course) 
+otype(course)
+
+class(course) <- "Class_times" 
+# by setting a class attribute we have 
 # created an S3 object
 
-writeLines(sloop::s3_class(course))
-sloop::otype(course)
-
-rm(course)
+s3_class(course)
+otype(course)
 ```
+:::
+::::
+
+::: notes
+Maybe some of you have not noticed yet but you will soon enough; your TA has some traits in common with say Luna Lovegood, and finds it hard to make it to meetings and things. Here we makes a course object which he can save into his R environment so he can just click on it to remind him when he is suppose to show up for class. 
+
 We see that the above object is honestly, just a list that we arbitrarily made an S3 object. That is more or less what it takes to become an S3 object, us just saying hey 'this is a class' !
 
 But we can do things with S3 objects which make them useful to construct. For example, we can add quality assurance checks to our objects.
+:::
+
+```{r}
+rm(course)
+```
 
 ## Create a more complex S3 object
 
-Your TA made a very poor first list of places he had to be for class, and ended up wandering around tech lost for an hour. He decided to make a slightly more robust Sw object so this did not happen again.
+A more complex S3 object can have some unstructured error checking in it. 
 
-```{r  Create an S3 object 2, warning = F, comment = ""}
+:::: {.columns}
+::: {.column width = '50%'}
+```{r  Create an S3 object 2, echo = TRUE}
 course <- function(n, w, r, d, t){
   
-  values <- list(name = n, 
-                 wing = w, 
-                 room = r, 
-                 day = d, 
-                 time = t)
+  values <- list(
+    name = n, 
+    wing = w, 
+    room = r, 
+    day = d, 
+    time = t)
     
   '%notin%' <- Negate('%in%')
   type <- c('Lecture', 'Laboratory', 'Seminar')
   tech_letters <- LETTERS[1:13]
   days <- c('M', 'T', 'W', 'TH', 'F', 'S', 'SU')
   
-  if(any(w %notin% tech_letters)) stop("This wing is not valid")
-  if(any(d %notin% days)) stop("This day is not valid")
-  if(any(n %notin% type)) stop("This course type is not valid")
+  if(any(w %notin% tech_letters)) 
+    stop("This wing is not valid")
+  if(any(d %notin% days)) 
+    stop("This day is not valid")
+  if(any(n %notin% type)) 
+    stop("This course type is not valid")
   
   attr(values, "class") <- "Course"
   return(values)
   
 }
 ```
+:::
 
-```{r  Create an S3 object 3, warning = F, comment = ""}
-course_success <- course(c("Lecture", "Lecture", "Laboratory", "Laboratory"),  
-                         c('L', 'L','M','L'),
-                         c(170,170,166,62), 
-                         c('T','TH','F','F'), 
-                         c('3:30-4:50','3:30-4:50', '12:00-12:50', '2:00-3:50')
-                         )
+::: {.column width = '50%'}
+```{r  Create an S3 object 3, echo = TRUE}
+course_success <- course(
+  c("Lecture", "Lecture", "Laboratory", "Laboratory"),  
+  c('L', 'L','M','L'),
+  c(170,170,166,62), 
+  c('T','TH','F','F'), 
+  c('3:30-4:50','3:30-4:50', '12:00-12:50', '2:00-3:50')
+  )
 ```
+:::
+::::
+
+::: notes
+Your TA made a very poor first list of places he had to be for class, and ended up wandering around tech lost for an hour. He decided to make a slightly more robust Sw object so this did not happen again.
 
 Here we see that an object of the S3 class can be much more than merely a collection of attributes. An S3 object can perform quality assurance steps to ensure the data comply to certain types, and that values are in appropriate units etc. 
 
 If the data are these thoroughly defined, we then see this opens the opportunity for an S3 object to act upon other parts of itself. While in the example above we put in values which match the acceptable criteria of the class we have defined, in the example below will violate the standards of our S3 Object.  
+:::
 
-```{r Create an S3 object 4, warning = F, eval = F}
-course_fail <- course("Lecture",  
-            'Z', # THIS IS NOT DEFINED
-            213, 'TH', '2:00-3:50')
+## S3 failure 
+
+:::: {.columns}
+::: {.column width = '50%'}
+```{r Create an S3 object 4, echo = TRUE, eval = F}
+course_fail <- course(
+  "Lecture",  
+  'Z', # THIS IS NOT DEFINED
+  213, 
+  'TH', 
+  '2:00-3:50')
 ```
 
-simulated output (R does not like errors, intentional or not):
+```{r, echo = TRUE, eval = F}
+Error in course("Lecture", "Z", 213, "TH", "2:00-3:50") : 
+This wing is not valid"
+```
 
-"Error in course("Lecture", "Z", 213, "TH", "2:00-3:50") : This wing is not valid"
+:::
 
+::: {.column width = '50%'}
+- We tried to populate our `course` S3 object with a `wing` which does not exist 
+- R prevented this action, and errored out our entry 
+:::
+::::
+
+::: notes 
 In the above example, if you input the wrong Wing in Tech, or the wrong day of week abbreviation, this class will angrily let you know and refuse to take your input. I assume this error can be relegated to a warning - but we will not get into those aspects of coding in this class. 
 
 One, possible, draw back of an s3 object is that it is relatively lax. 
+:::
 
-```{r Create an S3 object 5, warning = F, echo = F}
+```{r}
 rm(course, course_success, course_fail)
 ```
 
-## Create a simple S4 object
+## Create a simple S4 object I 
 
-The s4 object is not lax. Here we define the data type which each of these slots will accept. If the value you try to put in does not match, the object will not be created.
-```{r Create an S4 object, message = F, warning = F, comment = ""}
+An S4 object can be similar to S3, except we specify that we are using `slots`  
+
+:::: {.columns}
+::: {.column width = '60%'}
+```{r Create an S4 object, echo = TRUE, comment = ""}
 setClass("Office_Hours", 
          slots=
            list(
             Instructor="character",
-            Wing= "character",
+            Wing="character",
             Number="numeric",
             Days="character",
             Time="numeric",
@@ -542,11 +832,22 @@ setClass("Office_Hours",
             )
          )
 ```
+:::
 
-- Seven slot object, each slot with a specified data type. 
-- Will only input to each column of the correct data type.
+::: {.column width = '40%'}
+- Seven slot object, each slot with a specified data type  
+- Will only check that input to each slot matches the data type  
+:::
+::::
 
-```{r Populate an S4 object, message = F, warning = F, comment = ""}
+::: notes 
+The s4 object is not lax. Here we define the data type which each of these slots will accept. If the value you try to put in does not match, the object will not be created.
+:::
+
+## Create a simple S4 object II 
+We can populate our S4 object like this, notice that now we define the slots the values go into.  
+ 
+```{r Populate an S4 object, echo = TRUE}
 s4_ob_office_hours <- new("Office_Hours", 
   Instructor = c('Benkendorf','Scholl','Benkendorf','Scholl'),
   Wing = c('F', 'F', 'G', 'B'),
@@ -558,18 +859,24 @@ s4_ob_office_hours <- new("Office_Hours",
 )
 ```
 
-In it's simplest form an s4 object may be constructed via the setClass function. While this object is able to regulate the data types which are entered to each column, it cannot do much more. 
+::: notes
+In it's simplest form an s4 object may be constructed via the `setClass` function. While this object is able to regulate the data types which are entered to each column, it cannot do much more. 
+:::
 
-## Create a more complex S4 object
+## Create a more complex S4 object I 
 
-An S4 object can have validity functions, which basically ensures the data you put into it is appropriate. 
-```{r Create a more complex S4 object, message = F, warning = F, comment = ""}
+Validity functions ensure that not only are our data the correct type, they even match a pre-specified value. 
+
+:::: {.columns}
+::: {.column width = '60%'}
+
+```{r Create a more complex S4 object, echo = TRUE}
 
 office_hrs <- setClass("Office_Hours", 
          
          slots=c(
            Instructor="character",
-           Wing= "character",
+           Wing="character",
            Number="numeric",
            Days="character",
            Time="numeric",
@@ -584,20 +891,33 @@ office_hrs <- setClass("Office_Hours",
             days <- c('M', 'T', 'W', 'TH', 'F', 'S', 'SU')
             instructors <- c('Scholl', 'Benkendorf')
                 
-            if(any(object@Instructor != instructors))stop("This Instructor is not valid")
-            if(any(object@Wing %in% tech_letters))stop("This Wing is not valid")
-            if(any(object@Days %notin% days)) stop("This Day is not valid")
+            if(any(object@Instructor != instructors))
+              stop("This Instructor is not valid")
+            if(any(object@Wing %in% tech_letters))
+              stop("This Wing is not valid")
+            if(any(object@Days %notin% days)) 
+              stop("This Day is not valid")
   }
 )
 ```
 
-- Mandates the appropriate data type is entered
-- Checks that the 'Wing' we enter exists in the Tech Building
-- Ensures that a valid Instructor is entered
-- Ensures that the appropriate abbreviation for a day is entered.
-- Object clearly capable of performing procedures on itself. 
+:::
 
-```{r Populate a more complex S4 object, message = F, warning = F, comment = ""}
+::: {.column width = '40%'}
+<font size='5'>
+- Mandates the appropriate data type is entered  
+- Checks that the 'Wing' we enter exists in the Tech Building  
+- Ensures that a valid Instructor and day abbreviation is entered  
+- Object clearly capable of performing procedures on itself.   
+</font>
+:::
+::::
+
+## Populate a more complex S4 object II 
+
+:::: {.columns}
+::: {.column width = '60%'}
+```{r Populate a more complex S4 object, echo = TRUE}
 
 s4_ob_office_hours <- office_hrs( 
   Instructor = c('Scholl', 'Benkendorf', 'Scholl', 'Benkendorf'),
@@ -611,36 +931,43 @@ s4_ob_office_hours <- office_hrs(
 
 otype(s4_ob_office_hours)
 s3_class(s4_ob_office_hours)
-
-rm(s4_ob_office_hours, office_hrs)
 ```
+:::
 
-- Easy examples, but we could also script in conversion functions like with the ealier Units and POSIX S3 objects.
+::: {.column width = '40%'}
+<font size='5'>
 - S3/S4 objects can have a lot going on 'under the hood'
 - At their heart, they are performing operations on themselves. 
+</font> 
+:::
+::::
 
+::: notes
 You will realize in short time, that the biggest hurdle to dealing with spatial data in R is how complex some of the structures may be. But I guarantee you all have seen more of the intricate workings of these objects than the vast majority of folks which utilize them. Just remember, to appease the validity functions and you will be fine. 
+:::
 
-```{rCreate an S4 object 3, message = F, echo = F, warning = F, comment = ""}
+```{r Create an S4 object 3, message = F, echo = F, warning = F, comment = ""}
 rm(s4_ob_office_hours, office_hrs, dec_lakes_r, dec_lakes_r_classified_f, empty_raster, example_raster_oct, oct_lakes_r_classified_f)
 ```
 
 # Works Cited
 
-Advanced R. Wickham, H.  https://adv-r.hadley.nz/index.html Accessed 01.09.2022
+<font size='6'>
+[Advanced R](https://adv-r.hadley.nz/index.html) Accessed 01.09.2022  
 
-https://geocompr.robinlovelace.net/spatial-class.html Accessed 01.09.2022
+[Geomcomputation with R](https://geocompr.robinlovelace.net/spatial-class.html) Accessed 01.09.2022  
 
-Hijman, R. 05.12.2019 'The raster Package'
+[Raster](https://github.com/rspatial/raster) Accessed 05.12.2019   
 
-https://www.datamentor.io/r-programming/s3-class/ Accessed 01.18.2022
+[Data Mentor](https://www.datamentor.io/r-programming/s3-class/) Accessed 01.18.2022  
 
-https://rspatial.org/raster/RasterPackage.pdf Accessed 01.09.2022
+[R Spatial](https://rspatial.org/raster/RasterPackage.pdf) Accessed 01.09.2022  
 
-Pebesma, E.J., R.S. Bivand, 2005. Classes and methods for spatial data in R. R News 5 (2).
+Pebesma, E.J., R.S. Bivand, 2005. Classes and methods for spatial data in R. R News 5 (2).  
 
-Pebesma, E. https://r-spatial.github.io/sf/articles/sf1.html Accessed 01.10.2022
+[sf](https://r-spatial.github.io/sf/articles/sf1.html) Accessed 01.10.2022  
 
-https://cran.r-project.org/web/packages/vctrs/vignettes/s3-vector.html Accessed 01.14.2022
+[vctrs](https://cran.r-project.org/web/packages/vctrs/vignettes/s3-vector.html) Accessed 01.14.2022  
 
-https://en.wikipedia.org/wiki/Object-oriented_programming Accessed 01.19.2022
+[Object Oriented Programming Wikipedia](https://en.wikipedia.org/wiki/Object-oriented_programming) Accessed 01.19.2022  
+<font> 

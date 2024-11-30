@@ -6,7 +6,7 @@ See the other original README with the text file extension for more day to day o
 ## Notes 
 
 The contents of this folder were prepared for Northwestern Universities 'R Data Science' PBC 470 and ENV 390, by (sage/)Steppe in 2022. 
-All unattributed or unreferenced images in the presentations were collected by steppe, same with field data. 
+All unattributed or un-referenced images in the presentations were collected by steppe, same with field data. 
 Some of the content was inspired by the work of Yingying Xie in previous iterations of this course. Ikea exercise was developed by YyX.
 
 These materials were developed to give peoples with beginner to beginner-intermediate skills in R a background on Spatial Data Science.
@@ -14,7 +14,7 @@ These materials were developed to give peoples with beginner to beginner-interme
 In order to use these materials please do the following:
 
 1) Move the folder containing this file into your current directory you use for this class. 
-2) launch an R script and determine which directory you are located in. If neccessary change your directory to your course folder.
+2) launch an R script and determine which directory you are located in. If necessary change your directory to your course folder.
 e.g. setwd('C:\R_datsci_2022')
 
 Note there are two versions of these files. Please refer to the name of this directory to determine which you are using. 
@@ -43,7 +43,7 @@ run the following:
 > sessionInfo()
 
 Now you should only have 'attached base packages:' and NOT also 'other attached packages'
-If you have already intalledthese packages and errors have occurred please runthe following:
+If you have already intalled these packages and errors have occurred please runthe following:
 remove.packages('terra')
 remove.packages('raster')
 

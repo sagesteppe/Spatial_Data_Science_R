@@ -1,1 +1,1 @@
-https://sagesteppe.github.io/Spatial_Data_Science_R//Lecures/Day1
+https://sagesteppe.github.io/Spatial_Data_Science_R/Lecures/Day1

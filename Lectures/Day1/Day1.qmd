@@ -208,7 +208,7 @@ rm(fake_data, ext_rast, grid)
 :::
 
 ::: {style="float: right; width: 40%; font-size: 0.8em; color: #cbc4c3; text-align: center;"}
-![The Broad Street Pump (John Snow/ National Geographic)](`r` file.path('..', '..', 'pictures', 'John_Snow_Cholera_by_National_Geographic.jpg')`){
+![The Broad Street Pump (John Snow/ National Geographic)](`r file.path('..', '..', 'pictures', 'John_Snow_Cholera_by_National_Geographic.jpg')`){
   width=500 
   fig-align='right' 
 }

@@ -26,7 +26,7 @@ jobs:
   deploy:
     environment:
       name: github-pages
-      url: https://sagesteppe.github.io/Spatial_Data_Science_R/Lectures/Day1
+      url: https://sagesteppe.github.io/Spatial_Data_Science_R/Day1
     runs-on: ubuntu-latest
     steps:
       - name: Checkout

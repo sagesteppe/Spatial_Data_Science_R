@@ -1,1 +1,0 @@
-https://sagesteppe.github.io/Spatial_Data_Science_R/Lectures/Day1
